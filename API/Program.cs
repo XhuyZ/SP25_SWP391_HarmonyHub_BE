@@ -8,6 +8,19 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("AllowAllPolicy", policy =>
+    {
+        policy
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
@@ -22,6 +35,8 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAllPolicy");
 
 app.UseExceptionHandler();
 
