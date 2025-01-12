@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Constants;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("auth")]
+[Route(UriConstants.AUTH_BASE_URI)]
 [ApiController]
 public class AuthController: ApiBaseController
 {
