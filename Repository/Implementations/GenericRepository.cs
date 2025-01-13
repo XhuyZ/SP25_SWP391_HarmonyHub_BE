@@ -6,8 +6,8 @@ namespace Repository.Implementations;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
-    protected readonly DbContext _context;
-    protected readonly DbSet<T> _dbSet;
+    protected readonly HarmonyDataContext _context;
+    private readonly DbSet<T> _dbSet;
 
     public GenericRepository()
     {
