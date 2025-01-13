@@ -1,6 +1,7 @@
 ﻿using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -19,6 +20,7 @@ public class AccountController : ApiBaseController
     }
 
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllAccounts()
     {
         try

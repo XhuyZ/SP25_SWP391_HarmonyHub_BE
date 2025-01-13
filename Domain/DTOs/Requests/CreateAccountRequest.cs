@@ -4,7 +4,7 @@ public class CreateAccountRequest
 {
     public string? AvatarUrl { get; set; }
     public string Email { get; set; }
-    public string HashedPassword { get; set; }
+    public string Password { get; set; }
     public string Phone { get; set; }
     public string? RelationshipGoal { get; set; }
     public string FirstName { get; set; }
