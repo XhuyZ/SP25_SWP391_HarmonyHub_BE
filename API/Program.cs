@@ -4,6 +4,9 @@ using API.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Service.Implementations;
+using Service.Interfaces;
+using Service.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
+
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
