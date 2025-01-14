@@ -12,5 +12,9 @@ public class ResponseMappingProfile: Profile
         CreateMap(typeof(PagedList<>), typeof(PagedList<>));
 
         CreateMap<Account, AccountResponse>().ReverseMap();
+        CreateMap<Account, LoginResponse>()
+            .ForMember(dest => dest.AccountId, opt =>
+                opt.MapFrom(src => src.Id))
+            .ReverseMap();
     }
 }

@@ -23,7 +23,7 @@ public class AuthController : ApiBaseController
         try
         {
             var result = await _accountService.Login(request);
-            if (string.IsNullOrEmpty(result))
+            if (result == null || string.IsNullOrEmpty(result.AccessToken))
             {
                 return Unauthorized(new ApiResponse(StatusCodes.Status401Unauthorized,
                     MessageConstants.INVALID_ACCOUNT_CREDENTIALS));
@@ -33,7 +33,7 @@ public class AuthController : ApiBaseController
         }
         catch (ServiceException e)
         {
-            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, MessageConstants.FAILED));
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
 }
