@@ -7,7 +7,6 @@ using Service.Interfaces;
 
 namespace API.Controllers;
 
-[Route(UriConstants.AUTH_BASE_URI)]
 [ApiController]
 public class AuthController : ApiBaseController
 {
@@ -18,7 +17,7 @@ public class AuthController : ApiBaseController
         _accountService = accountService;
     }
 
-    [HttpPost("login")]
+    [HttpPost("auth/login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         try
