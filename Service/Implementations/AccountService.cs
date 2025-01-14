@@ -70,7 +70,7 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<string> Login(LoginRequest request)
+    public async Task<LoginResponse> Login(LoginRequest request)
     {
         var claims = new List<Claim>
         {
@@ -81,17 +81,34 @@ public class AccountService : IAccountService
             request.Password.Equals(_adminAccount.Password))
         {
             claims.Add(new Claim(ClaimTypes.Role, RoleEnum.Admin.ToString()));
-            return _tokenService.GenerateAccessToken(claims);
+            return new LoginResponse
+            {
+                Email = _adminAccount.Email,
+                Status = (int)AccountStatusEnum.Active,
+                Role = (int)RoleEnum.Admin,
+                AccessToken = _tokenService.GenerateAccessToken(claims)
+            };
         }
 
-        var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
-        if (BCrypt.Net.BCrypt.Verify(request.Password, existingAccount.HashedPassword))
+        try
         {
-            claims.Add(new Claim(ClaimTypes.Role,
-                existingAccount.Role == 1 ? RoleEnum.Member.ToString() : RoleEnum.Therapist.ToString()));
-            return _tokenService.GenerateAccessToken(claims);
-        }
+            var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
+            if (BCrypt.Net.BCrypt.Verify(request.Password, existingAccount.HashedPassword))
+            {
+                claims.Add(new Claim(ClaimTypes.Role,
+                    existingAccount.Role == 1 ? RoleEnum.Member.ToString() : RoleEnum.Therapist.ToString()));
 
-        return string.Empty;
+                var loginResponse = _mapper.Map<LoginResponse>(existingAccount);
+                loginResponse.AccessToken = _tokenService.GenerateAccessToken(claims);
+
+                return loginResponse;
+            }
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(MessageConstants.NOT_FOUND);
+        }
+        
+        return null;
     }
 }
