@@ -9,7 +9,7 @@ using Service.Interfaces;
 
 namespace API.Controllers;
 
-[Route("api/cloudinary")]
+[Route("cloudinary")]
 [ApiController]
 
 public class CloudinaryController : ApiBaseController
@@ -19,13 +19,14 @@ public class CloudinaryController : ApiBaseController
     {
         _cloudinaryService = cloudinaryService;
     }
+
     [HttpPost]
     public async Task<IActionResult> UploadFile(IFormFile file)
     {
         try
         {
             var result = await _cloudinaryService.UploadFile(file);
-            return Ok(result);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL,result));
         }
         catch (ServiceException e)
         {
