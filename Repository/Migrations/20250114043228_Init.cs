@@ -16,7 +16,7 @@ namespace Repository.Migrations
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Accounts",
+                name: "accounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -28,7 +28,7 @@ namespace Repository.Migrations
                     RelationshipGoal = table.Column<string>(type: "longtext", nullable: true),
                     FirstName = table.Column<string>(type: "longtext", nullable: false),
                     LastName = table.Column<string>(type: "longtext", nullable: false),
-                    Birthdate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Birthdate = table.Column<DateTime>(type: "DATE", nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false),
                     YearsOfExperience = table.Column<int>(type: "int", nullable: true),
                     Bio = table.Column<string>(type: "longtext", nullable: true),
@@ -40,12 +40,12 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                    table.PrimaryKey("PK_accounts", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -56,12 +56,12 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_questions", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Specialties",
+                name: "specialties",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -73,37 +73,37 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Specialties", x => x.Id);
+                    table.PrimaryKey("PK_specialties", x => x.Id);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Availabilities",
+                name: "availabilities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
-                    FromTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    ToTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    FromTime = table.Column<TimeSpan>(type: "TIME", nullable: false),
+                    ToTime = table.Column<TimeSpan>(type: "TIME", nullable: false),
                     TherapistId = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Availabilities", x => x.Id);
+                    table.PrimaryKey("PK_availabilities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Availabilities_Accounts_TherapistId",
+                        name: "FK_availabilities_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Blogs",
+                name: "blogs",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -118,18 +118,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
+                    table.PrimaryKey("PK_blogs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Blogs_Accounts_TherapistId",
+                        name: "FK_blogs_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Packages",
+                name: "packages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -146,18 +146,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Packages", x => x.Id);
+                    table.PrimaryKey("PK_packages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Packages_Accounts_TherapistId",
+                        name: "FK_packages_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Quizzes",
+                name: "quizzes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -172,18 +172,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Quizzes", x => x.Id);
+                    table.PrimaryKey("PK_quizzes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Quizzes_Accounts_TherapistId",
+                        name: "FK_quizzes_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Reports",
+                name: "reports",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -197,18 +197,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.PrimaryKey("PK_reports", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reports_Accounts_AccountId",
+                        name: "FK_reports_accounts_AccountId",
                         column: x => x.AccountId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Requests",
+                name: "requests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -221,25 +221,25 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.PrimaryKey("PK_requests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Requests_Accounts_MemberId",
+                        name: "FK_requests_accounts_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Sessions",
+                name: "sessions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     DayOfWeek = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "TIME", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "TIME", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     MeetUrl = table.Column<string>(type: "longtext", nullable: false),
                     Location = table.Column<string>(type: "longtext", nullable: false),
@@ -252,24 +252,24 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.PrimaryKey("PK_sessions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sessions_Accounts_MemberId",
+                        name: "FK_sessions_accounts_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Sessions_Accounts_TherapistId",
+                        name: "FK_sessions_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Transactions",
+                name: "transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -286,24 +286,24 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.PrimaryKey("PK_transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_ReceiverId",
+                        name: "FK_transactions_accounts_ReceiverId",
                         column: x => x.ReceiverId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transactions_Accounts_SenderId",
+                        name: "FK_transactions_accounts_SenderId",
                         column: x => x.SenderId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Options",
+                name: "options",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -315,18 +315,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Options", x => x.Id);
+                    table.PrimaryKey("PK_options", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Options_Questions_QuestionId",
+                        name: "FK_options_questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Qualifications",
+                name: "qualifications",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -340,24 +340,24 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Qualifications", x => x.Id);
+                    table.PrimaryKey("PK_qualifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Qualifications_Accounts_TherapistId",
+                        name: "FK_qualifications_accounts_TherapistId",
                         column: x => x.TherapistId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Qualifications_Specialties_SpecialtyId",
+                        name: "FK_qualifications_specialties_SpecialtyId",
                         column: x => x.SpecialtyId,
-                        principalTable: "Specialties",
+                        principalTable: "specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Feedbacks",
+                name: "feedbacks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -371,24 +371,24 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Feedbacks", x => x.Id);
+                    table.PrimaryKey("PK_feedbacks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Feedbacks_Accounts_MemberId",
+                        name: "FK_feedbacks_accounts_MemberId",
                         column: x => x.MemberId,
-                        principalTable: "Accounts",
+                        principalTable: "accounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Feedbacks_Packages_PackageId",
+                        name: "FK_feedbacks_packages_PackageId",
                         column: x => x.PackageId,
-                        principalTable: "Packages",
+                        principalTable: "packages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "QuizQuestions",
+                name: "quizquestions",
                 columns: table => new
                 {
                     QuizId = table.Column<int>(type: "int", nullable: false),
@@ -396,24 +396,24 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuizQuestions", x => new { x.QuizId, x.QuestionId });
+                    table.PrimaryKey("PK_quizquestions", x => new { x.QuizId, x.QuestionId });
                     table.ForeignKey(
-                        name: "FK_QuizQuestions_Questions_QuestionId",
+                        name: "FK_quizquestions_questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_QuizQuestions_Quizzes_QuizId",
+                        name: "FK_quizquestions_quizzes_QuizId",
                         column: x => x.QuizId,
-                        principalTable: "Quizzes",
+                        principalTable: "quizzes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Results",
+                name: "results",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -425,18 +425,18 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Results", x => x.Id);
+                    table.PrimaryKey("PK_results", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Results_Quizzes_QuizId",
+                        name: "FK_results_quizzes_QuizId",
                         column: x => x.QuizId,
-                        principalTable: "Quizzes",
+                        principalTable: "quizzes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PackageRequests",
+                name: "packagerequests",
                 columns: table => new
                 {
                     RequestId = table.Column<int>(type: "int", nullable: false),
@@ -444,110 +444,110 @@ namespace Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PackageRequests", x => new { x.RequestId, x.PackageId });
+                    table.PrimaryKey("PK_packagerequests", x => new { x.RequestId, x.PackageId });
                     table.ForeignKey(
-                        name: "FK_PackageRequests_Packages_PackageId",
+                        name: "FK_packagerequests_packages_PackageId",
                         column: x => x.PackageId,
-                        principalTable: "Packages",
+                        principalTable: "packages",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PackageRequests_Requests_RequestId",
+                        name: "FK_packagerequests_requests_RequestId",
                         column: x => x.RequestId,
-                        principalTable: "Requests",
+                        principalTable: "requests",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Availabilities_TherapistId",
-                table: "Availabilities",
+                name: "IX_availabilities_TherapistId",
+                table: "availabilities",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_TherapistId",
-                table: "Blogs",
+                name: "IX_blogs_TherapistId",
+                table: "blogs",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feedbacks_MemberId",
-                table: "Feedbacks",
+                name: "IX_feedbacks_MemberId",
+                table: "feedbacks",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Feedbacks_PackageId",
-                table: "Feedbacks",
+                name: "IX_feedbacks_PackageId",
+                table: "feedbacks",
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Options_QuestionId",
-                table: "Options",
+                name: "IX_options_QuestionId",
+                table: "options",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PackageRequests_PackageId",
-                table: "PackageRequests",
+                name: "IX_packagerequests_PackageId",
+                table: "packagerequests",
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Packages_TherapistId",
-                table: "Packages",
+                name: "IX_packages_TherapistId",
+                table: "packages",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualifications_SpecialtyId",
-                table: "Qualifications",
+                name: "IX_qualifications_SpecialtyId",
+                table: "qualifications",
                 column: "SpecialtyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Qualifications_TherapistId",
-                table: "Qualifications",
+                name: "IX_qualifications_TherapistId",
+                table: "qualifications",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuizQuestions_QuestionId",
-                table: "QuizQuestions",
+                name: "IX_quizquestions_QuestionId",
+                table: "quizquestions",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Quizzes_TherapistId",
-                table: "Quizzes",
+                name: "IX_quizzes_TherapistId",
+                table: "quizzes",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reports_AccountId",
-                table: "Reports",
+                name: "IX_reports_AccountId",
+                table: "reports",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_MemberId",
-                table: "Requests",
+                name: "IX_requests_MemberId",
+                table: "requests",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Results_QuizId",
-                table: "Results",
+                name: "IX_results_QuizId",
+                table: "results",
                 column: "QuizId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sessions_MemberId",
-                table: "Sessions",
+                name: "IX_sessions_MemberId",
+                table: "sessions",
                 column: "MemberId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sessions_TherapistId",
-                table: "Sessions",
+                name: "IX_sessions_TherapistId",
+                table: "sessions",
                 column: "TherapistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_ReceiverId",
-                table: "Transactions",
+                name: "IX_transactions_ReceiverId",
+                table: "transactions",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_SenderId",
-                table: "Transactions",
+                name: "IX_transactions_SenderId",
+                table: "transactions",
                 column: "SenderId");
         }
 
@@ -555,55 +555,55 @@ namespace Repository.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Availabilities");
+                name: "availabilities");
 
             migrationBuilder.DropTable(
-                name: "Blogs");
+                name: "blogs");
 
             migrationBuilder.DropTable(
-                name: "Feedbacks");
+                name: "feedbacks");
 
             migrationBuilder.DropTable(
-                name: "Options");
+                name: "options");
 
             migrationBuilder.DropTable(
-                name: "PackageRequests");
+                name: "packagerequests");
 
             migrationBuilder.DropTable(
-                name: "Qualifications");
+                name: "qualifications");
 
             migrationBuilder.DropTable(
-                name: "QuizQuestions");
+                name: "quizquestions");
 
             migrationBuilder.DropTable(
-                name: "Reports");
+                name: "reports");
 
             migrationBuilder.DropTable(
-                name: "Results");
+                name: "results");
 
             migrationBuilder.DropTable(
-                name: "Sessions");
+                name: "sessions");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "transactions");
 
             migrationBuilder.DropTable(
-                name: "Packages");
+                name: "packages");
 
             migrationBuilder.DropTable(
-                name: "Requests");
+                name: "requests");
 
             migrationBuilder.DropTable(
-                name: "Specialties");
+                name: "specialties");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "questions");
 
             migrationBuilder.DropTable(
-                name: "Quizzes");
+                name: "quizzes");
 
             migrationBuilder.DropTable(
-                name: "Accounts");
+                name: "accounts");
         }
     }
 }
