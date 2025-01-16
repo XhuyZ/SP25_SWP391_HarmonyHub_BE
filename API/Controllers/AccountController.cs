@@ -7,7 +7,6 @@ using Service.Interfaces;
 
 namespace API.Controllers;
 
-[Route(UriConstants.ACCOUNT_BASE_URI)]
 [ApiController]
 public class AccountController : ApiBaseController
 {
@@ -18,7 +17,7 @@ public class AccountController : ApiBaseController
         _accountService = accountService;
     }
 
-    [HttpGet]
+    [HttpGet("accounts")]
     public async Task<IActionResult> GetAllAccounts()
     {
         try
@@ -33,7 +32,7 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpGet("{accountId}")]
+    [HttpGet("accounts/{accountId}")]
     public async Task<IActionResult> GetAccountById(int accountId)
     {
         try
@@ -49,7 +48,7 @@ public class AccountController : ApiBaseController
     }
 
 
-    [HttpPost]
+    [HttpPost("accounts")]
     public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
     {
         try

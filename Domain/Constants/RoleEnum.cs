@@ -2,7 +2,8 @@
 
 public enum RoleEnum
 {
-    System = 1,
-    Member = 2,
-    Therapist = 3
+    Member = 1,
+    Therapist = 2,
+    System = 3,
+    Admin = 0
 }

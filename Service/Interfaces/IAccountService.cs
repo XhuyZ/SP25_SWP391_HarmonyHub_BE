@@ -8,4 +8,5 @@ public interface IAccountService
     Task<IEnumerable<AccountResponse>> GetAllAccounts();
     Task<AccountResponse> GetAccountById(int accountId);
     Task CreateAccount(CreateAccountRequest request);
+    Task<LoginResponse> Login(LoginRequest request);
 }
