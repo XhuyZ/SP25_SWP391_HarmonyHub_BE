@@ -1,4 +1,5 @@
 ﻿using Domain.DTOs.Requests;
+using Domain.DTOs.Responses;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace Service.Interfaces
     {
         //Task<IEnumerable<Blog>> GetBlogsByTherapistIdAsync(int therapistId);
         Task CreateBlog(CreateBlogRequest request);
+        Task<IEnumerable<BlogResponse>> GetAllBlogs();
+
     }
 }

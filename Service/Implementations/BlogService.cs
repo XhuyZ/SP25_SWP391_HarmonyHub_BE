@@ -30,8 +30,8 @@ namespace Service.Implementations
         {
             try
             {
-                var result = await _blogRepository.GetAllAsync();
-                return _mapper.Map<IEnumerable<BlogResponse>>(result);
+                var blogs = await _blogRepository.GetAllAsync();
+                return _mapper.Map<IEnumerable<BlogResponse>>(blogs);
             }
             catch (Exception e)
             {

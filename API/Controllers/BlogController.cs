@@ -20,13 +20,28 @@ public class BlogController : ApiBaseController
         _blogService = blogService;
     }
 
-    [HttpPost]
+    [HttpPost("createBlog")]
     public async Task<IActionResult> CreateBlog(CreateBlogRequest request)
     {
         try
         {
             await _blogService.CreateBlog(request);
-            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, request));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpGet("blogs")]
+    public async Task<IActionResult> GetAllBlogss()
+    {
+        try
+        {
+            var result = await _blogService.GetAllBlogs();
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
         {

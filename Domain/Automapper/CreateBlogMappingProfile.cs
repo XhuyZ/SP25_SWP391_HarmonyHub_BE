@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.DTOs.Requests;
-using Domain.DTOs.Responses;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Domain.Automapper
 {
-    public class BlogMappingProfile : Profile
+    public class CreateBlogMappingProfile : Profile
     {
-        public BlogMappingProfile()
+        public CreateBlogMappingProfile()
         {
-            CreateMap<Blog, BlogResponse>();
+            CreateMap<CreateBlogRequest, Blog>();
         }
     }
 }

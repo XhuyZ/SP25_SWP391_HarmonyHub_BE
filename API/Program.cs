@@ -24,7 +24,9 @@ builder.Services.AddScoped<IBlogService, BlogService>();
 
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 
-builder.Services.AddAutoMapper(typeof(BlogMappingProfile));
+builder.Services.AddAutoMapper(typeof(CreateBlogMappingProfile));
+
+builder.Services.AddAutoMapper(typeof(CreateBlogMappingProfile));
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
@@ -45,10 +47,10 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddAuthentication(opt =>
-    {
-        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
+{
+    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -68,7 +70,8 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Harmony API", Version = "v1"
+        Title = "Harmony API",
+        Version = "v1"
     });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
