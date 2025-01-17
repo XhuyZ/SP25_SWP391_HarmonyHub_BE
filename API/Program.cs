@@ -1,9 +1,12 @@
 using System.Text;
 using API.Extensions;
 using API.Middlewares;
+using Domain.Automapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Repository.Implementations;
+using Repository.Interfaces;
 using Service.Implementations;
 using Service.Interfaces;
 using Service.Settings;
@@ -16,6 +19,12 @@ builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+builder.Services.AddScoped<IBlogService, BlogService>();
+
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+
+builder.Services.AddAutoMapper(typeof(BlogMappingProfile));
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 
