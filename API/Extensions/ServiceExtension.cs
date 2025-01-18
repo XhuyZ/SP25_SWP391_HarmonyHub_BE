@@ -19,6 +19,13 @@ public static class ServiceExtension
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
 
+        services.AddScoped<IBlogService, BlogService>();
+
+        services.AddScoped<IBlogRepository, BlogRepository>();
+
+        services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+        services.AddScoped<ICloudinaryService, CloudinaryService>();
+
         return services;
     }
 }

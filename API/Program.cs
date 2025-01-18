@@ -18,18 +18,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
-
-builder.Services.AddScoped<IBlogService, BlogService>();
-
-builder.Services.AddScoped<IBlogRepository, BlogRepository>();
-
-builder.Services.AddAutoMapper(typeof(CreateBlogMappingProfile));
-
-builder.Services.AddAutoMapper(typeof(CreateBlogMappingProfile));
-
-builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddCors(opt =>

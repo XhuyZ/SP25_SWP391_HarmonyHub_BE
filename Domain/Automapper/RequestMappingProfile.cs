@@ -13,5 +13,8 @@ public class RequestMappingProfile: Profile
                 opt.MapFrom(src => src.Email.ToLower()))
             .ForMember(dest => dest.HashedPassword, opt =>
                 opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password)));
+
+
+        CreateMap<CreateBlogRequest, Blog>();
     }
 }
