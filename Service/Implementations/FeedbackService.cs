@@ -79,10 +79,6 @@ namespace Service.Implementations;
                 throw new ServiceException(MessageConstants.NOT_FOUND);
             }
 
-                // TODO: Khi thêm trường Status, thay đổi status thành Inactive thay vì xóa hoàn toàn
-                // feedbackToDelete.Status = Status.Inactive;
-                // await _feedbackRepository.UpdateAsync(feedbackToDelete);
-
              await _feedbackRepository.UpdateAsync(feedbackToDelete);
              return feedbackToDelete;
         }
