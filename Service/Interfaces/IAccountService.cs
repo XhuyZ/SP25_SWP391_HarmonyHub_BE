@@ -9,4 +9,7 @@ public interface IAccountService
     Task<AccountResponse> GetAccountById(int accountId);
     Task CreateAccount(CreateAccountRequest request);
     Task<LoginResponse> Login(LoginRequest request);
+    Task<AccountResponse> GetMemberProfile(int memberId);
+    Task<AccountResponse> GetAccountByEmail(string email);
+    Task<AccountResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request);
 }

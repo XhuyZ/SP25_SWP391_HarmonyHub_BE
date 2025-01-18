@@ -15,7 +15,7 @@ namespace API.Controllers
         {
             _feedbackService = feedbackService;
         }
-        [HttpGet]
+        [HttpGet("feedbacks")]
         public async Task<IActionResult> GetAllFeedbacks()
         {
             try
@@ -29,7 +29,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("{accountID}")]
+        [HttpGet("feedbacks/{memberId}")]
         public async Task<IActionResult> GetFeedbackByMemberId(int memberId)
         {
             try
@@ -50,6 +50,20 @@ namespace API.Controllers
             {
                 await _feedbackService.CreateFeedback(request);
                 return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+            }
+            catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
+
+        [HttpDelete("feedbacks/{memberId}/{packageId}")]
+        public async Task<IActionResult> DeleteFeedback(int memberId, int packageId)
+        {
+            try
+            {
+                var result = await _feedbackService.DeleteFeedbackByMemberAndPackage(memberId, packageId);
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
             }
             catch (ServiceException e)
             {

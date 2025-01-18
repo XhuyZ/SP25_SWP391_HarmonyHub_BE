@@ -67,7 +67,25 @@ namespace Service.Implementations;
             }
         }
 
-        //public async Task DeleteFeedback
+        public async Task<Feedback> DeleteFeedbackByMemberAndPackage(int memberId, int packageId)
+        {
+            var feedbacks = await _feedbackRepository.GetAllAsync();
+            var feedbackToDelete = feedbacks.FirstOrDefault(f => 
+                f.MemberId == memberId && 
+                f.PackageId == packageId);
+
+            if (feedbackToDelete == null)
+            {
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            }
+
+                // TODO: Khi thêm trường Status, thay đổi status thành Inactive thay vì xóa hoàn toàn
+                // feedbackToDelete.Status = Status.Inactive;
+                // await _feedbackRepository.UpdateAsync(feedbackToDelete);
+
+             await _feedbackRepository.UpdateAsync(feedbackToDelete);
+             return feedbackToDelete;
+        }
     }
 
 
