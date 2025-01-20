@@ -121,7 +121,6 @@ public class AccountService : IAccountService
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
                 
-            // Kiểm tra role là member
             if (account.Role != (int)RoleEnum.Member)
                 throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
 
