@@ -43,7 +43,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("feedbacks")]
         public async Task<IActionResult> CreateFeedback(CreateFeedbackRequest request)
         {
             try

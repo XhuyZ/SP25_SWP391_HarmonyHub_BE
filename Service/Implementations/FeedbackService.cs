@@ -79,7 +79,7 @@ namespace Service.Implementations;
                 throw new ServiceException(MessageConstants.NOT_FOUND);
             }
 
-             await _feedbackRepository.UpdateAsync(feedbackToDelete);
+             await _feedbackRepository.DeleteAsync(feedbackToDelete);
              return feedbackToDelete;
         }
     }
