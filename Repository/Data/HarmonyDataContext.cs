@@ -88,6 +88,11 @@ public class HarmonyDataContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            entity.SetTableName(entity.GetTableName()?.ToLowerInvariant());
+        }
+
         new AvailabilityConfiguration().Configure(modelBuilder.Entity<Availability>());
         new BlogConfiguration().Configure(modelBuilder.Entity<Blog>());
         new FeedbackConfiguration().Configure(modelBuilder.Entity<Feedback>());

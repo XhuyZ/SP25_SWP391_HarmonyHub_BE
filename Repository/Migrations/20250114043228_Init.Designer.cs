@@ -11,7 +11,7 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(HarmonyDataContext))]
-    [Migration("20250112082531_Init")]
+    [Migration("20250114043228_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -37,8 +37,8 @@ namespace Repository.Migrations
                     b.Property<string>("Bio")
                         .HasColumnType("longtext");
 
-                    b.Property<DateOnly>("Birthdate")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Birthdate")
+                        .HasColumnType("DATE");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -83,7 +83,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accounts");
+                    b.ToTable("accounts");
                 });
 
             modelBuilder.Entity("Domain.Entities.Availability", b =>
@@ -98,14 +98,14 @@ namespace Repository.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("FromTime")
-                        .HasColumnType("time");
+                    b.Property<TimeSpan>("FromTime")
+                        .HasColumnType("TIME");
 
                     b.Property<int>("TherapistId")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("ToTime")
-                        .HasColumnType("time");
+                    b.Property<TimeSpan>("ToTime")
+                        .HasColumnType("TIME");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
@@ -114,7 +114,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Availabilities");
+                    b.ToTable("availabilities");
                 });
 
             modelBuilder.Entity("Domain.Entities.Blog", b =>
@@ -151,7 +151,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("blogs");
                 });
 
             modelBuilder.Entity("Domain.Entities.Feedback", b =>
@@ -185,7 +185,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("Feedbacks");
+                    b.ToTable("feedbacks");
                 });
 
             modelBuilder.Entity("Domain.Entities.Option", b =>
@@ -211,7 +211,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Options");
+                    b.ToTable("options");
                 });
 
             modelBuilder.Entity("Domain.Entities.Package", b =>
@@ -252,7 +252,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Packages");
+                    b.ToTable("packages");
                 });
 
             modelBuilder.Entity("Domain.Entities.PackageRequest", b =>
@@ -267,7 +267,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("PackageRequests");
+                    b.ToTable("packagerequests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Qualification", b =>
@@ -301,7 +301,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Qualifications");
+                    b.ToTable("qualifications");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -322,7 +322,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions");
+                    b.ToTable("questions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Quiz", b =>
@@ -359,7 +359,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Quizzes");
+                    b.ToTable("quizzes");
                 });
 
             modelBuilder.Entity("Domain.Entities.QuizQuestion", b =>
@@ -374,7 +374,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuizQuestions");
+                    b.ToTable("quizquestions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Report", b =>
@@ -407,7 +407,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.ToTable("Reports");
+                    b.ToTable("reports");
                 });
 
             modelBuilder.Entity("Domain.Entities.Request", b =>
@@ -435,7 +435,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Requests");
+                    b.ToTable("requests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Result", b =>
@@ -461,7 +461,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("Results");
+                    b.ToTable("results");
                 });
 
             modelBuilder.Entity("Domain.Entities.Session", b =>
@@ -476,8 +476,8 @@ namespace Repository.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("EndTime")
-                        .HasColumnType("time");
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("TIME");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -494,8 +494,8 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<TimeOnly>("StartTime")
-                        .HasColumnType("time");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("TIME");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -515,7 +515,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("TherapistId");
 
-                    b.ToTable("Sessions");
+                    b.ToTable("sessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Specialty", b =>
@@ -539,7 +539,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Specialties");
+                    b.ToTable("specialties");
                 });
 
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
@@ -582,7 +582,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("transactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Availability", b =>
