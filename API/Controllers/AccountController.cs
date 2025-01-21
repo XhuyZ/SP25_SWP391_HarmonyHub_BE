@@ -4,6 +4,8 @@ using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
 using Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -56,6 +58,48 @@ public class AccountController : ApiBaseController
             await _accountService.CreateAccount(request);
 
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [Authorize(Roles = "Member")]
+    [HttpGet("profile/{memberId}")]
+    public async Task<IActionResult> GetMemberProfile(int memberId)
+    {
+        try
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
+            
+            if (existingAccount.Id != memberId)
+                return Forbid();
+
+            var result = await _accountService.GetMemberProfile(memberId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [Authorize(Roles = "Member")]
+    [HttpPut("profile/{memberId}")]
+    public async Task<IActionResult> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
+    {
+        try
+        {
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
+            
+            if (existingAccount.Id != memberId)
+                return Forbid();
+
+            var result = await _accountService.UpdateMemberProfile(memberId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
         {
