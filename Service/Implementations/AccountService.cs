@@ -111,4 +111,70 @@ public class AccountService : IAccountService
         
         return null;
     }
+
+    public async Task<AccountResponse> GetMemberProfile(int memberId)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(memberId);
+            
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+                
+            if (account.Role != (int)RoleEnum.Member)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<AccountResponse> GetAccountByEmail(string email)
+    {
+        try
+        {
+            var account = await _accountRepository.GetAccountByEmail(email);
+            
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<AccountResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(memberId);
+            
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+                
+            if (account.Role != (int)RoleEnum.Member)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Phone = request.Phone;
+            account.Email = request.Email;
+            account.Birthdate = request.Birthdate;
+            account.Gender = request.Gender;
+            account.AvatarUrl = request.AvatarUrl;
+
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 }
