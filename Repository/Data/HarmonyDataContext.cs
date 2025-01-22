@@ -18,24 +18,21 @@ public class HarmonyDataContext: DbContext
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Availability> Availabilities { get; set; }
     public DbSet<Blog> Blogs { get; set; }
-    public DbSet<Feedback> Feedbacks { get; set; }
     public DbSet<Option> Options { get; set; }
     public DbSet<Package> Packages { get; set; }
-    public DbSet<PackageRequest> PackageRequests { get; set; }
     public DbSet<Qualification> Qualifications { get; set; }
     public DbSet<Question> Questions { get; set; }
     public DbSet<Quiz> Quizzes { get; set; }
     public DbSet<QuizQuestion> QuizQuestions { get; set; }
     public DbSet<Report> Reports { get; set; }
-    public DbSet<Request> Requests { get; set; }
     public DbSet<Result> Results { get; set; }
-    public DbSet<Session> Sessions { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Specialty> Specialties { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var currentTime = DateTime.Now;
+        var currentTime = DateTime.UtcNow;
 
         foreach (var entry in ChangeTracker.Entries<BaseEntity>())
         {
@@ -93,18 +90,16 @@ public class HarmonyDataContext: DbContext
             entity.SetTableName(entity.GetTableName()?.ToLowerInvariant());
         }
 
+        new AppointmentConfiguration().Configure(modelBuilder.Entity<Appointment>());
         new AvailabilityConfiguration().Configure(modelBuilder.Entity<Availability>());
         new BlogConfiguration().Configure(modelBuilder.Entity<Blog>());
-        new FeedbackConfiguration().Configure(modelBuilder.Entity<Feedback>());
         new OptionConfiguration().Configure(modelBuilder.Entity<Option>());
-        new PackageRequestConfiguration().Configure(modelBuilder.Entity<PackageRequest>());
+        new PackageConfiguration().Configure(modelBuilder.Entity<Package>());
         new QualificationConfiguration().Configure(modelBuilder.Entity<Qualification>());
         new QuizConfiguration().Configure(modelBuilder.Entity<Quiz>());
         new QuizQuestionConfiguration().Configure(modelBuilder.Entity<QuizQuestion>());
         new ReportConfiguration().Configure(modelBuilder.Entity<Report>());
-        new RequestConfiguration().Configure(modelBuilder.Entity<Request>());
         new ResultConfiguration().Configure(modelBuilder.Entity<Result>());
-        new SessionConfiguration().Configure(modelBuilder.Entity<Session>());
         new TransactionConfiguration().Configure(modelBuilder.Entity<Transaction>());
         
         base.OnModelCreating(modelBuilder);

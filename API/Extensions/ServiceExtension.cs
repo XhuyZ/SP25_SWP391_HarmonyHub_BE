@@ -18,8 +18,6 @@ public static class ServiceExtension
 
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
-        services.AddScoped<IFeedbackService, FeedbackService>();
-        services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
         services.AddScoped<IBlogService, BlogService>();
 
