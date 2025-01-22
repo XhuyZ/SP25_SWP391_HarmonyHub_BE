@@ -19,5 +19,11 @@ public class TransactionConfiguration: IEntityTypeConfiguration<Transaction>
             .WithMany(x => x.ReceiverTransactions)
             .HasForeignKey(x => x.ReceiverId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .HasOne(x => x.Appointment)
+            .WithMany(x => x.Transactions)
+            .HasForeignKey(x => x.AppointmentId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
