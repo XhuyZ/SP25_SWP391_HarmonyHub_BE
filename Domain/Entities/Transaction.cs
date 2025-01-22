@@ -11,4 +11,6 @@ public class Transaction: BaseEntity
     public Account? Sender { get; set; }
     public int? ReceiverId { get; set; }
     public Account? Receiver { get; set; }
+    public int? AppointmentId { get; set; }
+    public Appointment? Appointment { get; set; }
 }
