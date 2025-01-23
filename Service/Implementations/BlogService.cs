@@ -44,6 +44,8 @@ namespace Service.Implementations
             try
             {
                 var blog = _mapper.Map<Blog>(request);
+                blog.Status = (int)BlogStatusEnum.Pending;
+                
                 await _blogRepository.AddAsync(blog);
             }
             catch (Exception e)
