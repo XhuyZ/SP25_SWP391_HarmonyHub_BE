@@ -4,8 +4,6 @@ using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
 using Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -49,13 +47,43 @@ public class AccountController : ApiBaseController
         }
     }
 
-
-    [HttpPost("accounts")]
-    public async Task<IActionResult> CreateAccount(CreateAccountRequest request)
+    [HttpGet("therapists")]
+    public async Task<IActionResult> GetAllTherapists()
     {
         try
         {
-            await _accountService.CreateAccount(request);
+            var result = await _accountService.GetAllTherapists();
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpGet("therapists/{therapistId}")]
+    public async Task<IActionResult> GetTherapistDetails(int therapistId)
+    {
+        try
+        {
+            var result = await _accountService.GetTherapistDetails(therapistId);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+
+    [HttpPost("register/member")]
+    public async Task<IActionResult> RegisterMember(RegisterMemberRequest request)
+    {
+        try
+        {
+            await _accountService.RegisterMember(request);
 
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
         }
@@ -65,18 +93,26 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [Authorize(Roles = "Member")]
-    [HttpGet("profile/{memberId}")]
+    [HttpPost("register/therapist")]
+    public async Task<IActionResult> RegisterTherapist(RegisterTherapistRequest request)
+    {
+        try
+        {
+            await _accountService.RegisterTherapist(request);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpGet("members/{memberId}")]
     public async Task<IActionResult> GetMemberProfile(int memberId)
     {
         try
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
-            
-            if (existingAccount.Id != memberId)
-                return Forbid();
-
             var result = await _accountService.GetMemberProfile(memberId);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
@@ -86,18 +122,11 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [Authorize(Roles = "Member")]
-    [HttpPut("profile/{memberId}")]
+    [HttpPut("members/{memberId}")]
     public async Task<IActionResult> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
     {
         try
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
-            
-            if (existingAccount.Id != memberId)
-                return Forbid();
-
             var result = await _accountService.UpdateMemberProfile(memberId, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }

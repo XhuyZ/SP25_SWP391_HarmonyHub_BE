@@ -1,17 +1,13 @@
 ﻿using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
-using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers;
 
-[Route("blog")]
 [ApiController]
-
 public class BlogController : ApiBaseController
 {
     private readonly IBlogService _blogService;
@@ -20,7 +16,7 @@ public class BlogController : ApiBaseController
         _blogService = blogService;
     }
 
-    [HttpPost("createBlog")]
+    [HttpPost("blogs")]
     public async Task<IActionResult> CreateBlog(CreateBlogRequest request)
     {
         try
@@ -35,7 +31,7 @@ public class BlogController : ApiBaseController
     }
 
     [HttpGet("blogs")]
-    public async Task<IActionResult> GetAllBlogss()
+    public async Task<IActionResult> GetAllBlogs()
     {
         try
         {
