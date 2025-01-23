@@ -3,4 +3,4 @@ using Repository.Interfaces;
 
 namespace Repository.Implementations;
 
-public class BlogRepository : GenericRepository<Blog>, IBlogRepository;
+public class TransactionRepository : GenericRepository<Transaction>, ITransactionRepository;

@@ -21,5 +21,10 @@ public class ResponseMappingProfile: Profile
             .ForMember(dest => dest.AccountId, opt =>
                 opt.MapFrom(src => src.Id))
             .ReverseMap();
+
+        CreateMap<Account, TherapistDetailsResponse>().ReverseMap();
+        CreateMap<Availability, AvailabilityResponse>().ReverseMap();
+        CreateMap<Qualification, QualificationResponse>().ReverseMap();
+        CreateMap<Specialty, SpecialtyResponse>().ReverseMap();
     }
 }
