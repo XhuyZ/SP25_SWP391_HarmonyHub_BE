@@ -2,9 +2,8 @@
 
 public class Appointment: BaseEntity
 {
-    public int DayOfWeek { get; set; }
-    public TimeOnly StartTime { get; set; }
-    public TimeOnly EndTime { get; set; }
+    public DateTime StartTime { get; set; }
+    public DateTime EndTime { get; set; }
     public string MeetUrl { get; set; }
     public string ClientNote { get; set; }
     public string? TherapistNote { get; set; }
