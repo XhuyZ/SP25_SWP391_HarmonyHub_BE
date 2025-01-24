@@ -4,7 +4,7 @@ using Service.Interfaces;
 namespace API.Controllers;
 
 [ApiController]
-public class PackageController: ApiBaseController
+public class PackageController : ApiBaseController
 {
     private readonly IPackageService _packageService;
 

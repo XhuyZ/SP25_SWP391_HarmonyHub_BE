@@ -18,4 +18,6 @@ public class TherapistDetailsResponse
     
     public List<AvailabilityResponse> Availabilities { get; set; }
     public List<QualificationResponse> Qualifications { get; set; }
+    public List<PackageResponse> Packages { get; set; }
+    public List<BlogResponse> Blogs { get; set; }
 }
