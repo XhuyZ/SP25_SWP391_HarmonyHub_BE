@@ -2,7 +2,7 @@
 
 public enum BlogStatusEnum
 {
-    Pending = 1,
-    Active = 2,
-    Inactive = 3
+    Pending = 2,
+    Active = 1,
+    Inactive = 0
 }

@@ -20,7 +20,10 @@ public class RequestMappingProfile : Profile
             .ForMember(dest => dest.HashedPassword, opt =>
                 opt.MapFrom(src => BCrypt.Net.BCrypt.HashPassword(src.Password)));
 
-
         CreateMap<CreateBlogRequest, Blog>();
+
+        CreateMap<CreatePackageRequest, Package>();
+
+        CreateMap<CreateAppointmentRequest, Appointment>();
     }
 }
