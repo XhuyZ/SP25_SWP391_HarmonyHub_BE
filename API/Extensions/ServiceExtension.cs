@@ -20,6 +20,8 @@ public static class ServiceExtension
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IFeedbackService, FeedbackService>();
         services.AddScoped<IFeedbackRepository, FeedbackRepository>();
+        services.AddScoped<IReportService, ReportService>();
+        services.AddScoped<IReportRepository, ReportRepository>();
 
         return services;
     }
