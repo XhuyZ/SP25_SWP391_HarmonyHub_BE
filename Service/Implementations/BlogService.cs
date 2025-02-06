@@ -59,9 +59,19 @@ namespace Service.Implementations
             await _blogRepository.UpdateAsync(blog);
         }
 
-        //public async Task<IEnumerable<Blog>> GetBlogsByTherapistIdAsync(int therapistId)
-        //{
-        //    return await _blogRepository.;
-        //}
+        public async Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId)
+        {
+            try
+            {
+                var blogs = await _blogRepository.GetAllAsync(b => b.TherapistId.HasValue && b.TherapistId.Value == therapistId);
+                return _mapper.Map<IEnumerable<BlogResponse>>(blogs);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error retrieving blogs for TherapistId {therapistId}: {e.Message}", e);
+            }
+        }
+
+
     }
 }

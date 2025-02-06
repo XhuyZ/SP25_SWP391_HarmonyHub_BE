@@ -44,4 +44,16 @@ public class BlogController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
+    [HttpGet("therapist/{therapistId}")]
+    public async Task<IActionResult> GetBlogsByTherapistId(int therapistId)
+    {
+        var blogs = await _blogService.GetBlogsByTherapistId(therapistId);
+
+        if (!blogs.Any())
+            return NotFound($"No blogs found for TherapistId {therapistId}");
+
+        return Ok(new { statusCode = 200, message = "Successful", data = blogs });
+    }
+
 }

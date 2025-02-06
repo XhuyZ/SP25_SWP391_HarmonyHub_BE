@@ -7,6 +7,8 @@ namespace Service.Interfaces
     {
         Task CreateBlog(CreateBlogRequest request);
         Task<IEnumerable<BlogResponse>> GetAllBlogs();
+        Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId);
+
 
     }
 }
