@@ -16,7 +16,7 @@ public class BlogController : ApiBaseController
         _blogService = blogService;
     }
 
-    [HttpPost("blogs")]
+    [HttpPost("blogs/createBlog")]
     public async Task<IActionResult> CreateBlog(CreateBlogRequest request)
     {
         try
@@ -30,7 +30,7 @@ public class BlogController : ApiBaseController
         }
     }
 
-    [HttpGet("blogs")]
+    [HttpGet("blogs/getAllBlogs")]
     public async Task<IActionResult> GetAllBlogs()
     {
         try
@@ -45,7 +45,7 @@ public class BlogController : ApiBaseController
         }
     }
 
-    [HttpGet("therapist/{therapistId}")]
+    [HttpGet("blogs/{therapistId}")]
     public async Task<IActionResult> GetBlogsByTherapistId(int therapistId)
     {
         var blogs = await _blogService.GetBlogsByTherapistId(therapistId);
@@ -54,6 +54,26 @@ public class BlogController : ApiBaseController
             return NotFound($"No blogs found for TherapistId {therapistId}");
 
         return Ok(new { statusCode = 200, message = "Successful", data = blogs });
+    }
+
+    [HttpPut("{blogId}/set-inactive")]
+    public async Task<IActionResult> SetBlogInactive(int blogId)
+    {
+        var success = await _blogService.SetBlogInactive(blogId);
+        if (!success)
+            return BadRequest(new { message = "Failed to set blog inactive." });
+
+        return Ok(new { statusCode = 200, message = "Blog set to inactive successfully." });
+    }
+
+    [HttpPut("{blogId}/set-active")]
+    public async Task<IActionResult> SetBlogActive(int blogId)
+    {
+        var success = await _blogService.SetBlogActive(blogId);
+        if (!success)
+            return BadRequest(new { message = "Failed to set blog active." });
+
+        return Ok(new { statusCode = 200, message = "Blog set to active successfully." });
     }
 
 }
