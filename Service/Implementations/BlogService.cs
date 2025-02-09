@@ -59,9 +59,54 @@ namespace Service.Implementations
             await _blogRepository.UpdateAsync(blog);
         }
 
-        //public async Task<IEnumerable<Blog>> GetBlogsByTherapistIdAsync(int therapistId)
-        //{
-        //    return await _blogRepository.;
-        //}
+        public async Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId)
+        {
+            try
+            {
+                var blogs = await _blogRepository.GetAllAsync(b => b.TherapistId.HasValue && b.TherapistId.Value == therapistId);
+                return _mapper.Map<IEnumerable<BlogResponse>>(blogs);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error retrieving blogs for TherapistId {therapistId}: {e.Message}", e);
+            }
+        }
+
+        public async Task<bool> SetBlogInactive(int blogId)
+        {
+            try
+            {
+                var blog = await _blogRepository.GetByIdAsync(blogId);
+                if (blog == null)
+                    throw new ServiceException("Blog not found.");
+
+                blog.Status = 0;
+                await _blogRepository.UpdateAsync(blog);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error setting blog inactive: {e.Message}", e);
+            }
+        }
+
+        public async Task<bool> SetBlogActive(int blogId)
+        {
+            try
+            {
+                var blog = await _blogRepository.GetByIdAsync(blogId);
+                if (blog == null)
+                    throw new ServiceException("Blog not found.");
+
+                blog.Status = 1;
+                await _blogRepository.UpdateAsync(blog);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error setting blog active: {e.Message}", e);
+            }
+        }
+
     }
 }
