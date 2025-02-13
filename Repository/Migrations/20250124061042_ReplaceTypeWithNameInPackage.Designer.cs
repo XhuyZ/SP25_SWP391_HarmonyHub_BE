@@ -11,8 +11,8 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(HarmonyDataContext))]
-    [Migration("20250114043228_Init")]
-    partial class Init
+    [Migration("20250124061042_ReplaceTypeWithNameInPackage")]
+    partial class ReplaceTypeWithNameInPackage
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -86,6 +86,67 @@ namespace Repository.Migrations
                     b.ToTable("accounts");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientNote")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("FeedbackContent")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("FeedbackDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<double?>("FeedbackRating")
+                        .HasColumnType("double");
+
+                    b.Property<string>("MeetUrl")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("MemberId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PackageId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TherapistId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TherapistNote")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("TherapistId");
+
+                    b.ToTable("appointments");
+                });
+
             modelBuilder.Entity("Domain.Entities.Availability", b =>
                 {
                     b.Property<int>("Id")
@@ -154,40 +215,6 @@ namespace Repository.Migrations
                     b.ToTable("blogs");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Feedback", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PackageId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Rating")
-                        .HasColumnType("double");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("PackageId");
-
-                    b.ToTable("feedbacks");
-                });
-
             modelBuilder.Entity("Domain.Entities.Option", b =>
                 {
                     b.Property<int>("Id")
@@ -227,11 +254,12 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("MinutesPerSession")
+                    b.Property<int>("MinutesPerAppointment")
                         .HasColumnType("int");
 
-                    b.Property<int>("NumberOfSessions")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -242,9 +270,6 @@ namespace Repository.Migrations
                     b.Property<int>("TherapistId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -253,21 +278,6 @@ namespace Repository.Migrations
                     b.HasIndex("TherapistId");
 
                     b.ToTable("packages");
-                });
-
-            modelBuilder.Entity("Domain.Entities.PackageRequest", b =>
-                {
-                    b.Property<int>("RequestId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PackageId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RequestId", "PackageId");
-
-                    b.HasIndex("PackageId");
-
-                    b.ToTable("packagerequests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Qualification", b =>
@@ -410,34 +420,6 @@ namespace Repository.Migrations
                     b.ToTable("reports");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Request", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("requests");
-                });
-
             modelBuilder.Entity("Domain.Entities.Result", b =>
                 {
                     b.Property<int>("Id")
@@ -462,60 +444,6 @@ namespace Repository.Migrations
                     b.HasIndex("QuizId");
 
                     b.ToTable("results");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Session", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("DayOfWeek")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("EndTime")
-                        .HasColumnType("TIME");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("MeetUrl")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("MemberId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<TimeSpan>("StartTime")
-                        .HasColumnType("TIME");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TherapistId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.HasIndex("TherapistId");
-
-                    b.ToTable("sessions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Specialty", b =>
@@ -551,6 +479,9 @@ namespace Repository.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("AppointmentId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
@@ -578,11 +509,38 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppointmentId");
+
                     b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
                     b.ToTable("transactions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.HasOne("Domain.Entities.Account", "Member")
+                        .WithMany("MemberAppointments")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Domain.Entities.Package", "Package")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Account", "Therapist")
+                        .WithMany("TherapistAppointments")
+                        .HasForeignKey("TherapistId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Member");
+
+                    b.Navigation("Package");
+
+                    b.Navigation("Therapist");
                 });
 
             modelBuilder.Entity("Domain.Entities.Availability", b =>
@@ -606,23 +564,6 @@ namespace Repository.Migrations
                     b.Navigation("Therapist");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Feedback", b =>
-                {
-                    b.HasOne("Domain.Entities.Account", "Member")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Entities.Package", "Package")
-                        .WithMany("Feedbacks")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Package");
-                });
-
             modelBuilder.Entity("Domain.Entities.Option", b =>
                 {
                     b.HasOne("Domain.Entities.Question", "Question")
@@ -639,29 +580,10 @@ namespace Repository.Migrations
                     b.HasOne("Domain.Entities.Account", "Therapist")
                         .WithMany("Packages")
                         .HasForeignKey("TherapistId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Therapist");
-                });
-
-            modelBuilder.Entity("Domain.Entities.PackageRequest", b =>
-                {
-                    b.HasOne("Domain.Entities.Package", "Package")
-                        .WithMany("PackageRequests")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Request", "Request")
-                        .WithMany("PackageRequests")
-                        .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Package");
-
-                    b.Navigation("Request");
                 });
 
             modelBuilder.Entity("Domain.Entities.Qualification", b =>
@@ -723,17 +645,6 @@ namespace Repository.Migrations
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Request", b =>
-                {
-                    b.HasOne("Domain.Entities.Account", "Member")
-                        .WithMany("Requests")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-                });
-
             modelBuilder.Entity("Domain.Entities.Result", b =>
                 {
                     b.HasOne("Domain.Entities.Quiz", "Quiz")
@@ -745,25 +656,13 @@ namespace Repository.Migrations
                     b.Navigation("Quiz");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Session", b =>
-                {
-                    b.HasOne("Domain.Entities.Account", "Member")
-                        .WithMany("MemberSessions")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Domain.Entities.Account", "Therapist")
-                        .WithMany("TherapistSessions")
-                        .HasForeignKey("TherapistId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Member");
-
-                    b.Navigation("Therapist");
-                });
-
             modelBuilder.Entity("Domain.Entities.Transaction", b =>
                 {
+                    b.HasOne("Domain.Entities.Appointment", "Appointment")
+                        .WithMany("Transactions")
+                        .HasForeignKey("AppointmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("Domain.Entities.Account", "Receiver")
                         .WithMany("ReceiverTransactions")
                         .HasForeignKey("ReceiverId")
@@ -773,6 +672,8 @@ namespace Repository.Migrations
                         .WithMany("SenderTransactions")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Appointment");
 
                     b.Navigation("Receiver");
 
@@ -785,9 +686,7 @@ namespace Repository.Migrations
 
                     b.Navigation("Blogs");
 
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("MemberSessions");
+                    b.Navigation("MemberAppointments");
 
                     b.Navigation("Packages");
 
@@ -799,18 +698,19 @@ namespace Repository.Migrations
 
                     b.Navigation("Reports");
 
-                    b.Navigation("Requests");
-
                     b.Navigation("SenderTransactions");
 
-                    b.Navigation("TherapistSessions");
+                    b.Navigation("TherapistAppointments");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.Navigation("Transactions");
                 });
 
             modelBuilder.Entity("Domain.Entities.Package", b =>
                 {
-                    b.Navigation("Feedbacks");
-
-                    b.Navigation("PackageRequests");
+                    b.Navigation("Appointments");
                 });
 
             modelBuilder.Entity("Domain.Entities.Question", b =>
@@ -825,11 +725,6 @@ namespace Repository.Migrations
                     b.Navigation("QuizQuestions");
 
                     b.Navigation("Results");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Request", b =>
-                {
-                    b.Navigation("PackageRequests");
                 });
 
             modelBuilder.Entity("Domain.Entities.Specialty", b =>

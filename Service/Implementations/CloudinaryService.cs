@@ -1,16 +1,9 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
-using Domain.Entities;
-using Google.Protobuf.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Service.Interfaces;
 using Service.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Implementations
 {
@@ -22,7 +15,7 @@ namespace Service.Implementations
         public CloudinaryService(IOptions<CloudinarySettings> cloudinarySetting)
         {
             _cloudinarySetting = cloudinarySetting.Value;
-            var account = new CloudinaryDotNet.Account(
+            var account = new Account(
                         _cloudinarySetting.Cloud,
                         _cloudinarySetting.ApiKey,
                         _cloudinarySetting.ApiSecret);

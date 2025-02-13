@@ -23,10 +23,8 @@ public class Account: BaseEntity
     public ICollection<Qualification>? Qualifications { get; set; }
     public ICollection<Transaction>? SenderTransactions { get; set; }
     public ICollection<Transaction>? ReceiverTransactions { get; set; }
-    public ICollection<Request> Requests { get; set; }
-    public ICollection<Session>? MemberSessions { get; set; }
-    public ICollection<Session>? TherapistSessions { get; set; }
+    public ICollection<Appointment>? MemberAppointments { get; set; }
+    public ICollection<Appointment>? TherapistAppointments { get; set; }
     public ICollection<Package> Packages { get; set; }
-    public ICollection<Feedback> Feedbacks { get; set; }
     public ICollection<Report> Reports { get; set; }
 }

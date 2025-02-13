@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -10,9 +11,11 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(HarmonyDataContext))]
-    partial class HarmonyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250123103716_UpdateAppointment")]
+    partial class UpdateAppointment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,10 +257,6 @@ namespace Repository.Migrations
                     b.Property<int>("MinutesPerAppointment")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -265,6 +264,9 @@ namespace Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TherapistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")

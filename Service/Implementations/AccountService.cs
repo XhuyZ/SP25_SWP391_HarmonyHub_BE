@@ -42,6 +42,35 @@ public class AccountService : IAccountService
         }
     }
 
+    public async Task<IEnumerable<TherapistDetailsResponse>> GetAllTherapists()
+    {
+        try
+        {
+            var result = await _accountRepository.GetAllTherapists();
+            return _mapper.Map<IEnumerable<TherapistDetailsResponse>>(result);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<TherapistDetailsResponse> GetTherapistDetails(int therapistId)
+    {
+        try
+        {
+            var result = await _accountRepository.GetTherapistDetails(therapistId);
+            if (result == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            
+            return _mapper.Map<TherapistDetailsResponse>(result);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
     public async Task<AccountResponse> GetAccountById(int accountId)
     {
         try
@@ -58,11 +87,40 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task CreateAccount(CreateAccountRequest request)
+    public async Task RegisterMember(RegisterMemberRequest request)
     {
         try
         {
+            var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
+            if (existingAccount != null)
+                throw new ServiceException(MessageConstants.DUPLICATE);
+
             var account = _mapper.Map<Account>(request);
+            account.Balance = 0;
+            account.Role = (int)RoleEnum.Member;
+            account.Status = (int)AccountStatusEnum.Active;
+
+            await _accountRepository.AddAsync(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task RegisterTherapist(RegisterTherapistRequest request)
+    {
+        try
+        {
+            var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
+            if (existingAccount != null)
+                throw new ServiceException(MessageConstants.DUPLICATE);
+            
+            var account = _mapper.Map<Account>(request);
+            account.Balance = 0;
+            account.Role = (int)RoleEnum.Therapist;
+            account.Status = (int)AccountStatusEnum.Pending;
+
             await _accountRepository.AddAsync(account);
         }
         catch (Exception e)
@@ -97,7 +155,9 @@ public class AccountService : IAccountService
             if (BCrypt.Net.BCrypt.Verify(request.Password, existingAccount.HashedPassword))
             {
                 claims.Add(new Claim(ClaimTypes.Role,
-                    existingAccount.Role == 1 ? RoleEnum.Member.ToString() : RoleEnum.Therapist.ToString()));
+                    existingAccount.Role == (int)RoleEnum.Member
+                        ? RoleEnum.Member.ToString()
+                        : RoleEnum.Therapist.ToString()));
 
                 var loginResponse = _mapper.Map<LoginResponse>(existingAccount);
                 loginResponse.AccessToken = _tokenService.GenerateAccessToken(claims);
@@ -117,6 +177,7 @@ public class AccountService : IAccountService
     {
         try
         {
+            var account = await _accountRepository.GetMemberDetails(memberId);
             var account = await _accountRepository.GetByIdAsync(memberId);
 
             if (account == null)
@@ -141,7 +202,7 @@ public class AccountService : IAccountService
 
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
-
+            
             return _mapper.Map<AccountResponse>(account);
         }
         catch (Exception e)
@@ -154,10 +215,12 @@ public class AccountService : IAccountService
     {
         try
         {
+            var account = await _accountRepository.GetMemberDetails(memberId);
             var account = await _accountRepository.GetByIdAsync(memberId);
 
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
+
 
             if (account.Role != (int)RoleEnum.Member)
                 throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);

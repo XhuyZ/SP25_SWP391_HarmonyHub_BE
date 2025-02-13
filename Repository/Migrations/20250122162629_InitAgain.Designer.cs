@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository.Data;
 
@@ -10,9 +11,11 @@ using Repository.Data;
 namespace Repository.Migrations
 {
     [DbContext(typeof(HarmonyDataContext))]
-    partial class HarmonyDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250122162629_InitAgain")]
+    partial class InitAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,8 +99,11 @@ namespace Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("TIME");
 
                     b.Property<string>("FeedbackContent")
                         .HasColumnType("longtext");
@@ -118,8 +124,8 @@ namespace Repository.Migrations
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("TIME");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -254,10 +260,6 @@ namespace Repository.Migrations
                     b.Property<int>("MinutesPerAppointment")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -265,6 +267,9 @@ namespace Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("TherapistId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
