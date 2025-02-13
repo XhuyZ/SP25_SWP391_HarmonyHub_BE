@@ -12,8 +12,6 @@ public interface IAccountService
     Task RegisterMember(RegisterMemberRequest request);
     Task RegisterTherapist(RegisterTherapistRequest request);
     Task<LoginResponse> Login(LoginRequest request);
-    Task<AccountResponse> GetMemberProfile(int memberId);
-    Task<AccountResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request);
     Task<MemberProfileResponse> GetMemberProfile(int memberId);
     Task<AccountResponse> GetAccountByEmail(string email);
     Task<MemberProfileResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request);

@@ -33,8 +33,6 @@ public static class ServiceExtension
 
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<ICloudinaryService, CloudinaryService>();
-        services.AddScoped<IFeedbackService, FeedbackService>();
-        services.AddScoped<IFeedbackRepository, FeedbackRepository>();
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IReportRepository, ReportRepository>();
 

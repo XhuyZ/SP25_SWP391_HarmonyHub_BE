@@ -177,7 +177,6 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = await _accountRepository.GetMemberDetails(memberId);
             var account = await _accountRepository.GetByIdAsync(memberId);
 
             if (account == null)
@@ -215,7 +214,6 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = await _accountRepository.GetMemberDetails(memberId);
             var account = await _accountRepository.GetByIdAsync(memberId);
 
             if (account == null)

@@ -1,4 +1,5 @@
-﻿using Domain.Constants;
+﻿using AutoMapper.Execution;
+using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -136,17 +137,11 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [Authorize(Roles = "Therapist")]
     [HttpGet("profile/{therapistId}")]
     public async Task<IActionResult> GetTherapistProfile(int therapistId)
     {
         try
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
-
-            if (existingAccount.Id != therapistId)
-                return Forbid();
             var result = await _accountService.GetTherapistProfile(therapistId);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
@@ -161,10 +156,6 @@ public class AccountController : ApiBaseController
     {
         try
         {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            var existingAccount = await _accountService.GetAccountByEmail(userEmail);
-            if (existingAccount.Id != therapistId)
-                return Forbid();
             var result = await _accountService.UpdateTherapistProfile(therapistId, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
