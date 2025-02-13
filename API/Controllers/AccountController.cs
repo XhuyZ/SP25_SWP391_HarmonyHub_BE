@@ -1,4 +1,5 @@
-﻿using Domain.Constants;
+﻿using AutoMapper.Execution;
+using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -128,6 +129,34 @@ public class AccountController : ApiBaseController
         try
         {
             var result = await _accountService.UpdateMemberProfile(memberId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpGet("profile/{therapistId}")]
+    public async Task<IActionResult> GetTherapistProfile(int therapistId)
+    {
+        try
+        {
+            var result = await _accountService.GetTherapistProfile(therapistId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpPut("profile/{therapistId}")]
+    public async Task<IActionResult> UpdateTherapistProfile(int therapistId, UpdateTherapistProfileRequest request)
+    {
+        try
+        {
+            var result = await _accountService.UpdateTherapistProfile(therapistId, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
