@@ -76,4 +76,56 @@ public class AppointmentController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+    [HttpGet("appointments/feedback")]
+    public async Task<IActionResult> GetAllAppointmentFeedback()
+    {
+        try
+        {
+            var result = await _appointmentService.GetAllAppointmentFeedback();
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    [HttpGet("appointments/{appointmentId}/feedback")]  
+    public async Task<IActionResult> GetAppointmentFeedbackID(int appointmentId)
+    {
+        try
+        {
+            var result = await _appointmentService.GetAppointmentFeedbackID(appointmentId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    [HttpPost("appointments/{appointmentId}/create-feedback")]
+    public async Task<IActionResult> CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
+    {
+        try
+        {
+            await _appointmentService.CreateFeedbackAppointment(appointmentId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    [HttpPut("appointments/{appointmentId}/update-feedback")]
+    public async Task<IActionResult> UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request)
+    {
+        try
+        {
+            await _appointmentService.UpdateFeedbackAppointment(appointmentId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 }
