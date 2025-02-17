@@ -1,4 +1,5 @@
-﻿using Repository.Implementations;
+﻿using Domain.Entities;
+using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Implementations;
 using Service.Interfaces;
@@ -33,6 +34,10 @@ public static class ServiceExtension
 
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+        services.AddScoped<IQuizRepository, QuizRepository>();
+        services.AddScoped<IQuizService, QuizService>();
+
 
         return services;
     }

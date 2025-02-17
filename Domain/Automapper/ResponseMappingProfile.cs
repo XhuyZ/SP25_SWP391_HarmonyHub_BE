@@ -16,6 +16,9 @@ public class ResponseMappingProfile : Profile
         CreateMap<Blog, BlogResponse>()
             .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
+        CreateMap<Quiz, QuizResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id)).ReverseMap();
+
         CreateMap<Account, LoginResponse>()
             .ForMember(dest => dest.AccountId, opt =>
                 opt.MapFrom(src => src.Id))
