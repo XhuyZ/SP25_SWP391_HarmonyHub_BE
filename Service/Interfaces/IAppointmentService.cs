@@ -10,7 +10,8 @@ public interface IAppointmentService
     Task CreateAppointment(int memberId, CreateAppointmentRequest request);
     Task ChangeAppointmentStatus(int appointmentId, ChangeAppointmentStatusRequest request);
     Task<IEnumerable<AppointmentFeedbackResponse>> GetAllAppointmentFeedback();
-    Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId);
-    Task CreateFeedbackAppointment(CreateFeedbackAppointmentRequest request);
-    Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
+    Task<AppointmentFeedbackResponse> GetAppointmentFeedbackID(int appointmentId);
+    Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request);
+    //Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
+    Task DeleteFeedbackAppointment(int appointmentId);
 }

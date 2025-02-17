@@ -109,16 +109,16 @@ public class AppointmentService : IAppointmentService
     }
     public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
     {
-        var apointmentFeedback = await _appointmentRepository.GetByIdAsync(appointmentId);
-        if (apointmentFeedback == null)
+        var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+        if (apointment == null)
             throw new ServiceException(MessageConstants.NOT_FOUND);
         try
         {
-            apointmentFeedback.FeedbackRating = request.FeedbackRating;
-            apointmentFeedback.FeedbackContent = request.FeedbackContent;
-            apointmentFeedback.FeedbackDate = DateTime.Now;
+            apointment.FeedbackRating = request.FeedbackRating;
+            apointment.FeedbackContent = request.FeedbackContent;
+            apointment.FeedbackDate = DateTime.Now;
 
-            await _appointmentRepository.AddAsync(apointmentFeedback);
+            await _appointmentRepository.UpdateAsync(apointment);
         }
         catch (Exception e)
         {
@@ -136,6 +136,24 @@ public class AppointmentService : IAppointmentService
             existingFeedback.FeedbackContent = request.FeedbackContent;
             existingFeedback.FeedbackDate = DateTime.Now;
             await _appointmentRepository.UpdateAsync(existingFeedback);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task DeleteFeedbackAppointment(int appointmentId) 
+    {
+        var appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+        if (appointment == null)
+            throw new ServiceException(MessageConstants.NOT_FOUND);
+        try
+        {
+            appointment.FeedbackRating = null;
+            appointment.FeedbackContent = null;
+            appointment.FeedbackDate = null;
+
+            await _appointmentRepository.UpdateAsync(appointment);
         }
         catch (Exception e)
         {

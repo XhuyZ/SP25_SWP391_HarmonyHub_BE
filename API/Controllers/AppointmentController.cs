@@ -102,7 +102,7 @@ public class AppointmentController : ApiBaseController
             throw new ServiceException(e.Message);
         }
     }
-    [HttpPost("appointments/{appointmentId}/create-feedback")]
+    [HttpPost("appointments/create-feedback/{appointmentId}")]
     public async Task<IActionResult> CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
     {
         try
@@ -126,6 +126,20 @@ public class AppointmentController : ApiBaseController
         catch (Exception e)
         {
             throw new ServiceException(e.Message);
+        }
+    }
+
+    [HttpPut("appintments/delete-feedback/{appoinmentid}")]
+    public async Task<IActionResult> DeleteFeedbackAppointment(int appointmentId) 
+    {
+        try
+        {
+            await _appointmentService.DeleteFeedbackAppointment(appointmentId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
 }
