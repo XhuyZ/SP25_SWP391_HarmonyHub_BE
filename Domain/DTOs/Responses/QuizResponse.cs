@@ -15,8 +15,9 @@ namespace Domain.DTOs.Responses
         public string Description { get; set; }
         public int Status { get; set; }
         public int TherapistId { get; set; }
+        public List<Question>QuestionResponse { get; set; }
 
-        public ICollection<QuizQuestion> QuizQuestions { get; set; }
+        //public ICollection<QuizQuestion> QuizQuestions { get; set; }
 
     }
 }

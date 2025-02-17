@@ -15,16 +15,16 @@ namespace API.Controllers
     [ApiController]
     public class QuizController : ControllerBase
     {
-        private readonly QuizService _quizService;
+        private readonly IQuizService _quizService;
 
-        public QuizController(QuizService quizService)
+        public QuizController(IQuizService quizService)
         {
             _quizService = quizService;
         }
 
         // GET: api/quiz
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Quiz>>> GetAll()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
