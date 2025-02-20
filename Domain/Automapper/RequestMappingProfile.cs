@@ -25,5 +25,7 @@ public class RequestMappingProfile : Profile
         CreateMap<CreatePackageRequest, Package>();
 
         CreateMap<CreateAppointmentRequest, Appointment>();
+
+        CreateMap<CreateQuizRequest, Quiz>();
     }
 }
