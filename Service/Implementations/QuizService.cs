@@ -29,7 +29,7 @@ namespace Service.Implementations
         {
             try
             {
-                var quiz = await _quizRepository.GetAllAsync();
+                var quiz = await _quizRepository.GetAllQuizzes();
                 return _mapper.Map<IEnumerable<QuizResponse>>(quiz);
             }
             catch (Exception e)

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Entities;
+using Microsoft.Extensions.Options;
 
 namespace Domain.DTOs.Responses
 {
     public class QuestionResponse
     {
+        public int Id { get; set; }
         public string Content { get; set; }
-        public List<string> Options { get; set; }
+        public List<OptionResponse> OptionResponse { get; set; } = new List<OptionResponse>();
     }
 }

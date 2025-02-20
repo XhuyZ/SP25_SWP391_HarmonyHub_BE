@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Repository.Interfaces
+namespace Domain.DTOs.Responses
 {
-    public interface IQuizRepository : IGenericRepository<Quiz>
+    public class QuizQuestionResponse
     {
-        Task<IEnumerable<Quiz>> GetAllQuizzes();
+        public int QuizId { get; set; }
+        public int QuestionId { get; set; }
     }
 }
