@@ -154,6 +154,7 @@ public class AccountService : IAccountService
             var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
             if (BCrypt.Net.BCrypt.Verify(request.Password, existingAccount.HashedPassword))
             {
+                claims.Add(new Claim("AccountId", existingAccount.Id.ToString()));
                 claims.Add(new Claim(ClaimTypes.Role,
                     existingAccount.Role == (int)RoleEnum.Member
                         ? RoleEnum.Member.ToString()
