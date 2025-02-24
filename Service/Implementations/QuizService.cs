@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
 using Repository.Implementations;
@@ -45,10 +46,11 @@ namespace Service.Implementations
         //}
 
         //// Add a new quiz
-        //public async Task AddQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.AddAsync(quiz);
-        //}
+        public async Task<IEnumerable<QuizResponse>> AddQuizAsync(CreateQuizRequest request)
+        {
+
+            return await _quizRepository.AddAsync(request);
+        }
 
         //// Update an existing quiz
         //public async Task UpdateQuizAsync(Quiz quiz)
