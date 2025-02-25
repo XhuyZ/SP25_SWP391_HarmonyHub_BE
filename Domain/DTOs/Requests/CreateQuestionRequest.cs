@@ -6,6 +6,6 @@ namespace Domain.DTOs.Requests
     {
         public string Content { get; set; }
 
-        public ICollection<Option> Options { get; set; }
+        public List<OptionRequest> Options { get; set; }
     }
 }

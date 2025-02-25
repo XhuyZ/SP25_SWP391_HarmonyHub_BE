@@ -2,6 +2,7 @@
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
@@ -25,7 +26,6 @@ namespace Service.Implementations
             _mapper = mapper;
         }
 
-        // Get all quizzes
         public async Task<IEnumerable<QuizResponse>> GetAllQuizzes()
         {
             try
@@ -39,29 +39,48 @@ namespace Service.Implementations
             }
         }
 
-        //// Get a quiz by ID
-        //public async Task<Quiz> GetQuizByIdAsync(int id)
-        //{
-        //    return await _quizRepository.GetByIdAsync(id);
-        //}
-
-        //// Add a new quiz
-        public async Task<IEnumerable<QuizResponse>> AddQuizAsync(CreateQuizRequest request)
+        public async Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request)
         {
+            var quiz = new Quiz
+            {
+                Title = request.Title,
+                Description = request.Description,
+                ImageUrl = request.ImageUrl,
+                Status = request.Status,
+                TherapistId = request.TherapistId,
+                QuizQuestions = new List<QuizQuestion>()
+            };
 
-            return await _quizRepository.AddAsync(request);
+            foreach (var questionRequest in request.Questions)
+            {
+                var question = new Question
+                {
+                    Content = questionRequest.Content,
+                    Options = new List<Option>()
+                };
+
+                foreach (var optionRequest in questionRequest.Options)
+                {
+                    var option = new Option
+                    {
+                        Content = optionRequest.Content
+                    };
+                    question.Options.Add(option);
+                }
+
+                var quizQuestion = new QuizQuestion
+                {
+                    Quiz = quiz,
+                    Question = question
+                };
+
+                quiz.QuizQuestions.Add(quizQuestion);
+            }
+
+            await _quizRepository.AddAsync(quiz);
+
+            return _mapper.Map<QuizResponse>(quiz);
         }
 
-        //// Update an existing quiz
-        //public async Task UpdateQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.UpdateAsync(quiz);
-        //}
-
-        //// Delete a quiz by ID
-        //public async Task DeleteQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.DeleteAsync(quiz);
-        //}
     }
 }

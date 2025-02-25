@@ -8,6 +8,7 @@ using Domain.Constants;
 using Domain.DTOs.Common;
 using Service.Exceptions;
 using Service.Interfaces;
+using Domain.DTOs.Requests;
 
 namespace API.Controllers
 {
@@ -22,7 +23,6 @@ namespace API.Controllers
             _quizService = quizService;
         }
 
-        // GET: api/quiz
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -38,41 +38,19 @@ namespace API.Controllers
             }
         }
 
-        //// GET: api/quiz/{id}
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Quiz>> GetById(int id)
-        //{
-        //    var quiz = await _quizService.GetQuizByIdAsync(id);
-        //    if (quiz == null)
-        //        return NotFound(new { message = "Quiz not found" });
+        [HttpPost]
+        public async Task<IActionResult> CreateMedical([FromBody] CreateQuizRequest request)
+        {
+            try
+            {
+                var quiz = await _quizService.CreateQuizAsync(request);
+                return Ok(new { statusCode = 200, message = "Successful", data = quiz });
+            }
+         catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
 
-        //    return Ok(quiz);
-        //}
-
-        //// POST: api/quiz
-        //[HttpPost]
-        //public async Task<ActionResult> Create([FromBody] Quiz quiz)
-        //{
-        //    if (quiz == null)
-        //        return BadRequest(new { message = "Invalid quiz data" });
-
-        //    await _quizService.AddQuizAsync(quiz);
-        //    return CreatedAtAction(nameof(GetById), new { id = quiz.Id }, quiz);
-        //}
-
-        //// PUT: api/quiz/{id}
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> Update(int id, [FromBody] Quiz quiz)
-        //{
-        //    if (quiz == null || quiz.Id != id)
-        //        return BadRequest(new { message = "Quiz data is invalid or mismatched ID" });
-
-        //    var existingQuiz = await _quizService.GetQuizByIdAsync(id);
-        //    if (existingQuiz == null)
-        //        return NotFound(new { message = "Quiz not found" });
-
-        //    await _quizService.UpdateQuizAsync(quiz);
-        //    return NoContent();
-        //}
     }
 }

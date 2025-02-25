@@ -11,7 +11,7 @@ namespace Service.Interfaces
     public interface IQuizService
     {
         Task<IEnumerable<QuizResponse>> GetAllQuizzes();
-        Task<IEnumerable<QuizResponse>> AddQuizAsync(CreateQuizRequest request);
+        Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request);
 
     }
 }
