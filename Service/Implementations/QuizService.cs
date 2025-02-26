@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
@@ -26,6 +27,36 @@ namespace Service.Implementations
             _mapper = mapper;
         }
 
+        public async Task<bool> InactiveQuiz(int id)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+            {
+                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
+            } else if (quiz.Status == (int)QuizStatusEnum.Inactive)
+            {
+                throw new Exception("Quiz already inactive.");
+            }
+            quiz.Status = (int)QuizStatusEnum.Inactive;
+            await _quizRepository.UpdateAsync(quiz);
+            return true;
+        }
+
+        public async Task<bool> ActiveQuiz(int id)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+            {
+                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
+            } else if(quiz.Status == (int)QuizStatusEnum.Active)
+            {
+                throw new Exception("Quiz already active.");
+            }
+            quiz.Status = (int)QuizStatusEnum.Active;
+            await _quizRepository.UpdateAsync(quiz);
+            return true;
+        }
+
         public async Task<IEnumerable<QuizResponse>> GetAllQuizzes()
         {
             try
@@ -46,7 +77,7 @@ namespace Service.Implementations
                 Title = request.Title,
                 Description = request.Description,
                 ImageUrl = request.ImageUrl,
-                Status = request.Status,
+                Status = (int)QuizStatusEnum.Pending,
                 TherapistId = request.TherapistId,
                 QuizQuestions = new List<QuizQuestion>()
             };

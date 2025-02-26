@@ -8,7 +8,6 @@ namespace Domain.DTOs.Requests
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImageUrl { get; set; }
-        public int Status { get; set; }
         public int TherapistId { get; set; }
         public List<CreateQuestionRequest> Questions { get; set; }
     }

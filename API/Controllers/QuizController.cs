@@ -9,6 +9,7 @@ using Domain.DTOs.Common;
 using Service.Exceptions;
 using Service.Interfaces;
 using Domain.DTOs.Requests;
+using MySqlX.XDevAPI.Common;
 
 namespace API.Controllers
 {
@@ -23,7 +24,7 @@ namespace API.Controllers
             _quizService = quizService;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllQuizzes")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -38,8 +39,8 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateMedical([FromBody] CreateQuizRequest request)
+        [HttpPost("CreateQuizWithQuestion(s)AndOption(s)")]
+        public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
         {
             try
             {
@@ -49,6 +50,42 @@ namespace API.Controllers
          catch (ServiceException e)
             {
                 return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
+
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> ActivateQuiz(int id)
+        {
+            try
+            {
+                var result = await _quizService.ActiveQuiz(id);
+                return Ok(new { Message = "Quiz activated successfully." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [HttpPut("{id}/deactivate")]
+        public async Task<IActionResult> DeactivateQuiz(int id)
+        {
+            try
+            {
+                var result = await _quizService.InactiveQuiz(id);
+                return Ok(new { Message = "Quiz deactivated successfully." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
             }
         }
 
