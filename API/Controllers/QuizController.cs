@@ -89,5 +89,26 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("question")]
+        public async Task<IActionResult> DeleteQuestion(int questionId)
+        {
+            try
+            {
+                var result = await _quizService.DeleteQuestionAsync(questionId);
+                if (result)
+                {
+                    return Ok(new { Message = "Question and options deleted successfully." });
+                }
+                return NotFound($"Question with ID {questionId} not found.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the question.", error = ex.Message });
+            }
+        }
     }
 }

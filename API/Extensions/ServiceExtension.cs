@@ -38,6 +38,11 @@ public static class ServiceExtension
         services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddScoped<IQuizService, QuizService>();
 
+        services.AddScoped<IQuestionRepository, QuestionRepository>();
+
+        services.AddScoped<IOptionRepository, OptionRepository>();
+
+        services.AddScoped<IQuizQuestionRepository, QuizQuestionRepository>();
 
         return services;
     }

@@ -14,6 +14,7 @@ namespace Service.Interfaces
         Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request);
         Task<bool> InactiveQuiz(int id);
         Task<bool> ActiveQuiz(int id);
+        Task<bool> DeleteQuestionAsync(int questionId);
 
     }
 }

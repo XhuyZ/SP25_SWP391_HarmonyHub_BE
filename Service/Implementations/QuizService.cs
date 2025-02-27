@@ -20,11 +20,17 @@ namespace Service.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IQuizRepository _quizRepository;
+        private readonly IQuestionRepository _questionRepository;
+        private readonly IOptionRepository _optionRepository;
+        private readonly IQuizQuestionRepository _quizQuestionRepository;
 
-        public QuizService(IQuizRepository quizRepository, IMapper mapper)
+        public QuizService(IQuizRepository quizRepository, IMapper mapper, IQuestionRepository questionRepository, IOptionRepository optionRepository, IQuizQuestionRepository quizQuestionRepository)
         {
             _quizRepository = quizRepository;
             _mapper = mapper;
+            _questionRepository = questionRepository;
+            _optionRepository = optionRepository;
+            _quizQuestionRepository = quizQuestionRepository;
         }
 
         public async Task<bool> InactiveQuiz(int id)
@@ -112,6 +118,36 @@ namespace Service.Implementations
 
             return _mapper.Map<QuizResponse>(quiz);
         }
+
+        public async Task<bool> DeleteQuestionAsync(int questionId)
+        {
+            var question = await _questionRepository.GetByIdAsync(questionId);
+            if (question == null)
+            {
+                throw new KeyNotFoundException($"Question with ID {questionId} not found.");
+            }
+
+            var quizQuestions = (await _quizQuestionRepository.GetAllAsync()).Where(q => q.QuestionId == questionId);
+            if (quizQuestions.Any())
+            {
+                await _quizQuestionRepository.DeleteRangeAsync(quizQuestions);
+            }
+
+            var options = (await _optionRepository.GetAllAsync()).Where(o => o.QuestionId == questionId);
+            if (options.Any())
+            {
+                await _optionRepository.DeleteRangeAsync(options);
+            }
+
+
+            // Finally, delete the question
+            await _questionRepository.DeleteAsync(question);
+
+            return true;
+        }
+
+
+
 
     }
 }
