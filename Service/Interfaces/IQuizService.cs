@@ -1,4 +1,5 @@
-﻿using Domain.DTOs.Responses;
+﻿using Domain.DTOs.Requests;
+using Domain.DTOs.Responses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,10 @@ namespace Service.Interfaces
     public interface IQuizService
     {
         Task<IEnumerable<QuizResponse>> GetAllQuizzes();
+        Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request);
+        Task<bool> InactiveQuiz(int id);
+        Task<bool> ActiveQuiz(int id);
+        Task<bool> DeleteQuestionAsync(int questionId);
 
     }
 }

@@ -2,6 +2,7 @@
 using Repository.Interfaces;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Domain.Constants;
 
 
 namespace Repository.Implementations;

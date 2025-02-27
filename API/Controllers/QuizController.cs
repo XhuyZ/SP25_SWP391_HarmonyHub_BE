@@ -8,6 +8,8 @@ using Domain.Constants;
 using Domain.DTOs.Common;
 using Service.Exceptions;
 using Service.Interfaces;
+using Domain.DTOs.Requests;
+using MySqlX.XDevAPI.Common;
 
 namespace API.Controllers
 {
@@ -22,8 +24,7 @@ namespace API.Controllers
             _quizService = quizService;
         }
 
-        // GET: api/quiz
-        [HttpGet]
+        [HttpGet("GetAllQuizzes")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -38,41 +39,76 @@ namespace API.Controllers
             }
         }
 
-        //// GET: api/quiz/{id}
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Quiz>> GetById(int id)
-        //{
-        //    var quiz = await _quizService.GetQuizByIdAsync(id);
-        //    if (quiz == null)
-        //        return NotFound(new { message = "Quiz not found" });
+        [HttpPost("CreateQuizWithQuestion(s)AndOption(s)")]
+        public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
+        {
+            try
+            {
+                var quiz = await _quizService.CreateQuizAsync(request);
+                return Ok(new { statusCode = 200, message = "Successful", data = quiz });
+            }
+         catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
 
-        //    return Ok(quiz);
-        //}
+        [HttpPut("{id}/activate")]
+        public async Task<IActionResult> ActivateQuiz(int id)
+        {
+            try
+            {
+                var result = await _quizService.ActiveQuiz(id);
+                return Ok(new { Message = "Quiz activated successfully." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
 
-        //// POST: api/quiz
-        //[HttpPost]
-        //public async Task<ActionResult> Create([FromBody] Quiz quiz)
-        //{
-        //    if (quiz == null)
-        //        return BadRequest(new { message = "Invalid quiz data" });
+        [HttpPut("{id}/deactivate")]
+        public async Task<IActionResult> DeactivateQuiz(int id)
+        {
+            try
+            {
+                var result = await _quizService.InactiveQuiz(id);
+                return Ok(new { Message = "Quiz deactivated successfully." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { Error = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+        }
 
-        //    await _quizService.AddQuizAsync(quiz);
-        //    return CreatedAtAction(nameof(GetById), new { id = quiz.Id }, quiz);
-        //}
-
-        //// PUT: api/quiz/{id}
-        //[HttpPut("{id}")]
-        //public async Task<ActionResult> Update(int id, [FromBody] Quiz quiz)
-        //{
-        //    if (quiz == null || quiz.Id != id)
-        //        return BadRequest(new { message = "Quiz data is invalid or mismatched ID" });
-
-        //    var existingQuiz = await _quizService.GetQuizByIdAsync(id);
-        //    if (existingQuiz == null)
-        //        return NotFound(new { message = "Quiz not found" });
-
-        //    await _quizService.UpdateQuizAsync(quiz);
-        //    return NoContent();
-        //}
+        [HttpDelete("question")]
+        public async Task<IActionResult> DeleteQuestion(int questionId)
+        {
+            try
+            {
+                var result = await _quizService.DeleteQuestionAsync(questionId);
+                if (result)
+                {
+                    return Ok(new { Message = "Question and options deleted successfully." });
+                }
+                return NotFound($"Question with ID {questionId} not found.");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while deleting the question.", error = ex.Message });
+            }
+        }
     }
 }

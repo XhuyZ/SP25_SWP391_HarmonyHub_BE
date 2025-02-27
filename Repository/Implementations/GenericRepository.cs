@@ -78,4 +78,14 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
             throw new Exception(e.Message);
         }
     }
+
+    public async Task DeleteRangeAsync(IEnumerable<T> entities)
+    {
+        if (entities == null || !entities.Any())
+            throw new ArgumentException("Entities cannot be null or empty");
+
+        _dbSet.RemoveRange(entities);
+        await _context.SaveChangesAsync();
+    }
+
 }
