@@ -12,6 +12,6 @@ public interface IAppointmentService
     Task<IEnumerable<AppointmentFeedbackResponse>> GetAllAppointmentFeedback();
     Task<AppointmentFeedbackResponse> GetAppointmentFeedbackID(int appointmentId);
     Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request);
-    //Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
+    Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
     Task DeleteFeedbackAppointment(int appointmentId);
 }

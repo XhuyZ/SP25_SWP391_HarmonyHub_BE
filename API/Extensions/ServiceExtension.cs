@@ -3,6 +3,7 @@ using Repository.Interfaces;
 using Service.Implementations;
 using Service.Interfaces;
 using Service.Settings;
+using VNPAY.NET;
 
 namespace API.Extensions;
 
@@ -35,6 +36,8 @@ public static class ServiceExtension
         services.AddScoped<ICloudinaryService, CloudinaryService>();
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IReportRepository, ReportRepository>();
+
+        //services.AddScoped<IVNpayService, VNPayService>();
 
         return services;
     }

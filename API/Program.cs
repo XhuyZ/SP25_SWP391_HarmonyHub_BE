@@ -10,6 +10,7 @@ using Repository.Interfaces;
 using Service.Implementations;
 using Service.Interfaces;
 using Service.Settings;
+using VNPAY.NET;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ builder.Services.AddCors(opt =>
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+builder.Services.AddScoped<IVnpay, Vnpay>();
 
 builder.Services.AddAuthentication(opt =>
 {
