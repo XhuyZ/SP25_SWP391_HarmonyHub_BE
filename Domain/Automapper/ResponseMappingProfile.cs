@@ -16,6 +16,35 @@ public class ResponseMappingProfile : Profile
         CreateMap<Blog, BlogResponse>()
             .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
+        CreateMap<Option, OptionResponse>()
+    .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+    .ReverseMap();
+
+        CreateMap<Question, QuestionResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+            .ForMember(dest => dest.OptionResponse, opt => opt.MapFrom(src => src.Options.Any()
+                ? src.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
+                : new List<OptionResponse>()))
+            .ReverseMap();
+
+        CreateMap<Quiz, QuizResponse>()
+            .ForMember(dest => dest.QuestionResponse, opt => opt.MapFrom(src => src.QuizQuestions.Select(q => new QuestionResponse
+            {
+                Id = q.Question.Id,
+                Content = q.Question.Content,
+                OptionResponse = q.Question.Options.Any()
+                    ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
+                    : new List<OptionResponse>()
+            })))
+            .ReverseMap();
+
+        CreateMap<QuizQuestion, QuizQuestionResponse>()
+            .ForMember(dest => dest.QuizId, opt => opt.MapFrom(src => src.QuizId))
+            .ForMember(dest => dest.QuestionId, opt => opt.MapFrom(src => src.QuestionId))
+            .ReverseMap();
+
+
         CreateMap<Account, LoginResponse>()
             .ForMember(dest => dest.AccountId, opt =>
                 opt.MapFrom(src => src.Id))
@@ -36,5 +65,6 @@ public class ResponseMappingProfile : Profile
             .ForMember(dest => dest.PackageName, opt =>
                 opt.MapFrom(src => src.Package.Name))
             .ReverseMap();
+
     }
 }

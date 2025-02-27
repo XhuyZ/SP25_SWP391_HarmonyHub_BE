@@ -3,7 +3,6 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
-using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -93,20 +92,21 @@ public class AppointmentService : IAppointmentService
             throw new ServiceException(e.Message);
         }
     }
-    public async Task<AppointmentFeedbackResponse> GetAppointmentFeedbackID(int appointmentId)
-    {
-        try
-        {
-            var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
-            if (feedback == null)
-                throw new ServiceException(MessageConstants.NOT_FOUND);
-            return _mapper.Map<AppointmentFeedbackResponse>(feedback);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
+    // public async Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId)
+    // {
+    //     try
+    //     {
+    //         var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
+    //         if (feedback == null)
+    //             throw new ServiceException(MessageConstants.NOT_FOUND);
+    //         return _mapper.Map<AppointmentFeedbackResponse>(feedback);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         throw new ServiceException(e.Message);
+    //     }
+    // }
+    
     public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
     {
         var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);

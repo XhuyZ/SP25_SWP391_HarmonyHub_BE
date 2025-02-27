@@ -1,4 +1,5 @@
-﻿using Repository.Implementations;
+﻿using Domain.Entities;
+using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Implementations;
 using Service.Interfaces;
@@ -37,7 +38,9 @@ public static class ServiceExtension
         services.AddScoped<IReportService, ReportService>();
         services.AddScoped<IReportRepository, ReportRepository>();
 
-        //services.AddScoped<IVNpayService, VNPayService>();
+        services.AddScoped<IQuizRepository, QuizRepository>();
+        services.AddScoped<IQuizService, QuizService>();
+
 
         return services;
     }
