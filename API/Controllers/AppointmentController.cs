@@ -47,6 +47,21 @@ public class AppointmentController : ApiBaseController
         }
     }
 
+    [HttpGet("therapists/{id}/appointment")]
+    public async Task<IActionResult> GetAppointmentById(int id)
+    {
+        try
+        {
+            var result = await _appointmentService.GetAppointmentById(id);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
     [HttpPost("members/{memberId}/appointments")]
     public async Task<IActionResult> CreateAppointment(int memberId, CreateAppointmentRequest request)
     {

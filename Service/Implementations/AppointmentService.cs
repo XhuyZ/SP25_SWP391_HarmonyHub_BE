@@ -48,6 +48,19 @@ public class AppointmentService : IAppointmentService
         }
     }
 
+    public async Task<AppointmentResponse> GetAppointmentById(int id)
+    {
+        try
+        {
+            var result = await _appointmentRepository.GetByIdAsync(id);
+            return _mapper.Map<AppointmentResponse>(result);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
     public async Task CreateAppointment(int memberId, CreateAppointmentRequest request)
     {
         try
