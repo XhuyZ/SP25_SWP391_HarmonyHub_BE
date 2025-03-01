@@ -66,5 +66,6 @@ public class ResponseMappingProfile : Profile
                 opt.MapFrom(src => src.Package.Name))
             .ReverseMap();
 
+        CreateMap<Appointment, AppointmentFeedbackResponse>();
     }
 }
