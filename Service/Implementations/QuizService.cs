@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Domain.Constants;
+using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
@@ -17,14 +20,49 @@ namespace Service.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IQuizRepository _quizRepository;
+        private readonly IQuestionRepository _questionRepository;
+        private readonly IOptionRepository _optionRepository;
+        private readonly IQuizQuestionRepository _quizQuestionRepository;
 
-        public QuizService(IQuizRepository quizRepository, IMapper mapper)
+        public QuizService(IQuizRepository quizRepository, IMapper mapper, IQuestionRepository questionRepository, IOptionRepository optionRepository, IQuizQuestionRepository quizQuestionRepository)
         {
             _quizRepository = quizRepository;
             _mapper = mapper;
+            _questionRepository = questionRepository;
+            _optionRepository = optionRepository;
+            _quizQuestionRepository = quizQuestionRepository;
         }
 
-        // Get all quizzes
+        public async Task<bool> InactiveQuiz(int id)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+            {
+                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
+            } else if (quiz.Status == (int)QuizStatusEnum.Inactive)
+            {
+                throw new Exception("Quiz already inactive.");
+            }
+            quiz.Status = (int)QuizStatusEnum.Inactive;
+            await _quizRepository.UpdateAsync(quiz);
+            return true;
+        }
+
+        public async Task<bool> ActiveQuiz(int id)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+            {
+                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
+            } else if(quiz.Status == (int)QuizStatusEnum.Active)
+            {
+                throw new Exception("Quiz already active.");
+            }
+            quiz.Status = (int)QuizStatusEnum.Active;
+            await _quizRepository.UpdateAsync(quiz);
+            return true;
+        }
+
         public async Task<IEnumerable<QuizResponse>> GetAllQuizzes()
         {
             try
@@ -38,28 +76,78 @@ namespace Service.Implementations
             }
         }
 
-        //// Get a quiz by ID
-        //public async Task<Quiz> GetQuizByIdAsync(int id)
-        //{
-        //    return await _quizRepository.GetByIdAsync(id);
-        //}
+        public async Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request)
+        {
+            var quiz = new Quiz
+            {
+                Title = request.Title,
+                Description = request.Description,
+                ImageUrl = request.ImageUrl,
+                Status = (int)QuizStatusEnum.Pending,
+                TherapistId = request.TherapistId,
+                QuizQuestions = new List<QuizQuestion>()
+            };
 
-        //// Add a new quiz
-        //public async Task AddQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.AddAsync(quiz);
-        //}
+            foreach (var questionRequest in request.Questions)
+            {
+                var question = new Question
+                {
+                    Content = questionRequest.Content,
+                    Options = new List<Option>()
+                };
 
-        //// Update an existing quiz
-        //public async Task UpdateQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.UpdateAsync(quiz);
-        //}
+                foreach (var optionRequest in questionRequest.Options)
+                {
+                    var option = new Option
+                    {
+                        Content = optionRequest.Content
+                    };
+                    question.Options.Add(option);
+                }
 
-        //// Delete a quiz by ID
-        //public async Task DeleteQuizAsync(Quiz quiz)
-        //{
-        //    await _quizRepository.DeleteAsync(quiz);
-        //}
+                var quizQuestion = new QuizQuestion
+                {
+                    Quiz = quiz,
+                    Question = question
+                };
+
+                quiz.QuizQuestions.Add(quizQuestion);
+            }
+
+            await _quizRepository.AddAsync(quiz);
+
+            return _mapper.Map<QuizResponse>(quiz);
+        }
+
+        public async Task<bool> DeleteQuestionAsync(int questionId)
+        {
+            var question = await _questionRepository.GetByIdAsync(questionId);
+            if (question == null)
+            {
+                throw new KeyNotFoundException($"Question with ID {questionId} not found.");
+            }
+
+            var quizQuestions = (await _quizQuestionRepository.GetAllAsync()).Where(q => q.QuestionId == questionId);
+            if (quizQuestions.Any())
+            {
+                await _quizQuestionRepository.DeleteRangeAsync(quizQuestions);
+            }
+
+            var options = (await _optionRepository.GetAllAsync()).Where(o => o.QuestionId == questionId);
+            if (options.Any())
+            {
+                await _optionRepository.DeleteRangeAsync(options);
+            }
+
+
+            // Finally, delete the question
+            await _questionRepository.DeleteAsync(question);
+
+            return true;
+        }
+
+
+
+
     }
 }
