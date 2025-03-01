@@ -9,4 +9,5 @@ public interface IAppointmentService
     Task<IEnumerable<AppointmentResponse>> GetTherapistAppointments(int therapistId);
     Task CreateAppointment(int memberId, CreateAppointmentRequest request);
     Task ChangeAppointmentStatus(int appointmentId, ChangeAppointmentStatusRequest request);
+    Task<AppointmentResponse> GetAppointmentById(int id);
 }
