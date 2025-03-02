@@ -47,12 +47,12 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpGet("therapists/{id}/appointment")]
-    public async Task<IActionResult> GetAppointmentById(int id)
+    [HttpGet("appointments/{appointmentId}")]
+    public async Task<IActionResult> GetAppointmentById(int appointmentId)
     {
         try
         {
-            var result = await _appointmentService.GetAppointmentById(id);
+            var result = await _appointmentService.GetAppointmentById(appointmentId);
 
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
