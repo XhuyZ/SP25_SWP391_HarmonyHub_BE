@@ -1,5 +1,4 @@
-﻿using Domain.Constants;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 
@@ -29,5 +28,15 @@ public class AppointmentRepository : GenericRepository<Appointment>, IAppointmen
             .Include(x => x.Package)
             .Where(x => x.TherapistId == therapistId)
             .ToListAsync();
+    }
+
+    public async Task<Appointment> GetAppointmentById(int appointmentId)
+    {
+        return await _context.Appointments
+            .AsSplitQuery()
+            .Include(x => x.Member)
+            .Include(x => x.Therapist)
+            .Include(x => x.Package)
+            .SingleOrDefaultAsync(x => x.Id == appointmentId);
     }
 }
