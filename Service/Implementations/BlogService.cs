@@ -72,41 +72,27 @@ namespace Service.Implementations
             }
         }
 
-        public async Task<bool> SetBlogInactive(int blogId)
+        public async Task<bool> SetBlogStatus(int blogId, int status)
         {
             try
             {
                 var blog = await _blogRepository.GetByIdAsync(blogId);
+                if (status != (int)BlogStatusEnum.Inactive && status != (int)BlogStatusEnum.Active)
+                    throw new ServiceException("Invalid status. Only 0 (Inactive) or 1 (Active) are allowed.");
+                if (blog.Status == (int)status)
+                    throw new ServiceException($"Blog is already {status}.");
                 if (blog == null)
                     throw new ServiceException("Blog not found.");
-
-                blog.Status = 0;
+                blog.Status = status;
                 await _blogRepository.UpdateAsync(blog);
                 return true;
             }
             catch (Exception e)
             {
-                throw new ServiceException($"Error setting blog inactive: {e.Message}", e);
+                throw new ServiceException($"Error updating blog status: {e.Message}", e);
             }
         }
 
-        public async Task<bool> SetBlogActive(int blogId)
-        {
-            try
-            {
-                var blog = await _blogRepository.GetByIdAsync(blogId);
-                if (blog == null)
-                    throw new ServiceException("Blog not found.");
-
-                blog.Status = 1;
-                await _blogRepository.UpdateAsync(blog);
-                return true;
-            }
-            catch (Exception e)
-            {
-                throw new ServiceException($"Error setting blog active: {e.Message}", e);
-            }
-        }
 
     }
 }

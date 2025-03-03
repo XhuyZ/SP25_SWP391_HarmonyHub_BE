@@ -33,44 +33,48 @@ namespace Service.Implementations
             _quizQuestionRepository = quizQuestionRepository;
         }
 
-        public async Task<bool> InactiveQuiz(int id)
-        {
-            var quiz = await _quizRepository.GetByIdAsync(id);
-            if (quiz == null)
-            {
-                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
-            } else if (quiz.Status == (int)QuizStatusEnum.Inactive)
-            {
-                throw new Exception("Quiz already inactive.");
-            }
-            quiz.Status = (int)QuizStatusEnum.Inactive;
-            await _quizRepository.UpdateAsync(quiz);
-            return true;
-        }
 
-        public async Task<bool> ActiveQuiz(int id)
+        public async Task<bool> SetQuizStatus(int quizId, int status)
         {
-            var quiz = await _quizRepository.GetByIdAsync(id);
-            if (quiz == null)
+            try
             {
-                throw new KeyNotFoundException($"Quiz with ID {id} not found.");
-            } else if(quiz.Status == (int)QuizStatusEnum.Active)
-            {
-                throw new Exception("Quiz already active.");
+                var quiz = await _quizRepository.GetByIdAsync(quizId);
+                if (status != (int)QuizStatusEnum.Inactive && status != (int)QuizStatusEnum.Active)
+                    throw new ServiceException("Invalid status. Only 0 (Inactive) or 1 (Active) are allowed.");
+                if (quiz.Status == (int)status)
+                    throw new ServiceException($"Quiz is already {status}.");
+                if (quiz == null)
+                    throw new ServiceException("Quiz not found.");
+                quiz.Status = status;
+                await _quizRepository.UpdateAsync(quiz);
+                return true;
             }
-            quiz.Status = (int)QuizStatusEnum.Active;
-            await _quizRepository.UpdateAsync(quiz);
-            return true;
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error updating quiz status: {e.Message}", e);
+            }
         }
 
         public async Task<IEnumerable<QuizResponse>> GetAllQuizzes()
         {
             try
             {
-                var quiz = await _quizRepository.GetAllQuizzes();
-                return _mapper.Map<IEnumerable<QuizResponse>>(quiz);
+                var quizzes = await _quizRepository.GetAllQuizzes();
+                return _mapper.Map<IEnumerable<QuizResponse>>(quizzes);
             }
             catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
+        }
+
+        public async Task<QuizResponse> GetQuizById(int id)
+        {
+            try
+            {
+                var quiz = await _quizRepository.GetByIdAsync(id);
+                return _mapper.Map<QuizResponse>(quiz);
+            }catch(Exception e)
             {
                 throw new ServiceException(e.Message);
             }
