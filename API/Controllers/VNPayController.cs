@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Service.Interfaces;
 using VNPAY.NET;
 using VNPAY.NET.Enums;
 using VNPAY.NET.Models;
@@ -6,46 +7,24 @@ using VNPAY.NET.Models;
 
 namespace API.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    public class VNPayController : ApiBaseController
+    public class VNPayController : ControllerBase
     {
-        private readonly IVnpay _vnpay;
+        private readonly IVnpayPaymentService _vnpayService;
         private readonly IConfiguration _configuration;
 
-        public VNPayController(IVnpay vnpay, IConfiguration configuration)
+        public VNPayController(IVnpayPaymentService vnpayService)
         {
-            _vnpay = vnpay;
-            _configuration = configuration;
-
-            // Khởi tạo VNPAY với thông tin từ configuration
-            _vnpay.Initialize(
-                _configuration["Vnpay:TmnCode"],
-                _configuration["Vnpay:HashSecret"],
-                _configuration["Vnpay:BaseUrl"],
-                _configuration["Vnpay:ReturnUrl"]
-            );
+            _vnpayService = vnpayService;
         }
-
         [HttpGet("CreatePaymentUrl")]
         public ActionResult<string> CreatePaymentUrl(double moneyToPay, string description)
         {
             try
             {
                 var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "::1";
-
-                var request = new PaymentRequest
-                {
-                    PaymentId = DateTime.Now.Ticks,
-                    Money = moneyToPay,
-                    Description = description,
-                    IpAddress = ipAddress,
-                    BankCode = BankCode.ANY,
-                    CreatedDate = DateTime.Now,
-                    Currency = Currency.VND,
-                    Language = DisplayLanguage.Vietnamese
-                };
-
-                var paymentUrl = _vnpay.GetPaymentUrl(request);
+                var paymentUrl = _vnpayService.CreatePaymentUrl(moneyToPay, description, ipAddress);
                 return Created(paymentUrl, paymentUrl);
             }
             catch (Exception ex)
@@ -61,7 +40,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var paymentResult = _vnpay.GetPaymentResult(Request.Query);
+                    var paymentResult = _vnpayService.GetPaymentCallback(Request.Query);
                     var resultDescription = $"{paymentResult.PaymentResponse.Description}. {paymentResult.TransactionStatus.Description}.";
 
                     if (paymentResult.IsSuccess)
@@ -87,7 +66,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var paymentResult = _vnpay.GetPaymentResult(Request.Query);
+                    var paymentResult = _vnpayService.ProcessIpnCallback(Request.Query);
                     if (paymentResult.IsSuccess)
                     {
                         // Thực hiện cập nhật trạng thái đơn hàng trong DB của bạn tại đây
@@ -103,6 +82,40 @@ namespace API.Controllers
             }
 
             return NotFound("Không tìm thấy thông tin thanh toán.");
+        }
+
+        [HttpGet("vnpay-return")]
+        public IActionResult PaymentReturn()
+        {
+            try
+            {
+                var response = _vnpayService.ProcessPaymentReturn(Request.Query);
+
+                if (response.PaymentStatus)
+                {
+                    return Ok(new
+                    {
+                        Success = true,
+                        Message = "Thanh toán thành công",
+                        Data = response
+                    });
+                }
+
+                return BadRequest(new
+                {
+                    Success = false,
+                    Message = "Thanh toán thất bại",
+                    Data = response
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Success = false,
+                    Message = ex.Message
+                });
+            }
         }
     }
 }
