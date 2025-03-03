@@ -32,6 +32,21 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("quiz")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var result = await _quizService.GetQuizById(id);
+
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+            }
+            catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
+
         [HttpPost("quizzes")]
         public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
         {
@@ -46,31 +61,13 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("quizzes/{id}/activate")]
-        public async Task<IActionResult> ActivateQuiz(int id)
+        [HttpPut("{id}/SetStatus")]
+        public async Task<IActionResult> SetStatusQuiz(int id, int status)
         {
             try
             {
-                var result = await _quizService.ActiveQuiz(id);
-                return Ok(new { Message = "Quiz activated successfully." });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Error = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
-        }
-
-        [HttpPut("quizzes/{id}/deactivate")]
-        public async Task<IActionResult> DeactivateQuiz(int id)
-        {
-            try
-            {
-                var result = await _quizService.InactiveQuiz(id);
-                return Ok(new { Message = "Quiz deactivated successfully." });
+                var result = await _quizService.SetQuizStatus(id,status);
+                return Ok(new { Message = "Quiz status updated successfully." });
             }
             catch (KeyNotFoundException ex)
             {
