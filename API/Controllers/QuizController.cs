@@ -32,6 +32,21 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet("quiz")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var result = await _quizService.GetQuizById(id);
+
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+            }
+            catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+            }
+        }
+
         [HttpPost("quizzes")]
         public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
         {

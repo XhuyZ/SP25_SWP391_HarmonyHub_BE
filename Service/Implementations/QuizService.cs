@@ -59,10 +59,22 @@ namespace Service.Implementations
         {
             try
             {
-                var quiz = await _quizRepository.GetAllQuizzes();
-                return _mapper.Map<IEnumerable<QuizResponse>>(quiz);
+                var quizzes = await _quizRepository.GetAllQuizzes();
+                return _mapper.Map<IEnumerable<QuizResponse>>(quizzes);
             }
             catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
+        }
+
+        public async Task<QuizResponse> GetQuizById(int id)
+        {
+            try
+            {
+                var quiz = await _quizRepository.GetByIdAsync(id);
+                return _mapper.Map<QuizResponse>(quiz);
+            }catch(Exception e)
             {
                 throw new ServiceException(e.Message);
             }
