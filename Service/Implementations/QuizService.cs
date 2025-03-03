@@ -33,35 +33,6 @@ namespace Service.Implementations
             _quizQuestionRepository = quizQuestionRepository;
         }
 
-        //public async Task<bool> InactiveQuiz(int id)
-        //{
-        //    var quiz = await _quizRepository.GetByIdAsync(id);
-        //    if (quiz == null)
-        //    {
-        //        throw new KeyNotFoundException($"Quiz with ID {id} not found.");
-        //    } else if (quiz.Status == (int)QuizStatusEnum.Inactive)
-        //    {
-        //        throw new Exception("Quiz already inactive.");
-        //    }
-        //    quiz.Status = (int)QuizStatusEnum.Inactive;
-        //    await _quizRepository.UpdateAsync(quiz);
-        //    return true;
-        //}
-
-        //public async Task<bool> ActiveQuiz(int id)
-        //{
-        //    var quiz = await _quizRepository.GetByIdAsync(id);
-        //    if (quiz == null)
-        //    {
-        //        throw new KeyNotFoundException($"Quiz with ID {id} not found.");
-        //    } else if(quiz.Status == (int)QuizStatusEnum.Active)
-        //    {
-        //        throw new Exception("Quiz already active.");
-        //    }
-        //    quiz.Status = (int)QuizStatusEnum.Active;
-        //    await _quizRepository.UpdateAsync(quiz);
-        //    return true;
-        //}
 
         public async Task<bool> SetQuizStatus(int quizId, int status)
         {

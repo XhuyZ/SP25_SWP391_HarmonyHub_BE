@@ -16,7 +16,7 @@ public class BlogController : ApiBaseController
         _blogService = blogService;
     }
 
-    [HttpPost("blogs/createBlog")]
+    [HttpPost("blogs")]
     public async Task<IActionResult> CreateBlog(CreateBlogRequest request)
     {
         try
@@ -30,7 +30,7 @@ public class BlogController : ApiBaseController
         }
     }
 
-    [HttpGet("blogs/getAllBlogs")]
+    [HttpGet("blogs")]
     public async Task<IActionResult> GetAllBlogs()
     {
         try
@@ -45,7 +45,7 @@ public class BlogController : ApiBaseController
         }
     }
 
-    [HttpGet("blogs/{therapistId}")]
+    [HttpGet("therapists/{therapistId}/blogs")]
     public async Task<IActionResult> GetBlogsByTherapistId(int therapistId)
     {
         var blogs = await _blogService.GetBlogsByTherapistId(therapistId);

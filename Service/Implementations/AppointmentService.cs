@@ -52,7 +52,7 @@ public class AppointmentService : IAppointmentService
     {
         try
         {
-            var result = await _appointmentRepository.GetByIdAsync(id);
+            var result = await _appointmentRepository.GetAppointmentById(id);
             return _mapper.Map<AppointmentResponse>(result);
         }
         catch (Exception e)

@@ -1,21 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Domain.Entities;
-using Service;
-using Service.Implementations;
-using Domain.Constants;
+﻿using Domain.Constants;
 using Domain.DTOs.Common;
+using Domain.DTOs.Requests;
+using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
 using Service.Interfaces;
-using Domain.DTOs.Requests;
-using MySqlX.XDevAPI.Common;
 
 namespace API.Controllers
 {
-    [Route("api/Quiz")]
     [ApiController]
-    public class QuizController : ControllerBase
+    public class QuizController : ApiBaseController
     {
         private readonly IQuizService _quizService;
 
@@ -24,7 +17,7 @@ namespace API.Controllers
             _quizService = quizService;
         }
 
-        [HttpGet("GetAllQuizzes")]
+        [HttpGet("quizzes")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -39,7 +32,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("CreateQuizWithQuestion(s)AndOption(s)")]
+        [HttpPost("quizzes")]
         public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
         {
             try
@@ -47,7 +40,7 @@ namespace API.Controllers
                 var quiz = await _quizService.CreateQuizAsync(request);
                 return Ok(new { statusCode = 200, message = "Successful", data = quiz });
             }
-         catch (ServiceException e)
+            catch (ServiceException e)
             {
                 return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
             }
@@ -71,7 +64,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("question")]
+        [HttpDelete("questions/{questionId}")]
         public async Task<IActionResult> DeleteQuestion(int questionId)
         {
             try
@@ -81,6 +74,7 @@ namespace API.Controllers
                 {
                     return Ok(new { Message = "Question and options deleted successfully." });
                 }
+
                 return NotFound($"Question with ID {questionId} not found.");
             }
             catch (KeyNotFoundException ex)
@@ -89,7 +83,8 @@ namespace API.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "An error occurred while deleting the question.", error = ex.Message });
+                return StatusCode(500,
+                    new { message = "An error occurred while deleting the question.", error = ex.Message });
             }
         }
     }
