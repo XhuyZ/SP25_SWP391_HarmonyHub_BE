@@ -12,8 +12,7 @@ namespace Service.Interfaces
     {
         Task<IEnumerable<QuizResponse>> GetAllQuizzes();
         Task<QuizResponse> CreateQuizAsync(CreateQuizRequest request);
-        Task<bool> InactiveQuiz(int id);
-        Task<bool> ActiveQuiz(int id);
+        Task<bool> SetQuizStatus(int quizId, int status);
         Task<bool> DeleteQuestionAsync(int questionId);
 
     }

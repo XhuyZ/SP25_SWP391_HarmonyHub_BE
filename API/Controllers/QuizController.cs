@@ -53,31 +53,13 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}/activate")]
-        public async Task<IActionResult> ActivateQuiz(int id)
+        [HttpPut("{id}/SetStatus")]
+        public async Task<IActionResult> SetStatusQuiz(int id, int status)
         {
             try
             {
-                var result = await _quizService.ActiveQuiz(id);
-                return Ok(new { Message = "Quiz activated successfully." });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { Error = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.Message });
-            }
-        }
-
-        [HttpPut("{id}/deactivate")]
-        public async Task<IActionResult> DeactivateQuiz(int id)
-        {
-            try
-            {
-                var result = await _quizService.InactiveQuiz(id);
-                return Ok(new { Message = "Quiz deactivated successfully." });
+                var result = await _quizService.SetQuizStatus(id,status);
+                return Ok(new { Message = "Quiz status updated successfully." });
             }
             catch (KeyNotFoundException ex)
             {
