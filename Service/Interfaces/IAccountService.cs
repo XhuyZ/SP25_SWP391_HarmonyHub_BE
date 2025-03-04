@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
+using Microsoft.AspNetCore.Http;
 
 namespace Service.Interfaces;
 
@@ -17,5 +18,6 @@ public interface IAccountService
     Task<MemberProfileResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request);
     Task<TherapistProfileResponse> GetTherapistProfile(int therapistId);
     Task<TherapistProfileResponse> UpdateTherapistProfile(int therapistId, UpdateTherapistProfileRequest request);
+    Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile);
 
 }
