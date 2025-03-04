@@ -3,6 +3,7 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Implementations;
 using Repository.Interfaces;
@@ -23,14 +24,16 @@ namespace Service.Implementations
         private readonly IQuestionRepository _questionRepository;
         private readonly IOptionRepository _optionRepository;
         private readonly IQuizQuestionRepository _quizQuestionRepository;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public QuizService(IQuizRepository quizRepository, IMapper mapper, IQuestionRepository questionRepository, IOptionRepository optionRepository, IQuizQuestionRepository quizQuestionRepository)
+        public QuizService(IQuizRepository quizRepository, IMapper mapper, IQuestionRepository questionRepository, IOptionRepository optionRepository, IQuizQuestionRepository quizQuestionRepository, ICloudinaryService cloudinaryService)
         {
             _quizRepository = quizRepository;
             _mapper = mapper;
             _questionRepository = questionRepository;
             _optionRepository = optionRepository;
             _quizQuestionRepository = quizQuestionRepository;
+            _cloudinaryService = cloudinaryService;
         }
 
 
@@ -143,11 +146,30 @@ namespace Service.Implementations
                 await _optionRepository.DeleteRangeAsync(options);
             }
 
-
-            // Finally, delete the question
             await _questionRepository.DeleteAsync(question);
 
             return true;
+        }
+
+        public async Task<QuizResponse> UpdateAvatarUrl(int id, IFormFile imgFile)
+        {
+            try
+            {
+                var quiz = await _quizRepository.GetByIdAsync(id);
+                if (quiz == null)
+                    throw new ServiceException(MessageConstants.NOT_FOUND);
+
+                var imgUrl = await _cloudinaryService.UploadFile(imgFile);
+
+                quiz.ImageUrl = imgUrl;
+                await _quizRepository.UpdateAsync(quiz);
+
+                return _mapper.Map<QuizResponse>(quiz);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
         }
 
 

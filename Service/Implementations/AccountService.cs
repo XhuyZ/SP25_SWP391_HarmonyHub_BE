@@ -4,7 +4,9 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -18,14 +20,16 @@ public class AccountService : IAccountService
     private readonly AdminAccount _adminAccount;
     private readonly ITokenService _tokenService;
     private readonly IAccountRepository _accountRepository;
+    private readonly ICloudinaryService _cloudinaryService;
 
     public AccountService(IMapper mapper, IOptions<AdminAccount> adminAccount, ITokenService tokenService,
-        IAccountRepository accountRepository)
+        IAccountRepository accountRepository, ICloudinaryService cloudinaryService)
     {
         _mapper = mapper;
         _adminAccount = adminAccount.Value;
         _tokenService = tokenService;
         _accountRepository = accountRepository;
+        _cloudinaryService = cloudinaryService;
     }
 
     public async Task<IEnumerable<AccountResponse>> GetAllAccounts()
@@ -283,6 +287,29 @@ public class AccountService : IAccountService
 
             await _accountRepository.UpdateAsync(account);
             return _mapper.Map<TherapistProfileResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(id);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            var avatarUrl = await _cloudinaryService.UploadFile(avatarFile);
+
+            account.AvatarUrl = avatarUrl;
+            await _accountRepository.UpdateAsync(account);
+
+            return _mapper.Map<AccountResponse>(account);
         }
         catch (Exception e)
         {

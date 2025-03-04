@@ -3,6 +3,7 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
+using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers
@@ -61,7 +62,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("{id}/SetStatus")]
+        [HttpPut("quiz/{id}/SetStatus")]
         public async Task<IActionResult> SetStatusQuiz(int id, int status)
         {
             try
@@ -76,6 +77,20 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { Error = ex.Message });
+            }
+        }
+
+        [HttpPut("quiz/imgUrl")]
+        public async Task<IActionResult> UpdateQuizImgUrl(int Id, IFormFile imgUrl)
+        {
+            try
+            {
+                var result = await _quizService.UpdateAvatarUrl(Id, imgUrl);
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+            }
+            catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
             }
         }
 

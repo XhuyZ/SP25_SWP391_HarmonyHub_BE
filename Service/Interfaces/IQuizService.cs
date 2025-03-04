@@ -1,5 +1,6 @@
 ﻿using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace Service.Interfaces
         Task<bool> SetQuizStatus(int quizId, int status);
         Task<bool> DeleteQuestionAsync(int questionId);
         Task<QuizResponse> GetQuizById(int id);
-
+        Task<QuizResponse> UpdateAvatarUrl(int id, IFormFile imgFile);
     }
 }
