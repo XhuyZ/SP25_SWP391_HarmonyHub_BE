@@ -1,4 +1,8 @@
-﻿using Domain.Entities;
+﻿using Domain.DTOs.Common;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Repository.Data;
 using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Implementations;
@@ -48,6 +52,8 @@ public static class ServiceExtension
         services.AddScoped<IQuizQuestionRepository, QuizQuestionRepository>();
         services.AddScoped<IVnpayPaymentService, VnpayPaymentService>();
 
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<IGenericService<Transaction, TransactionDTO>, GenericService<Transaction, TransactionDTO>>();
         return services;
     }
 }

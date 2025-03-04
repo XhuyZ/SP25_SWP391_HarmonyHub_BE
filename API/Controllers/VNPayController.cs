@@ -1,8 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Constants;
+using Domain.DTO.Request;
+using System.Net;
+using Domain.DTOs.Common;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Repository.Interfaces;
 using Service.Interfaces;
 using VNPAY.NET;
 using VNPAY.NET.Enums;
 using VNPAY.NET.Models;
+using Domain.DTOs.Responses;
 
 
 namespace API.Controllers
@@ -11,111 +19,152 @@ namespace API.Controllers
     [ApiController]
     public class VNPayController : ControllerBase
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IVnpayPaymentService _vnpayService;
-        private readonly IConfiguration _configuration;
+        private readonly IGenericRepository<Account> _accountRepo;
+        private readonly IGenericService<Transaction, TransactionDTO> _transactionService;
 
-        public VNPayController(IVnpayPaymentService vnpayService)
+        public VNPayController(IHttpContextAccessor httpContextAccessor, IVnpayPaymentService vnpayService, IGenericRepository<Account> accountRepo
+            , IGenericService<Transaction, TransactionDTO> transactionService)
         {
+            _httpContextAccessor = httpContextAccessor;
             _vnpayService = vnpayService;
+            _accountRepo = accountRepo;
+            _transactionService = transactionService;
         }
-        [HttpGet("CreatePaymentUrl")]
-        public ActionResult<string> CreatePaymentUrl(double moneyToPay, string description)
+        [HttpPost("Pay")]
+        public async Task<ActionResult<ApiResponse>> CreatePayment([FromBody] CreatePaymentRequest createPaymentRequest)
         {
             try
             {
-                var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "::1";
-                var paymentUrl = _vnpayService.CreatePaymentUrl(moneyToPay, description, ipAddress);
-                return Created(paymentUrl, paymentUrl);
+                string payload = _vnpayService.CreatePayment(createPaymentRequest);
+
+                return Ok(new ApiResponse((int)HttpStatusCode.OK, MessageConstants.SUCCESSFUL, payload));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ApiResponse((int)HttpStatusCode.BadRequest, MessageConstants.FAILED, null));
             }
         }
 
-        [HttpGet("Callback")]
-        public ActionResult<string> Callback()
-        {
-            if (Request.QueryString.HasValue)
-            {
-                try
-                {
-                    var paymentResult = _vnpayService.GetPaymentCallback(Request.Query);
-                    var resultDescription = $"{paymentResult.PaymentResponse.Description}. {paymentResult.TransactionStatus.Description}.";
-
-                    if (paymentResult.IsSuccess)
-                    {
-                        return Ok(resultDescription);
-                    }
-
-                    return BadRequest(resultDescription);
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            return NotFound("Không tìm thấy thông tin thanh toán.");
-        }
-
-        [HttpGet("IpnAction")]
-        public IActionResult IpnAction()
-        {
-            if (Request.QueryString.HasValue)
-            {
-                try
-                {
-                    var paymentResult = _vnpayService.ProcessIpnCallback(Request.Query);
-                    if (paymentResult.IsSuccess)
-                    {
-                        // Thực hiện cập nhật trạng thái đơn hàng trong DB của bạn tại đây
-                        return Ok();
-                    }
-
-                    return BadRequest("Thanh toán thất bại");
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(ex.Message);
-                }
-            }
-
-            return NotFound("Không tìm thấy thông tin thanh toán.");
-        }
-
-        [HttpGet("vnpay-return")]
-        public IActionResult PaymentReturn()
+        [HttpPost("CheckUserCredit")]
+        public async Task<ActionResult<ApiResponse>> CheckPaymentForUserCredit([FromBody] CreatePaymentUserRequest createPaymentRequest)
         {
             try
             {
-                var response = _vnpayService.ProcessPaymentReturn(Request.Query);
-
-                if (response.PaymentStatus)
+                var user = await _accountRepo.GetByIdAsync(createPaymentRequest.UserId);
+                if (user == null)
                 {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Thanh toán thành công",
-                        Data = response
-                    });
+                    return NotFound($"User with ID {createPaymentRequest.UserId} not found.");
                 }
-
-                return BadRequest(new
+                if (user.Balance < createPaymentRequest.Amount)
                 {
-                    Success = false,
-                    Message = "Thanh toán thất bại",
-                    Data = response
-                });
+                    return BadRequest(createPaymentRequest.Amount - user.Balance);
+                }
+                else
+                {
+                    return Ok();
+                }
             }
             catch (Exception ex)
             {
-                return BadRequest(new
-                {
-                    Success = false,
-                    Message = ex.Message
-                });
+                return BadRequest(new ApiResponse((int)HttpStatusCode.BadRequest, MessageConstants.FAILED, null));
             }
+        }
+
+        [HttpPost("PayUserCredit")]
+        public async Task<ActionResult<ApiResponse>> CreatePaymentForUserCredit([FromBody] CreatePaymentUserRequest createPaymentRequest)
+        {
+            try
+            {
+                string payload = _vnpayService.CreatePaymentForUserCredit(createPaymentRequest);
+
+                return Ok(new ApiResponse((int)HttpStatusCode.OK, MessageConstants.SUCCESSFUL, payload));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse((int)HttpStatusCode.BadRequest, MessageConstants.FAILED, null));
+            }
+        }
+
+        [HttpGet("Result/{Id}")]
+        public async Task<ActionResult<ApiResponse>> GetPaymentResultUser(int Id)
+        {
+            var context = _httpContextAccessor.HttpContext;
+
+            try
+            {
+                int result = _vnpayService.GetPaymentResult();
+
+                string orderId = context.Request.Query["vnp_TxnRef"];
+                string amount = context.Request.Query["vnp_Amount"];
+                string orderInfo = context.Request.Query["vnp_OrderInfo"];
+                string payDate = context.Request.Query["vnp_PayDate"];
+                string transactionCode = context.Request.Query["vnp_TransactionNo"];
+
+                var user = await _accountRepo.GetByIdAsync(Id);
+                //var role = user.Role;
+                if (user != null && result == 1)
+                {
+                    var transaction = new TransactionDTO
+                    {
+                        UserId = Id,
+                        ReceiverId = Id,
+                        Amount = decimal.Parse(amount) / 100,
+                        TransactionId = transactionCode,
+                        Description = "Charge credit for user",
+                        PaymentMethod  = (int)TransactionConstant.CHARGE,
+                        Status = (int)TransactionStatusEnum.Created,
+                    };
+
+                    await _transactionService.Add(transaction);
+
+                    user.Balance = user.Balance + decimal.Parse(amount) / 100;
+                    await _accountRepo.UpdateAsync(user);
+                }
+                //if (role == "Therapist")
+                //{
+                //    return Redirect("http://localhost:3000/ProfileTutor");
+                //}
+                return Redirect("http://localhost:3000/Profile");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse((int)HttpStatusCode.BadRequest, MessageConstants.FAILED, null));
+            }
+
+        }
+
+        [HttpGet("Result")]
+        public async Task<ActionResult<ApiResponse>> GetPaymentResult()
+        {
+            var context = _httpContextAccessor.HttpContext;
+
+            try
+            {
+                int result = _vnpayService.GetPaymentResult();
+
+                string orderId = context.Request.Query["vnp_TxnRef"];
+                string amount = context.Request.Query["vnp_Amount"];
+                string orderInfo = context.Request.Query["vnp_OrderInfo"];
+                string payDate = context.Request.Query["vnp_PayDate"];
+                string userId = context.Request.Query["vnp_Billing_Email"];
+
+                CreatePaymentResponse createPaymentResponse = new CreatePaymentResponse
+                {
+                    OrderId = orderId,
+                    Amount = amount,
+                    OrderInfo = orderInfo,
+                    PayDate = payDate
+                };
+
+                return Ok(new ApiResponse((int)HttpStatusCode.OK, MessageConstants.SUCCESSFUL, createPaymentResponse));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ApiResponse((int)HttpStatusCode.BadRequest, MessageConstants.FAILED, null));
+            }
+
         }
     }
 }
