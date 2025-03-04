@@ -22,5 +22,15 @@ namespace Repository.Implementations
                     .ThenInclude(q => q.Options)
                 .ToListAsync();
         }
+
+        public async Task<Quiz> GetByIdAsync(int id)
+        {
+            return await _context.Quizzes
+                .Include(q => q.QuizQuestions)
+                    .ThenInclude(qq => qq.Question)
+                        .ThenInclude(q => q.Options)
+                .FirstOrDefaultAsync(q => q.Id == id);
+        }
+
     }
 }

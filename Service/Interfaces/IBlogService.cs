@@ -8,8 +8,7 @@ namespace Service.Interfaces
         Task CreateBlog(CreateBlogRequest request);
         Task<IEnumerable<BlogResponse>> GetAllBlogs();
         Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId);
-        Task<bool> SetBlogInactive(int blogId);
-        Task<bool> SetBlogActive(int blogId);
+        Task<bool> SetBlogStatus(int blogId, int status);
 
     }
 }

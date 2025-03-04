@@ -56,24 +56,13 @@ public class BlogController : ApiBaseController
         return Ok(new { statusCode = 200, message = "Successful", data = blogs });
     }
 
-    [HttpPut("{blogId}/set-inactive")]
-    public async Task<IActionResult> SetBlogInactive(int blogId)
+    [HttpPut("{blogId}/UpdateStatus")]
+    public async Task<IActionResult> SetBlogStatus(int blogId, int status)
     {
-        var success = await _blogService.SetBlogInactive(blogId);
+        var success = await _blogService.SetBlogStatus(blogId, status);
         if (!success)
-            return BadRequest(new { message = "Failed to set blog inactive." });
+            return BadRequest(new { message = "Failed to update blog status." });
 
-        return Ok(new { statusCode = 200, message = "Blog set to inactive successfully." });
+        return Ok(new { statusCode = 200, message = "Blog status updated." });
     }
-
-    [HttpPut("{blogId}/set-active")]
-    public async Task<IActionResult> SetBlogActive(int blogId)
-    {
-        var success = await _blogService.SetBlogActive(blogId);
-        if (!success)
-            return BadRequest(new { message = "Failed to set blog active." });
-
-        return Ok(new { statusCode = 200, message = "Blog set to active successfully." });
-    }
-
 }
