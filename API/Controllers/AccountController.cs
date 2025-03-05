@@ -1,5 +1,4 @@
-﻿using AutoMapper.Execution;
-using Domain.Constants;
+﻿using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -157,6 +156,20 @@ public class AccountController : ApiBaseController
         try
         {
             var result = await _accountService.UpdateTherapistProfile(therapistId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpPut("accounts/{id}/avatar")]
+    public async Task<IActionResult> UpdateAccountAvatar(int Id, IFormFile avatarFile)
+    {
+        try
+        {
+            var result = await _accountService.UpdateAvatarUrl(Id, avatarFile);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
