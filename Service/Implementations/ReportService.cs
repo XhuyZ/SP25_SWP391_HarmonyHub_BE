@@ -96,11 +96,11 @@ namespace Service.Implementations
                 throw new ServiceException(e.Message);
             }
         }
-        public async Task<Report> DeleteReport(int acountID)
+        public async Task<Report> DeleteReport(int id)
         {
             var report = await _reportRepository.GetAllAsync();
             var reportToDelete = report.FirstOrDefault(f =>
-            f.AccountId == acountID);
+            f.AccountId == id);
 
             if (reportToDelete == null)
             {

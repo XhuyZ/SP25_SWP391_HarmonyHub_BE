@@ -15,6 +15,6 @@ namespace Service.Interfaces
         Task<ReportResponse> GetReportsByAcountID(int acountID);
         Task CreateReport(CreateReportRequest request);
         Task<ReportResponse> UpdateReport(int acountID, UpdateReportRequest request);
-        Task<Report> DeleteReport(int acountID);
+        Task<Report> DeleteReport(int id);
     }
 }

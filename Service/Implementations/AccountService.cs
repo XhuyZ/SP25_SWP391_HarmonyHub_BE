@@ -181,7 +181,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = await _accountRepository.GetByIdAsync(memberId);
+            var account = await _accountRepository.GetMemberDetails(memberId);
 
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
@@ -250,7 +250,7 @@ public class AccountService : IAccountService
     {
         try
         {
-            var account = await _accountRepository.GetByIdAsync(therapistId);
+            var account = await _accountRepository.GetTherapistDetails(therapistId);
 
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
