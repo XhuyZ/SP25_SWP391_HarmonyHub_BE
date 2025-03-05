@@ -2,11 +2,9 @@
 
 namespace Service.Interfaces
 {
-    public interface IVnpayPaymentService
+    public interface IVnPayService
     {
         string CreatePayment(CreatePaymentRequest createPaymentRequest);
-
-        string CreatePaymentForUserCredit(CreatePaymentUserRequest createPaymentRequest);
 
         int GetPaymentResult();
     }

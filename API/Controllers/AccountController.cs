@@ -1,9 +1,7 @@
-﻿using AutoMapper.Execution;
-using Domain.Constants;
+﻿using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Service.Exceptions;
 using Service.Interfaces;
 
