@@ -126,7 +126,7 @@ namespace API.Controllers
                 //{
                 //    return Redirect("http://localhost:3000/ProfileTutor");
                 //}
-                return Redirect("http://localhost:3000/Profile");
+                return Redirect("http://localhost:5264/api/members");
             }
             catch (Exception ex)
             {
