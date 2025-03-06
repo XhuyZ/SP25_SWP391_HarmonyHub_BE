@@ -4,11 +4,6 @@ using API.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Repository.Implementations;
-using Repository.Interfaces;
-using Service.Implementations;
-using Service.Interfaces;
-using Service.Settings;
 using VNPAY.NET;
 
 var builder = WebApplication.CreateBuilder(args);

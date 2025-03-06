@@ -1,86 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Constant;
-using Domain.DTO.Request;
-using Domain.DTOs.Responses;
-using Domain.Entities;
+﻿using Domain.DTO.Request;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Org.BouncyCastle.Asn1.Ocsp;
-using Repository.Interfaces;
-using Service.Common;
+using Microsoft.Extensions.Options;
 using Service.Interfaces;
-using VNPAY.NET;
-using VNPAY.NET.Enums;
-using VNPAY.NET.Models;
+using Service.Settings;
+using VNPAY_CS_ASPX;
 
 namespace Service.Implementations
 {
-    public class VnpayPaymentService : IVnpayPaymentService
+    public class VnPayService : IVnPayService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly VnPaySettings _vnPaySettings;
 
-        public VnpayPaymentService(IHttpContextAccessor httpContextAccessor)
+        public VnPayService(IHttpContextAccessor httpContextAccessor, IOptions<VnPaySettings> vnPaySettings)
         {
             _httpContextAccessor = httpContextAccessor;
-        }
-        public string CreatePaymentForUserCredit(CreatePaymentUserRequest createPaymentRequest)
-        {
-            //Get Config Info
-            string vnp_Returnurl = VnPayConstant.RETURN_URL;
-            string vnp_Url = VnPayConstant.PAY_URL;
-            string vnp_TmnCode = VnPayConstant.TMN_CODE;
-            string vnp_HashSecret = VnPayConstant.HASH_SECRET;
-
-            //Get payment input
-            long orderId = DateTime.Now.Ticks;
-            long amount = createPaymentRequest.Amount;
-            DateTime createdDate = DateTime.Now;
-
-            //Save order to db
-
-            //Build URL for VNPAY
-            VnPayLibrary vnpay = new VnPayLibrary();
-
-            vnpay.AddRequestData("vnp_Version", VnPayConstant.VERSION);
-            vnpay.AddRequestData("vnp_Command", VnPayConstant.PAY_COMMAND);
-            vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", (amount * 100).ToString());
-
-            vnpay.AddRequestData("vnp_CreateDate", createdDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", "VND");
-            vnpay.AddRequestData("vnp_IpAddr", VnPayUtils.GetIpAddress(_httpContextAccessor));
-
-            vnpay.AddRequestData("vnp_Locale", VnPayConstant.LOCALE);
-
-            vnpay.AddRequestData("vnp_OrderInfo", createPaymentRequest.OrderInfo);
-            vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-
-            vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl + "/" + createPaymentRequest.UserId);
-            vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
-
-            //vnpay.AddRequestData("vnp_Bill_Email", createPaymentRequest.UserId.ToString());
-
-            //Add Params of 2.1.0 Version
-            //Billing
-
-            string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
-
-            return paymentUrl;
+            _vnPaySettings = vnPaySettings.Value;
         }
 
         public string CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
-            //Get Config Info
-            string vnp_Returnurl = VnPayConstant.RETURN_URL;
-            string vnp_Url = VnPayConstant.PAY_URL;
-            string vnp_TmnCode = VnPayConstant.TMN_CODE;
-            string vnp_HashSecret = VnPayConstant.HASH_SECRET;
+            string vnp_Returnurl = _vnPaySettings.ReturnUrl;
+            string vnp_Url = _vnPaySettings.PayUrl;
+            string vnp_TmnCode = _vnPaySettings.TmnCode;
+            string vnp_HashSecret = _vnPaySettings.HashSecret;
 
             //Get payment input
             long orderId = DateTime.Now.Ticks;
@@ -92,19 +35,19 @@ namespace Service.Implementations
             //Build URL for VNPAY
             VnPayLibrary vnpay = new VnPayLibrary();
 
-            vnpay.AddRequestData("vnp_Version", VnPayConstant.VERSION);
-            vnpay.AddRequestData("vnp_Command", VnPayConstant.PAY_COMMAND);
+            vnpay.AddRequestData("vnp_Version", _vnPaySettings.Version);
+            vnpay.AddRequestData("vnp_Command", _vnPaySettings.PayCommand);
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
             vnpay.AddRequestData("vnp_Amount", (amount * 100).ToString());
 
             vnpay.AddRequestData("vnp_CreateDate", createdDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_CurrCode", "VND");
+            vnpay.AddRequestData("vnp_CurrCode", _vnPaySettings.CurrencyCode);
             vnpay.AddRequestData("vnp_IpAddr", VnPayUtils.GetIpAddress(_httpContextAccessor));
 
-            vnpay.AddRequestData("vnp_Locale", VnPayConstant.LOCALE);
+            vnpay.AddRequestData("vnp_Locale", _vnPaySettings.Locale);
 
             vnpay.AddRequestData("vnp_OrderInfo", createPaymentRequest.OrderInfo);
-            vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
+            vnpay.AddRequestData("vnp_OrderType", _vnPaySettings.OrderType); 
 
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
             vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
@@ -123,7 +66,7 @@ namespace Service.Implementations
 
             if (context.Request.Query.Count > 0)
             {
-                string vnp_HashSecret = VnPayConstant.HASH_SECRET;
+                string vnp_HashSecret = _vnPaySettings.HashSecret;
                 var vnpayData = context.Request.Query;
                 VnPayLibrary vnpay = new VnPayLibrary();
 
