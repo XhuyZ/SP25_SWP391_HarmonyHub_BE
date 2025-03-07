@@ -9,6 +9,7 @@ public interface IAccountService
     Task<IEnumerable<AccountResponse>> GetAllAccounts();
     Task<IEnumerable<TherapistDetailsResponse>> GetAllTherapists();
     Task<TherapistDetailsResponse> GetTherapistDetails(int therapistId);
+    Task<MemberDetailsResponse> GetMemberDetails(int memberId);
     Task<AccountResponse> GetAccountById(int accountId);
     Task RegisterMember(RegisterMemberRequest request);
     Task RegisterTherapist(RegisterTherapistRequest request);

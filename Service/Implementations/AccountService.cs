@@ -73,6 +73,21 @@ public class AccountService : IAccountService
             throw new ServiceException(e.Message);
         }
     }
+    public async Task<MemberDetailsResponse> GetMemberDetails(int memberId)
+    {
+        try
+        {
+            var result = await _accountRepository.GetMemberDetails(memberId);
+            if (result == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+
+            return _mapper.Map<MemberDetailsResponse>(result);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 
     public async Task<AccountResponse> GetAccountById(int accountId)
     {

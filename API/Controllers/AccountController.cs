@@ -76,6 +76,19 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+    [HttpGet("members/{memberId}")]
+    public async Task<IActionResult> GetMemberDetails(int memberId)
+    {
+        try
+        {
+            var result = await _accountService.GetMemberDetails(memberId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
 
 
     [HttpPost("register/member")]
@@ -108,7 +121,7 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpGet("members/{memberId}")]
+    [HttpGet("member/profile/{memberId}")]
     public async Task<IActionResult> GetMemberProfile(int memberId)
     {
         try
@@ -122,7 +135,7 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpPut("members/update-profile/{memberId}")]
+    [HttpPut("member/update-profile/{memberId}")]
     public async Task<IActionResult> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
     {
         try
@@ -163,7 +176,7 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpPut("members/update-detail/{memberId}")]
+    [HttpPut("member/update-detail/{memberId}")]
     public async Task<IActionResult> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
     {
         try
