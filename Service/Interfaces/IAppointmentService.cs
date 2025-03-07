@@ -12,7 +12,7 @@ public interface IAppointmentService
     Task<AppointmentResponse> GetAppointmentById(int id);
     Task<IEnumerable<AppointmentFeedbackResponse>> GetAllAppointmentFeedback();
     // Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId);
-    Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request);
+    //Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request);
     Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
     Task DeleteFeedbackAppointment(int appointmentId);
 }

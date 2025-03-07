@@ -278,7 +278,6 @@ public class AccountService : IAccountService
             account.Email = request.Email;
             account.Birthdate = request.Birthdate;
             account.Gender = request.Gender;
-            account.AvatarUrl = request.AvatarUrl;
             account.Bio = request.Bio;
             account.YearsOfExperience = request.YearsOfExperience;
 

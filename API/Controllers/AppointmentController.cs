@@ -119,20 +119,20 @@ public class AppointmentController : ApiBaseController
     //     }
     // }
     
-    [HttpPost("appointments/{appointmentId}/create-feedback")]
-    public async Task<IActionResult> CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
-    {
-        try
-        {
-            await _appointmentService.CreateFeedbackAppointment(appointmentId, request);
-            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-    [HttpPut("appointments/{appointmentId}/update-feedback")]
+    //[HttpPost("appointments/{appointmentId}/create-feedback")]
+    //public async Task<IActionResult> CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
+    //{
+    //    try
+    //    {
+    //        await _appointmentService.CreateFeedbackAppointment(appointmentId, request);
+    //        return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
+    [HttpPut("appointments/update-feedback/{appointmentId}")]
     public async Task<IActionResult> UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request)
     {
         try

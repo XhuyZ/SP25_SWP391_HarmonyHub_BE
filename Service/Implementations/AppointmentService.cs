@@ -120,24 +120,24 @@ public class AppointmentService : IAppointmentService
     //     }
     // }
     
-    public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
-    {
-        var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);
-        if (apointment == null)
-            throw new ServiceException(MessageConstants.NOT_FOUND);
-        try
-        {
-            apointment.FeedbackRating = request.FeedbackRating;
-            apointment.FeedbackContent = request.FeedbackContent;
-            apointment.FeedbackDate = DateTime.Now;
+    //public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
+    //{
+    //    var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+    //    if (apointment == null)
+    //        throw new ServiceException(MessageConstants.NOT_FOUND);
+    //    try
+    //    {
+    //        apointment.FeedbackRating = request.FeedbackRating;
+    //        apointment.FeedbackContent = request.FeedbackContent;
+    //        apointment.FeedbackDate = DateTime.Now;
 
-            await _appointmentRepository.UpdateAsync(apointment);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
+    //        await _appointmentRepository.UpdateAsync(apointment);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
     public async Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request)
     {
         var existingFeedback = await _appointmentRepository.GetByIdAsync(appointmentId);
