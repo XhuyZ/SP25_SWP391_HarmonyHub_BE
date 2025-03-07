@@ -122,7 +122,7 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpPut("members/{memberId}")]
+    [HttpPut("members/update-profile/{memberId}")]
     public async Task<IActionResult> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
     {
         try
@@ -136,7 +136,7 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpGet("profile/{therapistId}")]
+    [HttpGet("therapist/profile/{therapistId}")]
     public async Task<IActionResult> GetTherapistProfile(int therapistId)
     {
         try
@@ -150,12 +150,25 @@ public class AccountController : ApiBaseController
         }
     }
 
-    [HttpPut("profile/{therapistId}")]
+    [HttpPut("therapist/update-profile/{therapistId}")]
     public async Task<IActionResult> UpdateTherapistProfile(int therapistId, UpdateTherapistProfileRequest request)
     {
         try
         {
             var result = await _accountService.UpdateTherapistProfile(therapistId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+    [HttpPut("members/update-detail/{memberId}")]
+    public async Task<IActionResult> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
+    {
+        try
+        {
+            var result = await _accountService.UpdateMemberInfo(memberId, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
@@ -177,4 +190,5 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
 }

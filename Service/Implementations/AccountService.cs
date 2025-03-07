@@ -289,6 +289,32 @@ public class AccountService : IAccountService
             throw new ServiceException(e.Message);
         }
     }
+    public async Task<AccountResponse> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(memberId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Member)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+            account.Email = request.Email;
+            account.Phone = request.Phone;
+            account.RelationshipGoal = request.RelationshipGoal;
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Birthdate = request.Birthdate;
+            account.Gender = request.Gender;
+            account.YearsOfExperience = request.YearsOfExperience;
+            account.Bio = request.Bio;
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 
     public async Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile)
     {
