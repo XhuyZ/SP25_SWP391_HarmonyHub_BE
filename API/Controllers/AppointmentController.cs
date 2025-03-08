@@ -146,7 +146,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("appintments/delete-feedback/{appoinmentid}")]
+    [HttpPut("appintments/delete-feedback/{appointmentId}")]
     public async Task<IActionResult> DeleteFeedbackAppointment(int appointmentId) 
     {
         try

@@ -23,5 +23,6 @@ public interface IAccountService
     Task<TherapistQualificationResponse> UpdateTherapistQualification(int therapistId, UpdateTherapistQualificationRequest request);
     Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile);
     Task<AccountResponse> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request);
+    Task<AccountResponse> UpdateTherapistInfo(int memberId, UpdateTherapistInfoRequest request);
 
 }

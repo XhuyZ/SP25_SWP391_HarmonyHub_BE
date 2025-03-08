@@ -320,6 +320,30 @@ public class AccountService : IAccountService
             account.LastName = request.LastName;
             account.Birthdate = request.Birthdate;
             account.Gender = request.Gender;
+            account.Bio = request.Bio;
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<AccountResponse> UpdateTherapistInfo(int therapistId, UpdateTherapistInfoRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(therapistId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+            account.Email = request.Email;
+            account.Phone = request.Phone;
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Birthdate = request.Birthdate;
+            account.Gender = request.Gender;
             account.YearsOfExperience = request.YearsOfExperience;
             account.Bio = request.Bio;
             await _accountRepository.UpdateAsync(account);

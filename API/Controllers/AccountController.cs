@@ -189,6 +189,19 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+    [HttpPut("therapist/update-detail/{therapistId}")]
+    public async Task<IActionResult> UpdateTherapistInfo(int therapistId, UpdateTherapistInfoRequest request)
+    {
+        try
+        {
+            var result = await _accountService.UpdateTherapistInfo(therapistId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
     [HttpGet("therapist/qualification/{therapistid}")]
     public async Task<IActionResult> GetTherapistQualification(int therapistId)
     {
