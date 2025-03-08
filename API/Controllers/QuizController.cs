@@ -18,7 +18,7 @@ namespace API.Controllers
             _quizService = quizService;
         }
 
-        [HttpGet("quizzes")]
+        [HttpGet("quiz")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -33,7 +33,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet("quiz")]
+        [HttpGet("quiz/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -48,7 +48,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPost("quizzes")]
+        [HttpPost("quiz/create")]
         public async Task<IActionResult> CreateQuiz([FromBody] CreateQuizRequest request)
         {
             try
@@ -62,7 +62,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("quiz/{id}/SetStatus")]
+        [HttpPut("quiz/SetStatus/{id}")]
         public async Task<IActionResult> SetStatusQuiz(int id, int status)
         {
             try
@@ -80,7 +80,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("quiz/imgUrl")]
+        [HttpPut("quiz/imgUrl/{id}")]
         public async Task<IActionResult> UpdateQuizImgUrl(int Id, IFormFile imgUrl)
         {
             try
@@ -94,18 +94,18 @@ namespace API.Controllers
             }
         }
 
-        [HttpDelete("questions/{questionId}")]
-        public async Task<IActionResult> DeleteQuestion(int questionId)
+        [HttpDelete("questions/{id}")]
+        public async Task<IActionResult> DeleteQuestion(int id)
         {
             try
             {
-                var result = await _quizService.DeleteQuestionAsync(questionId);
+                var result = await _quizService.DeleteQuestionAsync(id);
                 if (result)
                 {
                     return Ok(new { Message = "Question and options deleted successfully." });
                 }
 
-                return NotFound($"Question with ID {questionId} not found.");
+                return NotFound($"Question with ID {id} not found.");
             }
             catch (KeyNotFoundException ex)
             {

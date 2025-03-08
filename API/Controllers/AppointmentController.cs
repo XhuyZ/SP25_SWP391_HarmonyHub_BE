@@ -159,4 +159,19 @@ public class AppointmentController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
+    [HttpPut("therapists/appointments/update-appointment-note/{appointmentid}")]
+    public async Task<IActionResult> UpdateTherapistAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request)
+    {
+        try
+        {
+            await _appointmentService.UpdateAppointmentNote(appointmentId, request);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 }
