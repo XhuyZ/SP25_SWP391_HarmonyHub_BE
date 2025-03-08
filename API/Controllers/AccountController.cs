@@ -189,6 +189,32 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+    [HttpGet("therapist/qualification/{therapistid}")]
+    public async Task<IActionResult> GetTherapistQualification(int therapistId)
+    {
+        try
+        {
+            var result = await _accountService.GetTherapistQualification(therapistId);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+    [HttpPut("therapist/update-qualification/{therapistid}")]
+    public async Task<IActionResult> UpdateTherapistQualification(int therapistId, UpdateTherapistQualificationRequest request)
+    {
+        try
+        {
+            var result = await _accountService.UpdateTherapistQualification(therapistId, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
 
     [HttpPut("accounts/{id}/avatar")]
     public async Task<IActionResult> UpdateAccountAvatar(int Id, IFormFile avatarFile)

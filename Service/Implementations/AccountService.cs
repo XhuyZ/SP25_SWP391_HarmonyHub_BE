@@ -330,6 +330,60 @@ public class AccountService : IAccountService
             throw new ServiceException(e.Message);
         }
     }
+    public async Task<TherapistQualificationResponse> GetTherapistQualification(int therapistId) 
+    {
+        try
+        {
+            var account = await _accountRepository.GetTherapistDetails(therapistId);
+
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            return _mapper.Map<TherapistQualificationResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<TherapistQualificationResponse> UpdateTherapistQualification(int therapistId, UpdateTherapistQualificationRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(therapistId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            account.FirstName = account.FirstName;
+            account.LastName = account.LastName;
+            account.YearsOfExperience = account.YearsOfExperience;
+            if (request.Qualifications != null)
+            {
+                var qualifications = new List<Qualification>();
+                foreach (var qualification in request.Qualifications)
+                {
+                    qualifications.Add(new Qualification
+                    {
+                        Degree = qualification.Degree,
+                        ImageUrl = qualification.ImageUrl,
+                        TherapistId = therapistId
+                    });
+                }
+                account.Qualifications = qualifications; // Cập nhật danh sách Qualifications
+            }
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<TherapistQualificationResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 
     public async Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile)
     {
