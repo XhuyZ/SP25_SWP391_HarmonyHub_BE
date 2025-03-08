@@ -146,7 +146,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("appointments/delete-feedback/{appoinmentid}")]
+    [HttpPut("appointments/delete-feedback/{appointmentid}")]
     public async Task<IActionResult> DeleteFeedbackAppointment(int appointmentId) 
     {
         try
@@ -160,7 +160,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("therapists/appointments/update-appointment-note")]
+    [HttpPut("therapists/appointments/update-appointment-note/{appointmentid}")]
     public async Task<IActionResult> UpdateTherapistAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request)
     {
         try
