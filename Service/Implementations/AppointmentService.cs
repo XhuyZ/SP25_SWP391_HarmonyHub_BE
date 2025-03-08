@@ -3,6 +3,7 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -166,6 +167,23 @@ public class AppointmentService : IAppointmentService
             appointment.FeedbackContent = null;
             appointment.FeedbackDate = null;
 
+            await _appointmentRepository.UpdateAsync(appointment);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task UpdateAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request)
+    {
+        var appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+        if (appointment == null)
+            throw new ServiceException(MessageConstants.NOT_FOUND);
+        try
+        {
+            appointment.TherapistNote = request.TherapistNote;
+            appointment.UpdatedAt = DateTime.Now;
             await _appointmentRepository.UpdateAsync(appointment);
         }
         catch (Exception e)

@@ -15,4 +15,5 @@ public interface IAppointmentService
     Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request);
     Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request);
     Task DeleteFeedbackAppointment(int appointmentId);
+    Task UpdateAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request);
 }
