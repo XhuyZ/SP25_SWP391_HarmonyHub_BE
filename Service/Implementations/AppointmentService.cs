@@ -105,18 +105,18 @@ public class AppointmentService : IAppointmentService
             throw new ServiceException(e.Message);
         }
     }
-    public async Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId)
-    {
-        try
-        {
-            var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
-            return new List<AppointmentFeedbackResponse> {_mapper.Map<AppointmentFeedbackResponse>(feedback)};
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
+    //public async Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId)
+    //{
+    //    try
+    //    {
+    //        var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
+    //        return new List<AppointmentFeedbackResponse> {_mapper.Map<AppointmentFeedbackResponse>(feedback)};
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
 
     //public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
     //{
