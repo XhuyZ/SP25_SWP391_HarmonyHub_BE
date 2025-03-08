@@ -1,23 +1,18 @@
 # Use the official .NET SDK image for building the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+WORKDIR /app
 
-# Copy csproj and restore dependencies
-COPY *.csproj ./
-RUN dotnet restore
-
-# Copy all files and build the application
+# Copy everything
 COPY . ./
-RUN dotnet publish -c Release -o /app/publish
+# Restore as distinct layers
+RUN dotnet restore
+# Build and publish a release
+RUN dotnet publish -o out
 
 # Use the official ASP.NET runtime image for the final image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/publish .
-
-# Configure the container to listen on port 8080
-ENV ASPNETCORE_URLS=http://+:8080
-EXPOSE 8080
+COPY --from=build /app/out .
 
 # Set the entry point for the application
-ENTRYPOINT ["dotnet", "YourAppName.dll"]
+ENTRYPOINT ["dotnet", "DotNet.Docker.dll"]
