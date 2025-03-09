@@ -71,5 +71,7 @@ public class ResponseMappingProfile : Profile
             .ReverseMap();
 
         CreateMap<Appointment, AppointmentFeedbackResponse>();
+
+        CreateMap<Availability, AvailabilityResponse>().ReverseMap();
     }
 }
