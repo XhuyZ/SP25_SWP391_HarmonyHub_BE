@@ -73,6 +73,21 @@ public class AccountService : IAccountService
             throw new ServiceException(e.Message);
         }
     }
+    public async Task<MemberDetailsResponse> GetMemberDetails(int memberId)
+    {
+        try
+        {
+            var result = await _accountRepository.GetMemberDetails(memberId);
+            if (result == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+
+            return _mapper.Map<MemberDetailsResponse>(result);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 
     public async Task<AccountResponse> GetAccountById(int accountId)
     {
@@ -278,12 +293,115 @@ public class AccountService : IAccountService
             account.Email = request.Email;
             account.Birthdate = request.Birthdate;
             account.Gender = request.Gender;
-            account.AvatarUrl = request.AvatarUrl;
             account.Bio = request.Bio;
             account.YearsOfExperience = request.YearsOfExperience;
 
             await _accountRepository.UpdateAsync(account);
             return _mapper.Map<TherapistProfileResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<AccountResponse> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(memberId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Member)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+            account.Email = request.Email;
+            account.Phone = request.Phone;
+            account.RelationshipGoal = request.RelationshipGoal;
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Birthdate = request.Birthdate;
+            account.Gender = request.Gender;
+            account.Bio = request.Bio;
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<AccountResponse> UpdateTherapistInfo(int therapistId, UpdateTherapistInfoRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(therapistId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+            account.Email = request.Email;
+            account.Phone = request.Phone;
+            account.FirstName = request.FirstName;
+            account.LastName = request.LastName;
+            account.Birthdate = request.Birthdate;
+            account.Gender = request.Gender;
+            account.YearsOfExperience = request.YearsOfExperience;
+            account.Bio = request.Bio;
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<AccountResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<TherapistQualificationResponse> GetTherapistQualification(int therapistId) 
+    {
+        try
+        {
+            var account = await _accountRepository.GetTherapistDetails(therapistId);
+
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            return _mapper.Map<TherapistQualificationResponse>(account);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+    public async Task<TherapistQualificationResponse> UpdateTherapistQualification(int therapistId, UpdateTherapistQualificationRequest request)
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(therapistId);
+            if (account == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
+            if (account.Role != (int)RoleEnum.Therapist)
+                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
+
+            account.FirstName = account.FirstName;
+            account.LastName = account.LastName;
+            account.YearsOfExperience = account.YearsOfExperience;
+            if (request.Qualifications != null)
+            {
+                var qualifications = new List<Qualification>();
+                foreach (var qualification in request.Qualifications)
+                {
+                    qualifications.Add(new Qualification
+                    {
+                        Degree = qualification.Degree,
+                        ImageUrl = qualification.ImageUrl,
+                        TherapistId = therapistId
+                    });
+                }
+                account.Qualifications = qualifications; // Cập nhật danh sách Qualifications
+            }
+            await _accountRepository.UpdateAsync(account);
+            return _mapper.Map<TherapistQualificationResponse>(account);
         }
         catch (Exception e)
         {

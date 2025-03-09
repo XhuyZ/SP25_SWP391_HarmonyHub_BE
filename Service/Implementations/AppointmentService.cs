@@ -3,6 +3,7 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -105,39 +106,37 @@ public class AppointmentService : IAppointmentService
             throw new ServiceException(e.Message);
         }
     }
-    // public async Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId)
-    // {
-    //     try
-    //     {
-    //         var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
-    //         if (feedback == null)
-    //             throw new ServiceException(MessageConstants.NOT_FOUND);
-    //         return _mapper.Map<AppointmentFeedbackResponse>(feedback);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         throw new ServiceException(e.Message);
-    //     }
-    // }
-    
-    public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
-    {
-        var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);
-        if (apointment == null)
-            throw new ServiceException(MessageConstants.NOT_FOUND);
-        try
-        {
-            apointment.FeedbackRating = request.FeedbackRating;
-            apointment.FeedbackContent = request.FeedbackContent;
-            apointment.FeedbackDate = DateTime.Now;
+    //public async Task<IEnumerable<AppointmentFeedbackResponse>> GetAppointmentFeedbackID(int appointmentId)
+    //{
+    //    try
+    //    {
+    //        var feedback = await _appointmentRepository.GetByIdAsync(appointmentId);
+    //        return new List<AppointmentFeedbackResponse> {_mapper.Map<AppointmentFeedbackResponse>(feedback)};
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
 
-            await _appointmentRepository.UpdateAsync(apointment);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
+    //public async Task CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
+    //{
+    //    var apointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+    //    if (apointment == null)
+    //        throw new ServiceException(MessageConstants.NOT_FOUND);
+    //    try
+    //    {
+    //        apointment.FeedbackRating = request.FeedbackRating;
+    //        apointment.FeedbackContent = request.FeedbackContent;
+    //        apointment.FeedbackDate = DateTime.Now;
+
+    //        await _appointmentRepository.UpdateAsync(apointment);
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
     public async Task UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request)
     {
         var existingFeedback = await _appointmentRepository.GetByIdAsync(appointmentId);
@@ -166,6 +165,23 @@ public class AppointmentService : IAppointmentService
             appointment.FeedbackContent = null;
             appointment.FeedbackDate = null;
 
+            await _appointmentRepository.UpdateAsync(appointment);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task UpdateAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request)
+    {
+        var appointment = await _appointmentRepository.GetByIdAsync(appointmentId);
+        if (appointment == null)
+            throw new ServiceException(MessageConstants.NOT_FOUND);
+        try
+        {
+            appointment.TherapistNote = request.TherapistNote;
+            appointment.UpdatedAt = DateTime.Now;
             await _appointmentRepository.UpdateAsync(appointment);
         }
         catch (Exception e)
