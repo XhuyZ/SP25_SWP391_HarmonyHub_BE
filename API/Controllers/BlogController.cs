@@ -45,6 +45,21 @@ public class BlogController : ApiBaseController
         }
     }
 
+    [HttpGet("blogs/{id}")]
+    public async Task<IActionResult> GetBlogById(int id)
+    {
+        try
+        {
+            var result = await _blogService.GetBlogById(id);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
     [HttpGet("therapists/{therapistId}/blogs")]
     public async Task<IActionResult> GetBlogsByTherapistId(int therapistId)
     {

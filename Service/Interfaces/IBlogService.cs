@@ -9,6 +9,6 @@ namespace Service.Interfaces
         Task<IEnumerable<BlogResponse>> GetAllBlogs();
         Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId);
         Task<bool> SetBlogStatus(int blogId, int status);
-
+        Task<BlogResponse> GetBlogById(int id);
     }
 }
