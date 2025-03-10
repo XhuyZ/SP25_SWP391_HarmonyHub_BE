@@ -20,6 +20,8 @@ public class ResponseMappingProfile : Profile
     .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
     .ReverseMap();
 
+        CreateMap<Result, ResultResponse>();
+
         CreateMap<Question, QuestionResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
@@ -36,6 +38,11 @@ public class ResponseMappingProfile : Profile
                 OptionResponse = q.Question.Options.Any()
                     ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
                     : new List<OptionResponse>()
+            })))
+            .ForMember(dest => dest.ResultResponse, opt => opt.MapFrom(src => src.Results.Select(r => new ResultResponse
+            {
+                Id = r.Id,
+                Content = r.Content
             })))
             .ReverseMap();
 
