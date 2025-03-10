@@ -395,7 +395,8 @@ public class AccountService : IAccountService
                     {
                         Degree = qualification.Degree,
                         ImageUrl = qualification.ImageUrl,
-                        TherapistId = therapistId
+                        TherapistId = therapistId,
+                        SpecialtyId = qualification.SpecialtyId
                     });
                 }
                 account.Qualifications = qualifications; // Cập nhật danh sách Qualifications
