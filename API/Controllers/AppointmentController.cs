@@ -174,4 +174,19 @@ public class AppointmentController : ApiBaseController
             throw new ServiceException(e.Message);
         }
     }
+
+    [HttpPut("appointments/update-meet-url/{appointmentId}")]
+    public async Task<IActionResult> UpdateAppointmentMeetUrl(int appointmentId, UpdateMeetingUrlRequest request)
+    {
+        try
+        {
+            await _appointmentService.UpdateAppointmentMeetUrl(appointmentId, request);
+
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
 }

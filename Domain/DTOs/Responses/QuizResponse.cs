@@ -11,6 +11,7 @@ namespace Domain.DTOs.Responses
         public int Status { get; set; }
         public int TherapistId { get; set; }
         public List<QuestionResponse> QuestionResponse { get; set; } = new List<QuestionResponse>();
+        public List<ResultResponse> ResultResponse { get; set; } = new List<ResultResponse>();
 
     }
 }

@@ -20,6 +20,7 @@ namespace Repository.Implementations
                     .Include(q => q.QuizQuestions)
                     .ThenInclude(qq => qq.Question)
                     .ThenInclude(q => q.Options)
+                     .Include(q => q.Results)
                 .ToListAsync();
         }
 
@@ -29,6 +30,7 @@ namespace Repository.Implementations
                 .Include(q => q.QuizQuestions)
                     .ThenInclude(qq => qq.Question)
                         .ThenInclude(q => q.Options)
+                         .Include(q => q.Results)
                 .FirstOrDefaultAsync(q => q.Id == id);
         }
 
