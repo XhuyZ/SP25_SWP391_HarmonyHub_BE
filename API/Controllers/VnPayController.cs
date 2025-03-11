@@ -1,10 +1,11 @@
 ﻿using Domain.Constants;
 using Domain.DTO.Request;
 using Domain.DTOs.Common;
-using Domain.DTOs.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Service.Exceptions;
 using Service.Interfaces;
+using Service.Settings;
 
 namespace API.Controllers
 {
@@ -13,11 +14,13 @@ namespace API.Controllers
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IVnPayService _vnPayService;
+        private readonly VnPaySettings _vnPaySettings;
 
-        public VnPayController(IHttpContextAccessor httpContextAccessor, IVnPayService vnPayService)
+        public VnPayController(IHttpContextAccessor httpContextAccessor, IVnPayService vnPayService, IOptions<VnPaySettings> vnPaySettings)
         {
             _httpContextAccessor = httpContextAccessor;
             _vnPayService = vnPayService;
+            _vnPaySettings = vnPaySettings.Value;
         }
 
         [HttpPost("vnpay/pay")]
@@ -25,7 +28,7 @@ namespace API.Controllers
         {
             try
             {
-                string payload = _vnPayService.CreatePayment(createPaymentRequest);
+                string payload = await _vnPayService.CreatePayment(createPaymentRequest);
 
                 return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, payload));
             }
@@ -42,23 +45,14 @@ namespace API.Controllers
 
             try
             {
-                int result = _vnPayService.GetPaymentResult();
+                int result = await _vnPayService.GetPaymentResult();
 
                 string orderId = context.Request.Query["vnp_TxnRef"];
                 string amount = context.Request.Query["vnp_Amount"];
                 string orderInfo = context.Request.Query["vnp_OrderInfo"];
                 string payDate = context.Request.Query["vnp_PayDate"];
-                string userId = context.Request.Query["vnp_Billing_Email"];
 
-                CreatePaymentResponse createPaymentResponse = new CreatePaymentResponse
-                {
-                    OrderId = orderId,
-                    Amount = amount,
-                    OrderInfo = orderInfo,
-                    PayDate = payDate
-                };
-
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, createPaymentResponse));
+                return Redirect($"{_vnPaySettings.RedirectUrl}?result={result}&orderId={orderId}&amount={amount}&orderInfo={orderInfo}&payDate={payDate}");
             }
             catch (Exception ex)
             {

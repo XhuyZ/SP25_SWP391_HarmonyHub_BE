@@ -11,4 +11,5 @@ public class VnPaySettings
     public string OrderType { get; set; }
     public string PayUrl { get; set; }
     public string ReturnUrl { get; set; }
+    public string RedirectUrl { get; set; }
 }
