@@ -17,8 +17,10 @@ public class ResponseMappingProfile : Profile
             .ForMember(dest => dest.BlogId, opt => opt.MapFrom(src => src.Id)).ReverseMap();
 
         CreateMap<Option, OptionResponse>()
-    .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
-    .ReverseMap();
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+            .ReverseMap();
+
+        CreateMap<Result, ResultResponse>();
 
         CreateMap<Question, QuestionResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
@@ -29,13 +31,19 @@ public class ResponseMappingProfile : Profile
             .ReverseMap();
 
         CreateMap<Quiz, QuizResponse>()
-            .ForMember(dest => dest.QuestionResponse, opt => opt.MapFrom(src => src.QuizQuestions.Select(q => new QuestionResponse
+            .ForMember(dest => dest.QuestionResponse, opt => opt.MapFrom(src => src.QuizQuestions.Select(q =>
+                new QuestionResponse
+                {
+                    Id = q.Question.Id,
+                    Content = q.Question.Content,
+                    OptionResponse = q.Question.Options.Any()
+                        ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
+                        : new List<OptionResponse>()
+                })))
+            .ForMember(dest => dest.ResultResponse, opt => opt.MapFrom(src => src.Results.Select(r => new ResultResponse
             {
-                Id = q.Question.Id,
-                Content = q.Question.Content,
-                OptionResponse = q.Question.Options.Any()
-                    ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
-                    : new List<OptionResponse>()
+                Id = r.Id,
+                Content = r.Content
             })))
             .ReverseMap();
 
@@ -73,5 +81,14 @@ public class ResponseMappingProfile : Profile
         CreateMap<Appointment, AppointmentFeedbackResponse>();
 
         CreateMap<Availability, AvailabilityResponse>().ReverseMap();
+
+        CreateMap<Transaction, TransactionResponse>()
+            .ForMember(dest => dest.SenderFullName, opt =>
+                opt.MapFrom(src => src.Sender.FirstName + " " + src.Sender.LastName))
+            .ForMember(dest => dest.ReceiverFullName, opt =>
+                opt.MapFrom(src => src.Receiver.FirstName + " " + src.Receiver.LastName))
+            .ReverseMap();
+
+        CreateMap<Report, ReportResponse>().ReverseMap();
     }
 }

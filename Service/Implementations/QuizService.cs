@@ -92,7 +92,8 @@ namespace Service.Implementations
                 ImageUrl = request.ImageUrl,
                 Status = (int)QuizStatusEnum.Pending,
                 TherapistId = request.TherapistId,
-                QuizQuestions = new List<QuizQuestion>()
+                QuizQuestions = new List<QuizQuestion>(),
+                Results = new List<Result>()
             };
 
             foreach (var questionRequest in request.Questions)
@@ -121,10 +122,20 @@ namespace Service.Implementations
                 quiz.QuizQuestions.Add(quizQuestion);
             }
 
-            await _quizRepository.AddAsync(quiz);
+                foreach (var resultRequest in request.Results)
+                {
+                    var result = new Result
+                    {
+                        Content = resultRequest.Content,
+                        Quiz = quiz
+                    };
+                    quiz.Results.Add(result);
+                }
 
+            await _quizRepository.AddAsync(quiz);
             return _mapper.Map<QuizResponse>(quiz);
         }
+
 
         public async Task<bool> DeleteQuestionAsync(int questionId)
         {
