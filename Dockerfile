@@ -1,5 +1,4 @@
-# Use the official .NET SDK image for building the application
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0@sha256:35792ea4ad1db051981f62b313f1be3b46b1f45cadbaa3c288cd0d3056eefb83 AS build
 WORKDIR /app
 
 # Copy everything
@@ -9,10 +8,8 @@ RUN dotnet restore
 # Build and publish a release
 RUN dotnet publish -o out
 
-# Use the official ASP.NET runtime image for the final image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff
 WORKDIR /app
 COPY --from=build /app/out .
-
-# Set the entry point for the application
 ENTRYPOINT ["dotnet", "API.dll"]
