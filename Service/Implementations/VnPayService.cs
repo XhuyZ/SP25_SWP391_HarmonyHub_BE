@@ -1,4 +1,6 @@
-﻿using Domain.DTO.Request;
+﻿using Domain.Constants;
+using Domain.DTO.Request;
+using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Service.Interfaces;
@@ -11,14 +13,16 @@ namespace Service.Implementations
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly VnPaySettings _vnPaySettings;
+        private readonly ITransactionService _transactionService;
 
-        public VnPayService(IHttpContextAccessor httpContextAccessor, IOptions<VnPaySettings> vnPaySettings)
+        public VnPayService(IHttpContextAccessor httpContextAccessor, IOptions<VnPaySettings> vnPaySettings, ITransactionService transactionService)
         {
             _httpContextAccessor = httpContextAccessor;
             _vnPaySettings = vnPaySettings.Value;
+            _transactionService = transactionService;
         }
 
-        public string CreatePayment(CreatePaymentRequest createPaymentRequest)
+        public async Task<string> CreatePayment(CreatePaymentRequest createPaymentRequest)
         {
             string vnp_Returnurl = _vnPaySettings.ReturnUrl;
             string vnp_Url = _vnPaySettings.PayUrl;
@@ -47,20 +51,30 @@ namespace Service.Implementations
             vnpay.AddRequestData("vnp_Locale", _vnPaySettings.Locale);
 
             vnpay.AddRequestData("vnp_OrderInfo", createPaymentRequest.OrderInfo);
-            vnpay.AddRequestData("vnp_OrderType", _vnPaySettings.OrderType); 
+            vnpay.AddRequestData("vnp_OrderType", _vnPaySettings.OrderType);
 
             vnpay.AddRequestData("vnp_ReturnUrl", vnp_Returnurl);
             vnpay.AddRequestData("vnp_TxnRef", orderId.ToString());
 
-            //Add Params of 2.1.0 Version
-            //Billing
+            var transaction = new Transaction
+            {
+                Amount = amount,
+                Description = createPaymentRequest.OrderInfo,
+                PaymentMethod = (int)PaymentMethodEnum.VnPay,
+                Status = (int)TransactionStatusEnum.Created,
+                TransactionId = orderId.ToString(),
+                SenderId = createPaymentRequest.SenderId,
+                ReceiverId = createPaymentRequest.ReceiverId,
+                AppointmentId = createPaymentRequest.AppointmentId
+            };
+            await _transactionService.CreateTransaction(transaction);
 
             string paymentUrl = vnpay.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 
             return paymentUrl;
         }
 
-        public int GetPaymentResult()
+        public async Task<int> GetPaymentResult()
         {
             var context = _httpContextAccessor.HttpContext;
 
@@ -79,20 +93,22 @@ namespace Service.Implementations
                     }
                 }
 
-                long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
+                string orderId = vnpay.GetResponseData("vnp_TxnRef");
                 long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
                 string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
                 string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
-                String vnp_SecureHash = context.Request.Query["vnp_SecureHash"];
-                String TerminalID = context.Request.Query["vnp_TmnCode"];
+                string vnp_SecureHash = context.Request.Query["vnp_SecureHash"];
+                string tmnCode = context.Request.Query["vnp_TmnCode"];
                 long vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / 100;
-                String bankCode = context.Request.Query["vnp_BankCode"];
+                string bankCode = context.Request.Query["vnp_BankCode"];
 
                 bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
                 if (checkSignature)
                 {
                     if (vnp_ResponseCode == "00" && vnp_TransactionStatus == "00")
                     {
+                        await _transactionService.UpdateTransactionStatus(orderId,
+                            (int)TransactionStatusEnum.Successful);
                         return 1;
                     }
                     else

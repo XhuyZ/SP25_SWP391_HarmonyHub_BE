@@ -4,8 +4,8 @@ namespace Service.Interfaces
 {
     public interface IVnPayService
     {
-        string CreatePayment(CreatePaymentRequest createPaymentRequest);
+        Task<string> CreatePayment(CreatePaymentRequest createPaymentRequest);
 
-        int GetPaymentResult();
+        Task<int> GetPaymentResult();
     }
 }

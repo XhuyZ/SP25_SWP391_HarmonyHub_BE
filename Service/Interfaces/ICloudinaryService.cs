@@ -1,14 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Service.Interfaces
+namespace Service.Interfaces;
+
+public interface ICloudinaryService
 {
-    public interface ICloudinaryService
-    {
-        Task<string> UploadFile(IFormFile file);
-    }
+    Task<string> UploadFile(IFormFile file);
 }
