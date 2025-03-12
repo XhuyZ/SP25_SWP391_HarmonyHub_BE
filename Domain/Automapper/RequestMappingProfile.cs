@@ -29,5 +29,8 @@ public class RequestMappingProfile : Profile
         CreateMap<CreateQuizRequest, Quiz>();
 
         CreateMap<UpdateAvailabilityRequest, Availability>();
+
+        CreateMap<CreateReportRequest, Report>();
+        CreateMap<UpdateReportRequest, Report>();
     }
 }

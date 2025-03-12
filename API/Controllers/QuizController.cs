@@ -81,11 +81,11 @@ namespace API.Controllers
         }
 
         [HttpPut("quiz/imgUrl/{id}")]
-        public async Task<IActionResult> UpdateQuizImgUrl(int Id, IFormFile imgUrl)
+        public async Task<IActionResult> UpdateQuizImgUrl(int id, IFormFile imgUrl)
         {
             try
             {
-                var result = await _quizService.UpdateAvatarUrl(Id, imgUrl);
+                var result = await _quizService.UpdateAvatarUrl(id, imgUrl);
                 return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
             }
             catch (ServiceException e)
