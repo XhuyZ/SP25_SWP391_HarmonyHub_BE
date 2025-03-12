@@ -41,11 +41,11 @@ namespace Service.Implementations
                 throw new ServiceException(e.Message);
             }
         }
-        public async Task<ReportResponse> GetReportsByAcountID(int acountID)
+        public async Task<ReportResponse> GetReportsByID(int reportID)
         {
             try
             {
-                var report = await _reportRepository.GetByIdAsync(acountID);
+                var report = await _reportRepository.GetByIdAsync(reportID);
                 if (report == null)
                     throw new ServiceException(MessageConstants.NOT_FOUND);
                 return _mapper.Map<ReportResponse>(report);
@@ -67,20 +67,13 @@ namespace Service.Implementations
                 throw new ServiceException(e.Message);
             }
         }
-        public async Task<ReportResponse> UpdateReport(int acountID, UpdateReportRequest request)
+        public async Task<ReportResponse> UpdateReport(int reportID, UpdateReportRequest request)
         {
+            var report = await _reportRepository.GetByIdAsync(request.Id);
+            if (report == null)
+                throw new ServiceException(MessageConstants.NOT_FOUND);
             try
             {
-                var account = await _accountRepository.GetByIdAsync(acountID);
-
-                if (account == null)
-                    throw new ServiceException(MessageConstants.NOT_FOUND);
-                if (account.Role != (int)RoleEnum.Therapist)
-                    throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
-
-                var report = await _reportRepository.GetByIdAsync(request.Id);
-                if (report == null)
-                    throw new ServiceException(MessageConstants.NOT_FOUND);
                 report.Id = request.Id;
                 report.Title = request.Title;
                 report.Content = request.Content;
@@ -96,12 +89,9 @@ namespace Service.Implementations
                 throw new ServiceException(e.Message);
             }
         }
-        public async Task<Report> DeleteReport(int id)
+        public async Task<Report> DeleteReport(int reportID)
         {
-            var report = await _reportRepository.GetAllAsync();
-            var reportToDelete = report.FirstOrDefault(f =>
-            f.AccountId == id);
-
+            var reportToDelete = await _reportRepository.GetByIdAsync(reportID);
             if (reportToDelete == null)
             {
                 throw new ServiceException(MessageConstants.NOT_FOUND);

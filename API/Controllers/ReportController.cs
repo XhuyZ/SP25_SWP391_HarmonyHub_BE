@@ -29,12 +29,12 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpGet("reports/{accountId}")]
-    public async Task<IActionResult> GetReportsByAcountID(int accountId)
+    [HttpGet("reports/{reportID}")]
+    public async Task<IActionResult> GetReportsByAcountID(int reportID)
     {
         try
         {
-            var result = await _reportService.GetReportsByAcountID(accountId);
+            var result = await _reportService.GetReportsByID(reportID);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
@@ -55,12 +55,12 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpPut("reports/{accountId}")]
-    public async Task<IActionResult> UpdateReport(int accountId, UpdateReportRequest request)
+    [HttpPut("reports/{reportID}")]
+    public async Task<IActionResult> UpdateReport(int reportID, UpdateReportRequest request)
     {
         try
         {
-            var result = await _reportService.UpdateReport(accountId, request);
+            var result = await _reportService.UpdateReport(reportID, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
@@ -68,12 +68,12 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpDelete("reports/{accountId}")]
-    public async Task<IActionResult> DeleteReport(int accountId)
+    [HttpDelete("reports/{reportID}")]
+    public async Task<IActionResult> DeleteReport(int reportID)
     {
         try
         {
-            var result = await _reportService.DeleteReport(accountId);
+            var result = await _reportService.DeleteReport(reportID);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
