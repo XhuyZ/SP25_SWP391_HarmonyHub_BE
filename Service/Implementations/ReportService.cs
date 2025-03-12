@@ -78,8 +78,6 @@ namespace Service.Implementations
                 report.Title = request.Title;
                 report.Content = request.Content;
                 report.AccountId = request.AccountId;
-                report.CreatedAt = request.CreatedAt;
-                report.UpdatedAt = DateTime.Now;
 
                 await _reportRepository.UpdateAsync(report);
                 return _mapper.Map<ReportResponse>(report);
