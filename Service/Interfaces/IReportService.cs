@@ -2,14 +2,12 @@
 using Domain.DTOs.Responses;
 using Domain.Entities;
 
-namespace Service.Interfaces
+namespace Service.Interfaces;
+public interface IReportService
 {
-    public interface IReportService
-    {
-        Task<IEnumerable<ReportResponse>> GetAllReports();
-        Task<ReportResponse> GetReportsByID(int reportID);
-        Task CreateReport(CreateReportRequest request);
-        Task<ReportResponse> UpdateReport(int reportID, UpdateReportRequest request);
-        Task<Report> DeleteReport(int reportID);
-    }
+    Task<IEnumerable<ReportResponse>> GetAllReports();
+    Task<ReportResponse> GetReportsByID(int reportID);
+    Task CreateReport(CreateReportRequest request);
+    Task<ReportResponse> UpdateReport(int reportID, UpdateReportRequest request);
+    Task<Report> DeleteReport(int reportID);
 }
