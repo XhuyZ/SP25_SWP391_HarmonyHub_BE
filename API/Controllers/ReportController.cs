@@ -5,82 +5,80 @@ using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 
-namespace API.Controllers
+namespace API.Controllers;
+[ApiController]
+public class ReportController : ApiBaseController
 {
-    [ApiController]
-    public class ReportController : ApiBaseController
+    public readonly IReportService _reportService;
+
+    public ReportController(IReportService reportService)
     {
-        public readonly IReportService _reportService;
+        _reportService = reportService;
+    }
 
-        public ReportController(IReportService reportService)
+    [HttpGet("reports")]
+    public async Task<IActionResult> GetAllReports()
+    {
+        try
         {
-            _reportService = reportService;
+            var result = await _reportService.GetAllReports();
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
-
-        [HttpGet("reports")]
-        public async Task<IActionResult> GetAllReports()
+        catch (ServiceException e)
         {
-            try
-            {
-                var result = await _reportService.GetAllReports();
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-            }
-            catch (ServiceException e)
-            {
-                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-            }
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
-        [HttpGet("reports/{accountId}")]
-        public async Task<IActionResult> GetReportsByAcountID(int accountId)
+    }
+    [HttpGet("reports/{reportID}")]
+    public async Task<IActionResult> GetReportsByAcountID(int reportID)
+    {
+        try
         {
-            try
-            {
-                var result = await _reportService.GetReportsByAcountID(accountId);
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-            }
-            catch (ServiceException e)
-            {
-                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-            }
+            var result = await _reportService.GetReportsByID(reportID);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
-        [HttpPost("reports")]
-        public async Task<IActionResult> CreateReport(CreateReportRequest request)
+        catch (ServiceException e)
         {
-            try
-            {
-                await _reportService.CreateReport(request);
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
-            }
-            catch (ServiceException e)
-            {
-                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-            }
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
-        [HttpPut("reports/{accountId}")]
-        public async Task<IActionResult> UpdateReport(int accountId, UpdateReportRequest request)
+    }
+    [HttpPost("reports")]
+    public async Task<IActionResult> CreateReport(CreateReportRequest request)
+    {
+        try
         {
-            try
-            {
-                var result = await _reportService.UpdateReport(accountId, request);
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-            }
-            catch (ServiceException e)
-            {
-                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-            }
+            await _reportService.CreateReport(request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
         }
-        [HttpDelete("reports/{accountId}")]
-        public async Task<IActionResult> DeleteReport(int accountId)
+        catch (ServiceException e)
         {
-            try
-            {
-                var result = await _reportService.DeleteReport(accountId);
-                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-            }
-            catch (ServiceException e)
-            {
-                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-            }
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+    [HttpPut("reports/{reportID}")]
+    public async Task<IActionResult> UpdateReport(int reportID, UpdateReportRequest request)
+    {
+        try
+        {
+            var result = await _reportService.UpdateReport(reportID, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+    [HttpDelete("reports/{reportID}")]
+    public async Task<IActionResult> DeleteReport(int reportID)
+    {
+        try
+        {
+            var result = await _reportService.DeleteReport(reportID);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
 }
