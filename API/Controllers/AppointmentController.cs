@@ -91,20 +91,19 @@ public class AppointmentController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpGet("appointments/feedback")]
-    public async Task<IActionResult> GetAllAppointmentFeedback()
-    {
-        try
-        {
-            var result = await _appointmentService.GetAllAppointmentFeedback();
-            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-
+    //[HttpGet("appointments/feedback")]
+    //public async Task<IActionResult> GetAllAppointmentFeedback()
+    //{
+    //    try
+    //    {
+    //        var result = await _appointmentService.GetAllAppointmentFeedback();
+    //        return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        throw new ServiceException(e.Message);
+    //    }
+    //}
     //[HttpGet("appointments/feedback/{appointmentId}")]
     //public async Task<IActionResult> GetAppointmentFeedbackID(int appointmentId)
     //{
