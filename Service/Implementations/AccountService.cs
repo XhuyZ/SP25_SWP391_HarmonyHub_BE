@@ -417,8 +417,6 @@ public class AccountService : IAccountService
             var account = await _accountRepository.GetByIdAsync(id);
             if (account == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
-            //if (account.Role != (int)RoleEnum.Therapist)
-            //    throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
 
             var avatarUrl = await _cloudinaryService.UploadFile(avatarFile);
 

@@ -230,11 +230,11 @@ public class AccountController : ApiBaseController
     }
 
     [HttpPut("accounts/{id}/avatar")]
-    public async Task<IActionResult> UpdateAccountAvatar(int Id, IFormFile avatarFile)
+    public async Task<IActionResult> UpdateAccountAvatar(int id, IFormFile avatarFile)
     {
         try
         {
-            var result = await _accountService.UpdateAvatarUrl(Id, avatarFile);
+            var result = await _accountService.UpdateAvatarUrl(id, avatarFile);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
