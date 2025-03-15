@@ -1,9 +1,7 @@
-﻿using Domain.Entities;
-using Repository.Interfaces;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Domain.Constants;
-
+using Repository.Interfaces;
 
 namespace Repository.Implementations;
 
