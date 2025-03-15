@@ -106,6 +106,24 @@ namespace Service.Implementations
             }
         }
 
+        public async Task<bool> UpdateBlogDetails(int blogId, UpdateBlogRequest request)
+        {
+            try
+            {
+                var blog = await _blogRepository.GetByIdAsync(blogId);
+                if (blog == null)
+                    throw new ServiceException("Blog not found.");
 
+                _mapper.Map(request, blog);
+                blog.Status = (int)BlogStatusEnum.Pending;
+
+                await _blogRepository.UpdateAsync(blog);
+                return true;
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"Error updating blog : {e.Message}", e);
+            }
+        }
     }
 }

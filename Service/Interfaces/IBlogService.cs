@@ -10,4 +10,5 @@ public interface IBlogService
     Task<IEnumerable<BlogResponse>> GetBlogsByTherapistId(int therapistId);
     Task<bool> SetBlogStatus(int blogId, int status);
     Task<BlogResponse> GetBlogById(int id);
+    Task<bool> UpdateBlogDetails(int blogId, UpdateBlogRequest request);
 }

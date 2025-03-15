@@ -71,13 +71,27 @@ public class BlogController : ApiBaseController
         return Ok(new { statusCode = 200, message = "Successful", data = blogs });
     }
 
-    [HttpPut("{blogId}/UpdateStatus")]
-    public async Task<IActionResult> SetBlogStatus(int blogId, int status)
+    [HttpPut("blogs/{id}/status")]
+    public async Task<IActionResult> SetBlogStatus(int id, int status)
     {
-        var success = await _blogService.SetBlogStatus(blogId, status);
+        var success = await _blogService.SetBlogStatus(id, status);
         if (!success)
             return BadRequest(new { message = "Failed to update blog status." });
 
         return Ok(new { statusCode = 200, message = "Blog status updated." });
+    }
+
+    [HttpPut("blogs/{id}")]
+    public async Task<IActionResult> UpdateBlogDetails(int id, UpdateBlogRequest request)
+    {
+        try
+        {
+            await _blogService.UpdateBlogDetails(id, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, request));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
     }
 }
