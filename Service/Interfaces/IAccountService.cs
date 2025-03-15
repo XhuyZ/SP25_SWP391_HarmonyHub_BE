@@ -14,11 +14,11 @@ public interface IAccountService
     Task RegisterMember(RegisterMemberRequest request);
     Task RegisterTherapist(RegisterTherapistRequest request);
     Task<LoginResponse> Login(LoginRequest request);
-    Task<AccountResponse> GetAccountByEmail(string email);
-    Task<TherapistQualificationResponse> GetTherapistQualification(int therapistId);
-    Task<TherapistQualificationResponse> UpdateTherapistQualification(int therapistId, UpdateTherapistQualificationRequest request);
-    Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile);
-    Task<AccountResponse> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request);
-    Task<AccountResponse> UpdateTherapistInfo(int memberId, UpdateTherapistInfoRequest request);
 
+    Task UpdateTherapistQualification(int qualificationId,
+        UpdateTherapistQualificationRequest request);
+
+    Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile);
+    Task UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request);
+    Task UpdateTherapistInfo(int memberId, UpdateTherapistInfoRequest request);
 }

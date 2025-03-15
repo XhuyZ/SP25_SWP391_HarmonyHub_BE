@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Domain.DTOs.Requests
+﻿namespace Domain.DTOs.Requests
 {
     public class CreateQuestionRequest
     {
