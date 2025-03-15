@@ -192,23 +192,6 @@ public class AccountService : IAccountService
         return null;
     }
 
-    public async Task<MemberProfileResponse> GetMemberProfile(int memberId)
-    {
-        try
-        {
-            var account = await _accountRepository.GetMemberDetails(memberId);
-
-            if (account == null)
-                throw new ServiceException(MessageConstants.NOT_FOUND);
-
-            return _mapper.Map<MemberProfileResponse>(account);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-
     public async Task<AccountResponse> GetAccountByEmail(string email)
     {
         try
@@ -226,84 +209,6 @@ public class AccountService : IAccountService
         }
     }
 
-    public async Task<MemberProfileResponse> UpdateMemberProfile(int memberId, UpdateProfileRequest request)
-    {
-        try
-        {
-            var account = await _accountRepository.GetByIdAsync(memberId);
-
-            if (account == null)
-                throw new ServiceException(MessageConstants.NOT_FOUND);
-
-
-            if (account.Role != (int)RoleEnum.Member)
-                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
-
-            account.FirstName = request.FirstName;
-            account.LastName = request.LastName;
-            account.Phone = request.Phone;
-            account.Email = request.Email;
-            account.Birthdate = request.Birthdate;
-            account.Gender = request.Gender;
-            account.AvatarUrl = request.AvatarUrl;
-            account.Bio = request.Bio;
-            account.RelationshipGoal = request.RelationshipGoal;
-
-            await _accountRepository.UpdateAsync(account);
-            return _mapper.Map<MemberProfileResponse>(account);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-
-    public async Task<TherapistProfileResponse> GetTherapistProfile(int therapistId)
-    {
-        try
-        {
-            var account = await _accountRepository.GetTherapistDetails(therapistId);
-
-            if (account == null)
-                throw new ServiceException(MessageConstants.NOT_FOUND);
-
-            if (account.Role != (int)RoleEnum.Therapist)
-                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
-
-            return _mapper.Map<TherapistProfileResponse>(account);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-
-    public async Task<TherapistProfileResponse> UpdateTherapistProfile(int therapistId, UpdateTherapistProfileRequest request)
-    {
-        try
-        {
-            var account = await _accountRepository.GetByIdAsync(therapistId);
-            if (account == null)
-                throw new ServiceException(MessageConstants.NOT_FOUND);
-            if (account.Role != (int)RoleEnum.Therapist)
-                throw new ServiceException(MessageConstants.INVALID_ACCOUNT_CREDENTIALS);
-            account.FirstName = request.FirstName;
-            account.LastName = request.LastName;
-            account.Phone = request.Phone;
-            account.Email = request.Email;
-            account.Birthdate = request.Birthdate;
-            account.Gender = request.Gender;
-            account.Bio = request.Bio;
-            account.YearsOfExperience = request.YearsOfExperience;
-
-            await _accountRepository.UpdateAsync(account);
-            return _mapper.Map<TherapistProfileResponse>(account);
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
     public async Task<AccountResponse> UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
     {
         try
