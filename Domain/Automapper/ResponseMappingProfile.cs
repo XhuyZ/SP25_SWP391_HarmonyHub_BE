@@ -66,6 +66,8 @@ public class ResponseMappingProfile : Profile
         CreateMap<Availability, AvailabilityResponse>().ReverseMap();
         CreateMap<Qualification, QualificationResponse>().ReverseMap();
         CreateMap<Specialty, SpecialtyResponse>().ReverseMap();
+        CreateMap<Qualification, TherapistQualificationResponse>().ReverseMap();
+        CreateMap<Qualification, QualificationResponses>() .ReverseMap();
 
         CreateMap<Package, PackageResponse>().ReverseMap();
 

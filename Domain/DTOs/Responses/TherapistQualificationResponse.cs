@@ -12,5 +12,5 @@ public class TherapistQualificationResponse
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public int YearsOfExperience { get; set; }
-    public List<QualificationResponse> Qualifications { get; set; }
+    public List<QualificationResponses> Qualifications { get; set; }
 }
