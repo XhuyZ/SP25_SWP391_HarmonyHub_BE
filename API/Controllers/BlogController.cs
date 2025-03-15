@@ -71,7 +71,7 @@ public class BlogController : ApiBaseController
         return Ok(new { statusCode = 200, message = "Successful", data = blogs });
     }
 
-    [HttpPut("{blogId}/UpdateStatus")]
+    [HttpPut("blogs/{blogId}/status")]
     public async Task<IActionResult> SetBlogStatus(int blogId, int status)
     {
         var success = await _blogService.SetBlogStatus(blogId, status);
