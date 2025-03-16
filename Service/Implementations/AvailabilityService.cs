@@ -1,16 +1,9 @@
 ﻿using AutoMapper;
-using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.Entities;
-using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Service.Implementations
 {
@@ -24,6 +17,7 @@ namespace Service.Implementations
             _mapper = mapper;
             _availabilityRepository = availabilityRepository;
         }
+        
         public async Task UpdateAvailability(int id, UpdateAvailabilityRequest request)
         {
             try

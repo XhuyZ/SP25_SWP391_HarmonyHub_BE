@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Domain.DTOs.Responses;
 
-namespace Domain.DTOs.Responses
+public class TherapistProfileResponse
 {
-    public class TherapistProfileResponse
-    {
-        public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateOnly Birthdate { get; set; }
-        public int Gender { get; set; }
-        public int YearsOfExperience { get; set; }
-        public string Bio { get; set; }
-        public decimal Balance { get; set; }
-    }
+    public int Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateOnly Birthdate { get; set; }
+    public int Gender { get; set; }
+    public int YearsOfExperience { get; set; }
+    public string Bio { get; set; }
 }

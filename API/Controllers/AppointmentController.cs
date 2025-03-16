@@ -91,48 +91,8 @@ public class AppointmentController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    [HttpGet("appointments/feedback")]
-    public async Task<IActionResult> GetAllAppointmentFeedback()
-    {
-        try
-        {
-            var result = await _appointmentService.GetAllAppointmentFeedback();
-            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-        }
-        catch (Exception e)
-        {
-            throw new ServiceException(e.Message);
-        }
-    }
-
-    //[HttpGet("appointments/feedback/{appointmentId}")]
-    //public async Task<IActionResult> GetAppointmentFeedbackID(int appointmentId)
-    //{
-    //    try
-    //    {
-    //        var result = await _appointmentService.GetAppointmentFeedbackID(appointmentId);
-    //        return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        throw new ServiceException(e.Message);
-    //    }
-    //}
-
-    //[HttpPost("appointments/{appointmentId}/create-feedback")]
-    //public async Task<IActionResult> CreateFeedbackAppointment(int appointmentId, CreateFeedbackAppointmentRequest request)
-    //{
-    //    try
-    //    {
-    //        await _appointmentService.CreateFeedbackAppointment(appointmentId, request);
-    //        return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
-    //    }
-    //    catch (Exception e)
-    //    {
-    //        throw new ServiceException(e.Message);
-    //    }
-    //}
-    [HttpPut("appointments/update-feedback/{appointmentId}")]
+    
+    [HttpPut("appointments/{appointmentId}/feedback")]
     public async Task<IActionResult> UpdateFeedbackAppointment(int appointmentId, UpdateFeedbackAppointmentRequest request)
     {
         try
@@ -146,7 +106,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("appintments/delete-feedback/{appointmentId}")]
+    [HttpPut("appointments/{appointmentId}/delete-feedback")]
     public async Task<IActionResult> DeleteFeedbackAppointment(int appointmentId) 
     {
         try
@@ -160,7 +120,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("therapists/appointments/update-appointment-note/{appointmentid}")]
+    [HttpPut("appointments/{appointmentId}/therapist-note")]
     public async Task<IActionResult> UpdateTherapistAppointmentNote(int appointmentId, UpdateTherapistAppointmentRequest request)
     {
         try
@@ -175,7 +135,7 @@ public class AppointmentController : ApiBaseController
         }
     }
 
-    [HttpPut("appointments/update-meet-url/{appointmentId}")]
+    [HttpPut("appointments/{appointmentId}/meet-url")]
     public async Task<IActionResult> UpdateAppointmentMeetUrl(int appointmentId, UpdateMeetingUrlRequest request)
     {
         try

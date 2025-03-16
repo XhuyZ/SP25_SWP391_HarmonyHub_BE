@@ -3,7 +3,6 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
-using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers
@@ -17,7 +16,7 @@ namespace API.Controllers
             _availabilityService = availabilityService;
         }
 
-        [HttpPost("availability/therapist/{id}")]
+        [HttpPost("availabilities/{id}")]
         public async Task<IActionResult> CreateAppointment(int id, UpdateAvailabilityRequest request)
         {
             try
