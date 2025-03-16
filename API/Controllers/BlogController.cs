@@ -3,6 +3,7 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
+using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers;
@@ -88,6 +89,20 @@ public class BlogController : ApiBaseController
         {
             await _blogService.UpdateBlogDetails(id, request);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, request));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpPut("blogs/{id}/avatar")]
+    public async Task<IActionResult> UpdateBlogAvatar(int id, IFormFile avatarFile)
+    {
+        try
+        {
+            var result = await _blogService.UpdateBlogAvatar(id, avatarFile);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
         {

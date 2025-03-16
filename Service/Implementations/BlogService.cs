@@ -3,6 +3,8 @@ using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.DTOs.Responses;
 using Domain.Entities;
+using Microsoft.AspNetCore.Http;
+using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -13,11 +15,13 @@ namespace Service.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IBlogRepository _blogRepository;
+        private readonly ICloudinaryService _cloudinaryService;
 
-        public BlogService(IMapper mapper, IBlogRepository blogRepository)
+        public BlogService(IMapper mapper, IBlogRepository blogRepository, ICloudinaryService cloudinaryService)
         {
             _mapper = mapper;
             _blogRepository = blogRepository;
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<IEnumerable<BlogResponse>> GetAllBlogs()
@@ -123,6 +127,27 @@ namespace Service.Implementations
             catch (Exception e)
             {
                 throw new ServiceException($"Error updating blog : {e.Message}", e);
+            }
+        }
+
+        public async Task<BlogResponse> UpdateBlogAvatar(int id, IFormFile img)
+        {
+            try
+            {
+                var blog = await _blogRepository.GetByIdAsync(id);
+                if (blog == null)
+                    throw new ServiceException(MessageConstants.NOT_FOUND);
+
+                var avatarUrl = await _cloudinaryService.UploadFile(img);
+
+                blog.ImageUrl = avatarUrl;
+                await _blogRepository.UpdateAsync(blog);
+
+                return _mapper.Map<BlogResponse>(blog);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
             }
         }
     }
