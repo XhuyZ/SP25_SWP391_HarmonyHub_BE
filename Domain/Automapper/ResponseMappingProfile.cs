@@ -60,13 +60,14 @@ public class ResponseMappingProfile : Profile
 
         CreateMap<Account, TherapistDetailsResponse>().ReverseMap();
         CreateMap<Account, MemberDetailsResponse>().ReverseMap();
-        CreateMap<Account, TherapistQualificationResponse>().ReverseMap();
-        CreateMap<Account, MemberProfileResponse>().ReverseMap();
         CreateMap<Account, TherapistProfileResponse>().ReverseMap();
+        
         CreateMap<Availability, AvailabilityResponse>().ReverseMap();
+        
         CreateMap<Qualification, QualificationResponse>().ReverseMap();
+        
         CreateMap<Specialty, SpecialtyResponse>().ReverseMap();
-
+        
         CreateMap<Package, PackageResponse>().ReverseMap();
 
         CreateMap<Appointment, AppointmentResponse>()
@@ -77,8 +78,6 @@ public class ResponseMappingProfile : Profile
             .ForMember(dest => dest.PackageName, opt =>
                 opt.MapFrom(src => src.Package.Name))
             .ReverseMap();
-
-        CreateMap<Appointment, AppointmentFeedbackResponse>();
 
         CreateMap<Availability, AvailabilityResponse>().ReverseMap();
 

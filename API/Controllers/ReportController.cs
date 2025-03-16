@@ -6,6 +6,7 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 
 namespace API.Controllers;
+
 [ApiController]
 public class ReportController : ApiBaseController
 {
@@ -29,12 +30,13 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
     [HttpGet("reports/{reportID}")]
-    public async Task<IActionResult> GetReportsByAcountID(int reportID)
+    public async Task<IActionResult> GetReportsByReportId(int reportID)
     {
         try
         {
-            var result = await _reportService.GetReportsByID(reportID);
+            var result = await _reportService.GetReportByID(reportID);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)
@@ -42,6 +44,7 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
     [HttpPost("reports")]
     public async Task<IActionResult> CreateReport(CreateReportRequest request)
     {
@@ -55,25 +58,13 @@ public class ReportController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
     [HttpPut("reports/{reportID}")]
     public async Task<IActionResult> UpdateReport(int reportID, UpdateReportRequest request)
     {
         try
         {
             var result = await _reportService.UpdateReport(reportID, request);
-            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
-        }
-        catch (ServiceException e)
-        {
-            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
-        }
-    }
-    [HttpDelete("reports/{reportID}")]
-    public async Task<IActionResult> DeleteReport(int reportID)
-    {
-        try
-        {
-            var result = await _reportService.DeleteReport(reportID);
             return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
         }
         catch (ServiceException e)

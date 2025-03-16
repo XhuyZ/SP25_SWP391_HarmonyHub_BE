@@ -3,7 +3,6 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
-using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers

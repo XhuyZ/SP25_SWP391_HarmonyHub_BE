@@ -45,6 +45,7 @@ public class SpecialtyService : ISpecialtyService
             var specialty = await _specialtyRepository.GetByIdAsync(id);
             if (specialty == null)
                 throw new ServiceException("Specialty not found");
+            
             return _mapper.Map<SpecialtyResponse>(specialty);
         }
         catch (Exception e)

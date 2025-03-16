@@ -20,6 +20,8 @@ public static class ServiceExtension
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IAccountRepository, AccountRepository>();
 
+        services.AddScoped<IQualificationRepository, QualificationRepository>();
+
         services.AddScoped<IBlogService, BlogService>();
         services.AddScoped<IBlogRepository, BlogRepository>();
 
@@ -46,6 +48,9 @@ public static class ServiceExtension
 
         services.AddScoped<IAvailabilityRepository, AvailabilityRepository>();
         services.AddScoped<IAvailabilityService, AvailabilityService>();
+
+        services.AddScoped<ISpecialtyService, SpecialtyService>();
+        services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
 
         services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
         services.AddScoped<ICloudinaryService, CloudinaryService>();
