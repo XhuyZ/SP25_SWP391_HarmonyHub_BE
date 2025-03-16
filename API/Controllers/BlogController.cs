@@ -3,6 +3,7 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
+using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers;
@@ -71,13 +72,41 @@ public class BlogController : ApiBaseController
         return Ok(new { statusCode = 200, message = "Successful", data = blogs });
     }
 
-    [HttpPut("blogs/{blogId}/status")]
-    public async Task<IActionResult> SetBlogStatus(int blogId, int status)
+    [HttpPut("blogs/{id}/status")]
+    public async Task<IActionResult> SetBlogStatus(int id, int status)
     {
-        var success = await _blogService.SetBlogStatus(blogId, status);
+        var success = await _blogService.SetBlogStatus(id, status);
         if (!success)
             return BadRequest(new { message = "Failed to update blog status." });
 
         return Ok(new { statusCode = 200, message = "Blog status updated." });
+    }
+
+    [HttpPut("blogs/{id}")]
+    public async Task<IActionResult> UpdateBlogDetails(int id, UpdateBlogRequest request)
+    {
+        try
+        {
+            await _blogService.UpdateBlogDetails(id, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, request));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
+    [HttpPut("blogs/{id}/avatar")]
+    public async Task<IActionResult> UpdateBlogAvatar(int id, IFormFile avatarFile)
+    {
+        try
+        {
+            var result = await _blogService.UpdateBlogAvatar(id, avatarFile);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
     }
 }
