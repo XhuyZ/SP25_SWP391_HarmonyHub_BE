@@ -35,5 +35,9 @@ public class RequestMappingProfile : Profile
         CreateMap<UpdateReportRequest, Report>();
 
         CreateMap<UpdateBlogRequest, Blog>();
+
+        CreateMap<CreateSpecialtyRequest, Specialty>();
+
+        CreateMap<UpdateSpecialtyRequest, Specialty>();
     }
 }
