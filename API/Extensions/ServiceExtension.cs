@@ -53,7 +53,8 @@ public static class ServiceExtension
         services.Configure<VnPaySettings>(config.GetSection("VnPaySettings"));
         services.AddScoped<IVnPayService, VnPayService>();
 
-
+        services.AddScoped<ISpecialtyService, SpecialtyService>();
+        services.AddScoped<ISpecialtyRepository, SpecialtyRepository>();
         return services;
     }
 }
