@@ -67,4 +67,23 @@ public class SpecialtyService : ISpecialtyService
             throw new ServiceException(e.Message);
         }
     }
+
+    public async Task<bool> UpdateSpecialty(int id, UpdateSpecialtyRequest request)
+    {
+        try
+        {
+            var specialty = await _specialtyRepository.GetByIdAsync(id);
+            if (specialty == null)
+                throw new ServiceException("Specialty not found.");
+
+            _mapper.Map(request, specialty);
+            specialty.UpdatedAt = DateTime.Now;
+            await _specialtyRepository.UpdateAsync(specialty);
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException($"Error updating specialty : {e.Message}", e);
+        }
+    }
 }

@@ -3,6 +3,7 @@ using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Service.Exceptions;
+using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers;
@@ -62,4 +63,17 @@ public class SpecialtyController : ApiBaseController
         }
     }
 
+    [HttpPut("specialties/{id}")]
+    public async Task<IActionResult> UpdateSpecialty(int id, UpdateSpecialtyRequest request)
+    {
+        try
+        {
+            await _specialtyService.UpdateSpecialty(id, request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
 }
