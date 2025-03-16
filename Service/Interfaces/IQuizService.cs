@@ -12,4 +12,5 @@ public interface IQuizService
     Task<bool> DeleteQuestionAsync(int questionId);
     Task<QuizResponse> GetQuizById(int id);
     Task<QuizResponse> UpdateAvatarUrl(int id, IFormFile imgFile);
+    Task<List<ResultResponse>> UpdateQuizResultsAsync(int id, List<UpdateQuizResultRequest> request);
 }
