@@ -183,8 +183,32 @@ namespace Service.Implementations
             }
         }
 
+        public async Task<List<ResultResponse>> UpdateQuizResultsAsync(int id, List<UpdateQuizResultRequest> request)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+                throw new ServiceException("Quiz not found.");
 
+            foreach (var resultRequest in request)
+            {
+                if (resultRequest.Id <= 0)
+                    throw new ServiceException("Result ID is required and must be greater than zero.");
 
+                var existingResult = quiz.Results.FirstOrDefault(r => r.Id == resultRequest.Id);
+                if (existingResult == null)
+                    throw new ServiceException($"No result with ID {resultRequest.Id} is linked to the quiz with ID {id}.");
+
+                existingResult.Content = resultRequest.Content;
+            }
+
+            await _quizRepository.UpdateAsync(quiz);
+
+            return quiz.Results.Select(r => new ResultResponse
+            {
+                Id = r.Id,
+                Content = r.Content
+            }).ToList();
+        }
 
     }
 }

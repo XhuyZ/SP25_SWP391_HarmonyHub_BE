@@ -117,5 +117,16 @@ namespace API.Controllers
                     new { message = "An error occurred while deleting the question.", error = ex.Message });
             }
         }
+
+        [HttpPut("quiz/{quizId}/results")]
+        public async Task<IActionResult> UpdateQuizResults(int quizId, [FromBody] List<UpdateQuizResultRequest> request)
+        {
+            if (request == null || !request.Any())
+                return BadRequest("Request cannot be empty.");
+
+            var response = await _quizService.UpdateQuizResultsAsync(quizId, request);
+            return Ok(new { statusCode = 200, message = "Results updated successfully", data = response });
+        }
+
     }
 }
