@@ -7,4 +7,6 @@ public class ReportResponse
     public string Content { get; set; }
     public int Status { get; set; }
     public int? AccountId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

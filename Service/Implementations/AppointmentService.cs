@@ -69,6 +69,7 @@ public class AppointmentService : IAppointmentService
             var appointment = _mapper.Map<Appointment>(request);
             appointment.MemberId = memberId;
             appointment.Status = (int)AppointmentStatusEnum.Pending;
+            appointment.MeetUrl = "";
 
             await _appointmentRepository.AddAsync(appointment);
         }
