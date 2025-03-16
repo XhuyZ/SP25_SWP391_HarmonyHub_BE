@@ -12,4 +12,6 @@ public class TransactionResponse
     public int? ReceiverId { get; set; }
     public string ReceiverFullName { get; set; }
     public int? AppointmentId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

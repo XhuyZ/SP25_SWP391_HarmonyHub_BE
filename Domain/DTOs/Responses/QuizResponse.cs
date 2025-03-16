@@ -10,5 +10,4 @@ public class QuizResponse
     public int TherapistId { get; set; }
     public List<QuestionResponse> QuestionResponse { get; set; } = new List<QuestionResponse>();
     public List<ResultResponse> ResultResponse { get; set; } = new List<ResultResponse>();
-
 }

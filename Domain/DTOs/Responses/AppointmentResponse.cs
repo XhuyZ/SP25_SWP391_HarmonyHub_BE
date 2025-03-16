@@ -18,4 +18,6 @@ public class AppointmentResponse
     public string TherapistFullName { get; set; }
     public int PackageId { get; set; }
     public string PackageName { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }
