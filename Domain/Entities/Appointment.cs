@@ -5,7 +5,7 @@ public class Appointment: BaseEntity
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }
     public string? MeetUrl { get; set; }
-    public string ClientNote { get; set; }
+    public string? ClientNote { get; set; }
     public string? TherapistNote { get; set; }
     public double? FeedbackRating { get; set; }
     public string? FeedbackContent { get; set; }
