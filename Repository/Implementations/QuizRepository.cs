@@ -26,12 +26,19 @@ namespace Repository.Implementations
 
         public async Task<Quiz> GetByIdAsync(int id)
         {
-            return await _context.Quizzes
-                .Include(q => q.QuizQuestions)
-                    .ThenInclude(qq => qq.Question)
-                        .ThenInclude(q => q.Options)
-                         .Include(q => q.Results)
-                .FirstOrDefaultAsync(q => q.Id == id);
+            var quiz = await _context.Quizzes
+        .Include(q => q.QuizQuestions)
+            .ThenInclude(qq => qq.Question)
+            .ThenInclude(q => q.Options)
+        .Include(q => q.Results)
+        .FirstOrDefaultAsync(q => q.Id == id);
+
+            if (quiz == null)
+                return null;
+
+            quiz.Results = quiz.Results.OrderBy(r => r.Type).ToList();
+
+            return quiz;
         }
 
     }
