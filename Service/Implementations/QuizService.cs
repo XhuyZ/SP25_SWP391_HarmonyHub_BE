@@ -108,6 +108,7 @@ namespace Service.Implementations
                 {
                     var option = new Option
                     {
+                        Type = optionRequest.Type,
                         Content = optionRequest.Content
                     };
                     question.Options.Add(option);
@@ -126,6 +127,7 @@ namespace Service.Implementations
                 {
                     var result = new Result
                     {
+                        Type = resultRequest.Type,
                         Content = resultRequest.Content,
                         Quiz = quiz
                     };
@@ -198,7 +200,14 @@ namespace Service.Implementations
                 if (existingResult == null)
                     throw new ServiceException($"No result with ID {resultRequest.Id} is linked to the quiz with ID {id}.");
 
-                existingResult.Content = resultRequest.Content;
+                if (existingResult.Type == resultRequest.Type)
+                {
+                    existingResult.Content = resultRequest.Content;
+                }
+                else
+                {
+                    throw new ServiceException($"Type mismatch for result ID {resultRequest.Id}. Expected type: {existingResult.Type}, received: {resultRequest.Type}.");
+                }
             }
 
             await _quizRepository.UpdateAsync(quiz);
@@ -206,9 +215,11 @@ namespace Service.Implementations
             return quiz.Results.Select(r => new ResultResponse
             {
                 Id = r.Id,
-                Content = r.Content
+                Content = r.Content,
+                Type = r.Type
             }).ToList();
         }
+
 
     }
 }
