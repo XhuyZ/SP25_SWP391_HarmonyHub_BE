@@ -6,6 +6,7 @@ using Domain.DTOs.Responses;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
+using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -278,6 +279,25 @@ public class AccountService : IAccountService
         catch (Exception e)
         {
             throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<bool> UpdateAccountStatus(int id, int status) 
+    {
+        try
+        {
+            var account = await _accountRepository.GetByIdAsync(id);
+            if (account.Status == (int)status)
+                throw new ServiceException($"Account is already {status}.");
+            if (account == null)
+                throw new ServiceException("Account not found.");
+            account.Status = status;
+            await _accountRepository.UpdateAsync(account);
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException($"Error updating account status: {e.Message}", e);
         }
     }
 }

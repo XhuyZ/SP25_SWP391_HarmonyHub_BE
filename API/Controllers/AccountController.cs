@@ -177,4 +177,17 @@ public class AccountController : ApiBaseController
         }
     }
 
+    [HttpPut("accounts/{id}/status")]
+    public async Task<IActionResult> UpdateAccountStatus(int id, int status)
+    {
+        try
+        {
+            var result = await _accountService.UpdateAccountStatus(id, status);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, result));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
 }
