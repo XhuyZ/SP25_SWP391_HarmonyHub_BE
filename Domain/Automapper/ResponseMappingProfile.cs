@@ -37,12 +37,13 @@ public class ResponseMappingProfile : Profile
                     Id = q.Question.Id,
                     Content = q.Question.Content,
                     OptionResponse = q.Question.Options.Any()
-                        ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
+                        ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content, Type = o.Type }).ToList()
                         : new List<OptionResponse>()
                 })))
             .ForMember(dest => dest.ResultResponse, opt => opt.MapFrom(src => src.Results.Select(r => new ResultResponse
             {
                 Id = r.Id,
+                Type = r.Type,
                 Content = r.Content
             })))
             .ReverseMap();
