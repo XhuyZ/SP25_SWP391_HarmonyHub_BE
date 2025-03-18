@@ -21,4 +21,5 @@ public interface IAccountService
     Task<AccountResponse> UpdateAvatarUrl(int id, IFormFile avatarFile);
     Task UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request);
     Task UpdateTherapistInfo(int memberId, UpdateTherapistInfoRequest request);
+    Task<bool> UpdateAccountStatus(int id, int status);
 }
