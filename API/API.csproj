@@ -18,9 +18,4 @@
   <ItemGroup>
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="C:\Users\DELL\.nuget\packages\vnpay.net\8.5.0\contentFiles\any\net8.0\Icon.ico" />
-  </ItemGroup>
-
 </Project>
