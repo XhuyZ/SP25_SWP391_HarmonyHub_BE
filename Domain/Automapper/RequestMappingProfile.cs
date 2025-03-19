@@ -36,6 +36,8 @@ public class RequestMappingProfile : Profile
 
         CreateMap<UpdateBlogRequest, Blog>();
 
+        CreateMap<AddQualificationRequest, Qualification>();
+
         CreateMap<CreateSpecialtyRequest, Specialty>();
 
         CreateMap<UpdateSpecialtyRequest, Specialty>();

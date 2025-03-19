@@ -195,6 +195,21 @@ public class AccountService : IAccountService
         return null;
     }
 
+    public async Task AddTherapistQualification(AddQualificationRequest request)
+    {
+        try
+        {
+            var existingAccount = await _accountRepository.GetAccountByEmail(request.Email);
+            var qualification = _mapper.Map<Qualification>(request);
+            qualification.TherapistId = existingAccount.Id;
+            await _qualificationRepository.AddAsync(qualification);
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException(e.Message);
+        }
+    }
+
     public async Task UpdateMemberInfo(int memberId, UpdateMemberInfoRequest request)
     {
         try

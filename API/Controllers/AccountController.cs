@@ -76,7 +76,7 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    
+
     [HttpGet("members/{memberId}")]
     public async Task<IActionResult> GetMemberDetails(int memberId)
     {
@@ -135,6 +135,7 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
+
     [HttpPut("therapists/{therapistId}/profile")]
     public async Task<IActionResult> UpdateTherapistInfo(int therapistId, UpdateTherapistInfoRequest request)
     {
@@ -148,9 +149,24 @@ public class AccountController : ApiBaseController
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
     }
-    
+
+    [HttpPost("qualifications")]
+    public async Task<IActionResult> AddTherapistQualification(AddQualificationRequest request)
+    {
+        try
+        {
+            await _accountService.AddTherapistQualification(request);
+            return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+        }
+        catch (ServiceException e)
+        {
+            return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
+        }
+    }
+
     [HttpPut("qualifications/{qualificationId}")]
-    public async Task<IActionResult> UpdateTherapistQualification(int therapistId, int qualificationId, UpdateTherapistQualificationRequest request)
+    public async Task<IActionResult> UpdateTherapistQualification(int therapistId, int qualificationId,
+        UpdateTherapistQualificationRequest request)
     {
         try
         {
