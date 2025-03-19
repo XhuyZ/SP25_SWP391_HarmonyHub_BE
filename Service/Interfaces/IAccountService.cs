@@ -14,6 +14,7 @@ public interface IAccountService
     Task RegisterMember(RegisterMemberRequest request);
     Task RegisterTherapist(RegisterTherapistRequest request);
     Task<LoginResponse> Login(LoginRequest request);
+    Task AddTherapistQualification(AddQualificationRequest request);
 
     Task UpdateTherapistQualification(int qualificationId,
         UpdateTherapistQualificationRequest request);
