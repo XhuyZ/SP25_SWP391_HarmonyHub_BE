@@ -93,6 +93,16 @@ namespace API.Controllers
             }
         }
 
+        [HttpPut("quiz/{id}/results")]
+        public async Task<IActionResult> UpdateQuizResults(int id, [FromBody] List<UpdateQuizResultRequest> request)
+        {
+            if (request == null || !request.Any())
+                return BadRequest("Request cannot be empty.");
+
+            var response = await _quizService.UpdateQuizResultsAsync(id, request);
+            return Ok(new { statusCode = 200, message = "Results updated successfully", data = response });
+        }
+
         [HttpDelete("questions/{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
@@ -117,15 +127,25 @@ namespace API.Controllers
             }
         }
 
-        [HttpPut("quiz/{quizId}/results")]
-        public async Task<IActionResult> UpdateQuizResults(int quizId, [FromBody] List<UpdateQuizResultRequest> request)
+        [HttpPut("quiz/{id}")]
+        public async Task<IActionResult> UpdateQuiz(int id, [FromBody] UpdateQuizRequest request)
         {
-            if (request == null || !request.Any())
-                return BadRequest("Request cannot be empty.");
+            if (request == null)
+                return BadRequest("Request body cannot be null.");
 
-            var response = await _quizService.UpdateQuizResultsAsync(quizId, request);
-            return Ok(new { statusCode = 200, message = "Results updated successfully", data = response });
+            try
+            {
+                var updatedQuiz = await _quizService.UpdateQuizAsync(id, request);
+                return Ok(updatedQuiz);
+            }
+            catch (ServiceException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred.", details = ex.Message });
+            }
         }
-
     }
 }

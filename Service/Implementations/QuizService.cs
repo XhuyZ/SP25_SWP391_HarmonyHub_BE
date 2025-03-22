@@ -220,6 +220,62 @@ namespace Service.Implementations
             }).ToList();
         }
 
+        public async Task<QuizResponse> UpdateQuizAsync(int id, UpdateQuizRequest request)
+        {
+            var quiz = await _quizRepository.GetByIdAsync(id);
+            if (quiz == null)
+                throw new ServiceException("Quiz not found.");
+
+            quiz.Title = request.Title;
+            quiz.Description = request.Description;
+
+            foreach (var questionRequest in request.Questions)
+            {
+                var existingQuestion = quiz.QuizQuestions
+                    .FirstOrDefault(q => q.Question.Id == questionRequest.id)?.Question;
+
+                if (existingQuestion == null)
+                    throw new ServiceException($"No question with ID {questionRequest.id} is linked to the quiz with ID {id}.");
+
+                existingQuestion.Content = questionRequest.Content;
+
+                foreach (var optionRequest in questionRequest.Options)
+                {
+                    var existingOption = existingQuestion.Options.FirstOrDefault(o => o.Id == optionRequest.id);
+                    if (existingOption == null)
+                        throw new ServiceException($"No option with ID {optionRequest.id} is linked to question ID {existingQuestion.Id}.");
+
+                    existingOption.Type = optionRequest.Type;
+                    existingOption.Content = optionRequest.Content;
+                }
+            }
+
+            await _quizRepository.UpdateAsync(quiz);
+
+            return new QuizResponse
+            {
+                Id = quiz.Id,
+                Title = quiz.Title,
+                Description = quiz.Description,
+                QuestionResponse = quiz.QuizQuestions.Select(q => new QuestionResponse
+                {
+                    id = q.Question.Id,
+                    Content = q.Question.Content,
+                    OptionResponse = q.Question.Options.Select(o => new OptionResponse
+                    {
+                        Type = o.Type,
+                        Content = o.Content
+                    }).ToList()
+                }).ToList(),
+                ResultResponse = quiz.Results.Select(r => new ResultResponse
+                {
+                    Type = r.Type,
+                    Content = r.Content
+                }).ToList()
+            };
+        }
+
+
 
     }
 }

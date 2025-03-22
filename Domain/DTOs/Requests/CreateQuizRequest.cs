@@ -6,6 +6,6 @@ public class CreateQuizRequest
     public string Description { get; set; }
     public string ImageUrl { get; set; }
     public int TherapistId { get; set; }
-    public List<CreateQuestionRequest> Questions { get; set; }
+    public List<QuestionRequest> Questions { get; set; }
     public List<ResultRequest> Results { get; set; }
 }
