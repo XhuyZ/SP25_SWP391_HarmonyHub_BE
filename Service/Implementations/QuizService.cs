@@ -266,6 +266,11 @@ namespace Service.Implementations
                         Type = o.Type,
                         Content = o.Content
                     }).ToList()
+                }).ToList(),
+                ResultResponse = quiz.Results.Select(r => new ResultResponse
+                {
+                    Type = r.Type,
+                    Content = r.Content
                 }).ToList()
             };
         }
