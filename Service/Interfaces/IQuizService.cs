@@ -13,4 +13,5 @@ public interface IQuizService
     Task<QuizResponse> GetQuizById(int id);
     Task<QuizResponse> UpdateAvatarUrl(int id, IFormFile imgFile);
     Task<List<ResultResponse>> UpdateQuizResultsAsync(int id, List<UpdateQuizResultRequest> request);
+    Task<QuizResponse> UpdateQuizAsync(int id, UpdateQuizRequest request);
 }

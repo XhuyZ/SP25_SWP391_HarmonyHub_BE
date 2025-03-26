@@ -23,7 +23,7 @@ public class ResponseMappingProfile : Profile
         CreateMap<Result, ResultResponse>();
 
         CreateMap<Question, QuestionResponse>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
             .ForMember(dest => dest.OptionResponse, opt => opt.MapFrom(src => src.Options.Any()
                 ? src.Options.Select(o => new OptionResponse { Content = o.Content }).ToList()
@@ -34,7 +34,7 @@ public class ResponseMappingProfile : Profile
             .ForMember(dest => dest.QuestionResponse, opt => opt.MapFrom(src => src.QuizQuestions.Select(q =>
                 new QuestionResponse
                 {
-                    Id = q.Question.Id,
+                    id = q.Question.Id,
                     Content = q.Question.Content,
                     OptionResponse = q.Question.Options.Any()
                         ? q.Question.Options.Select(o => new OptionResponse { Content = o.Content, Type = o.Type }).ToList()
