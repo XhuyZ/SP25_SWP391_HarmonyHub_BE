@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpPost("availabilities/{id}")]
-        public async Task<IActionResult> CreateAppointment(int id, UpdateAvailabilityRequest request)
+        public async Task<IActionResult> UpdateAvailability(int id, [FromBody] UpdateAvailabilityRequest request)
         {
             try
             {
