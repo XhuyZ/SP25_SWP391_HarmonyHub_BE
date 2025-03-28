@@ -17,7 +17,7 @@ namespace Service.Implementations
             _mapper = mapper;
             _availabilityRepository = availabilityRepository;
         }
-        
+
         public async Task UpdateAvailability(int id, UpdateAvailabilityRequest request)
         {
             try
@@ -38,5 +38,24 @@ namespace Service.Implementations
                 throw new ServiceException(e.Message);
             }
         }
+
+        public async Task DeleteAvailability(int id)
+        {
+            try
+            {
+                var check = await _availabilityRepository.GetByIdAsync(id);
+                if (check == null)
+                {
+                    throw new ServiceException($"Availability with ID {id} does not exist.");
+                }
+
+                await _availabilityRepository.DeleteAsync(check);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException($"An error occurred while deleting availability: {e.Message}");
+            }
+        }
+
     }
 }
