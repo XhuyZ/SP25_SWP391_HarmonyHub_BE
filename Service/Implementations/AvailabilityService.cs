@@ -44,15 +44,18 @@ namespace Service.Implementations
             try
             {
                 var check = await _availabilityRepository.GetByIdAsync(id);
-                if (check != null)
+                if (check == null)
                 {
-                    await _availabilityRepository.DeleteAsync(check);
+                    throw new ServiceException($"Availability with ID {id} does not exist.");
                 }
+
+                await _availabilityRepository.DeleteAsync(check);
             }
             catch (Exception e)
             {
-                throw new ServiceException(e.Message);
+                throw new ServiceException($"An error occurred while deleting availability: {e.Message}");
             }
         }
+
     }
 }

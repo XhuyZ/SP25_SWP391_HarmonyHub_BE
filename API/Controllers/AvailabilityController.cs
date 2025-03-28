@@ -17,7 +17,7 @@ namespace API.Controllers
             _availabilityService = availabilityService;
         }
 
-        [HttpPost("availabilities/{id}")]
+        [HttpPut("availabilities/{id}")]
         public async Task<IActionResult> UpdateAvailability(int id, [FromBody] UpdateAvailabilityRequest request)
         {
             try
