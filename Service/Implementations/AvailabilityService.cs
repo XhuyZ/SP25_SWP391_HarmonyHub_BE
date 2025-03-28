@@ -17,7 +17,7 @@ namespace Service.Implementations
             _mapper = mapper;
             _availabilityRepository = availabilityRepository;
         }
-        
+
         public async Task UpdateAvailability(int id, UpdateAvailabilityRequest request)
         {
             try
@@ -32,6 +32,22 @@ namespace Service.Implementations
                 availability.CreatedAt = DateTime.Now;
 
                 await _availabilityRepository.AddAsync(availability);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
+        }
+
+        public async Task DeleteAvailability(int id)
+        {
+            try
+            {
+                var check = await _availabilityRepository.GetByIdAsync(id);
+                if (check != null)
+                {
+                    await _availabilityRepository.DeleteAsync(check);
+                }
             }
             catch (Exception e)
             {
