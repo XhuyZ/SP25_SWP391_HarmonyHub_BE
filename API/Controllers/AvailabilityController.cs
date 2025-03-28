@@ -2,6 +2,7 @@
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Service.Exceptions;
 using Service.Interfaces;
 
@@ -16,7 +17,7 @@ namespace API.Controllers
             _availabilityService = availabilityService;
         }
 
-        [HttpPost("availabilities/{id}")]
+        [HttpPut("availabilities/{id}")]
         public async Task<IActionResult> UpdateAvailability(int id, [FromBody] UpdateAvailabilityRequest request)
         {
             try
@@ -30,5 +31,21 @@ namespace API.Controllers
                 throw new ServiceException(e.Message);
             }
         }
+
+        [HttpDelete("availabilities/{id}")]
+        public async Task<IActionResult> DeleteAvailability(int id)
+        {
+            try
+            {
+                await _availabilityService.DeleteAvailability(id);
+
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL));
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
+        }
+
     }
 }
