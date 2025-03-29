@@ -66,7 +66,7 @@ namespace API.Controllers
         {
             try
             {
-                var result = await _quizService.SetQuizStatus(id,status);
+                var result = await _quizService.SetQuizStatus(id, status);
                 return Ok(new { Message = "Quiz status updated successfully." });
             }
             catch (KeyNotFoundException ex)
