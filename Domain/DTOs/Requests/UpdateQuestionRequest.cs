@@ -11,6 +11,6 @@ namespace Domain.DTOs.Requests
         public int id { get; set; }
         public string Content { get; set; }
 
-        public List<OptionRequest> Options { get; set; }
+        public List<UpdateOptionRequest> Options { get; set; }
     }
 }

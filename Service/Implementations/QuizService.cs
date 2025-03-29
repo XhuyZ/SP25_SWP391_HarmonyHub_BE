@@ -257,6 +257,8 @@ namespace Service.Implementations
                 Id = quiz.Id,
                 Title = quiz.Title,
                 Description = quiz.Description,
+                TherapistId = quiz.TherapistId,
+                Status = quiz.Status,
                 QuestionResponse = quiz.QuizQuestions.Select(q => new QuestionResponse
                 {
                     id = q.Question.Id,
