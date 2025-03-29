@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Service.Exceptions;
-using Service.Interfaces;
-using Domain.Constants;
+﻿using Domain.Constants;
 using Domain.DTOs.Common;
 using Domain.DTOs.Requests;
+using Microsoft.AspNetCore.Mvc;
+using Service.Exceptions;
+using Service.Interfaces;
 
 namespace API.Controllers;
 
@@ -71,5 +71,15 @@ public class ReportController : ApiBaseController
         {
             return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
         }
+    }
+
+    [HttpPut("reports/{id}/status")]
+    public async Task<IActionResult> SetReportStatus(int id, int status)
+    {
+        var success = await _reportService.UpdateStatus(id, status);
+        if (!success)
+            return BadRequest(new { message = "Failed to update report status." });
+
+        return Ok(new { statusCode = 200, message = "report status updated." });
     }
 }

@@ -40,7 +40,7 @@ public class ReportService : IReportService
             var report = await _reportRepository.GetByIdAsync(reportID);
             if (report == null)
                 throw new ServiceException(MessageConstants.NOT_FOUND);
-            
+
             return _mapper.Map<ReportResponse>(report);
         }
         catch (Exception e)
@@ -55,7 +55,7 @@ public class ReportService : IReportService
         {
             var report = _mapper.Map<Report>(request);
             report.Status = (int)ReportStatusEnum.Pending;
-                
+
             await _reportRepository.AddAsync(report);
         }
         catch (Exception e)
@@ -81,6 +81,27 @@ public class ReportService : IReportService
         catch (Exception e)
         {
             throw new ServiceException(e.Message);
+        }
+    }
+
+    public async Task<bool> UpdateStatus(int reportId, int status)
+    {
+        try
+        {
+            var report = await _reportRepository.GetByIdAsync(reportId);
+            if (status != (int)ReportStatusEnum.Inactive && status != (int)ReportStatusEnum.Resolved)
+                throw new ServiceException("Invalid status. Only 0 (Inactive) or 1 (Resolved) are allowed.");
+            if (report.Status == (int)status)
+                throw new ServiceException($"Report is already {status}.");
+            if (report == null)
+                throw new ServiceException("Report not found.");
+            report.Status = status;
+            await _reportRepository.UpdateAsync(report);
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new ServiceException($"Error updating Report status: {e.Message}", e);
         }
     }
 }
