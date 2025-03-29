@@ -41,5 +41,7 @@ public class RequestMappingProfile : Profile
         CreateMap<CreateSpecialtyRequest, Specialty>();
 
         CreateMap<UpdateSpecialtyRequest, Specialty>();
+
+        CreateMap<CreateAvailabilityRequest, Availability>();
     }
 }

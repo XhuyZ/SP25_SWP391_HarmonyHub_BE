@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Domain.Constants;
 using Domain.DTOs.Requests;
 using Domain.Entities;
+using Repository.Implementations;
 using Repository.Interfaces;
 using Service.Exceptions;
 using Service.Interfaces;
@@ -57,5 +59,18 @@ namespace Service.Implementations
             }
         }
 
+        public async Task CreateAvailability(CreateAvailabilityRequest request)
+        {
+            try
+            {
+                var availability = _mapper.Map<Availability>(request);
+
+                await _availabilityRepository.AddAsync(availability);
+            }
+            catch (Exception e)
+            {
+                throw new ServiceException(e.Message);
+            }
+        }
     }
 }
