@@ -18,6 +18,7 @@ namespace Service.Validators
             RuleFor(x => x.id)
                 .NotEmpty().WithMessage("id cannot be empty");
 
+            RuleForEach(x => x.Options).SetValidator(new UpdateOptionRequestValidator());
         }
     }
 }

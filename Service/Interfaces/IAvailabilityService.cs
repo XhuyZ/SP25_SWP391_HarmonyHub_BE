@@ -6,4 +6,5 @@ public interface IAvailabilityService
 {
     Task UpdateAvailability(int id, UpdateAvailabilityRequest request);
     Task DeleteAvailability(int id);
+    Task CreateAvailability(CreateAvailabilityRequest request);
 }

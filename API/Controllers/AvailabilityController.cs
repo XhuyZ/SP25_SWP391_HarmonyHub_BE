@@ -4,6 +4,7 @@ using Domain.DTOs.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Service.Exceptions;
+using Service.Implementations;
 using Service.Interfaces;
 
 namespace API.Controllers
@@ -44,6 +45,20 @@ namespace API.Controllers
             catch (Exception e)
             {
                 throw new ServiceException(e.Message);
+            }
+        }
+
+        [HttpPost("availability")]
+        public async Task<IActionResult> CreateAvailability([FromBody] CreateAvailabilityRequest request)
+        {
+            try
+            {
+                await _availabilityService.CreateAvailability(request);
+                return Ok(new ApiResponse(StatusCodes.Status200OK, MessageConstants.SUCCESSFUL, request));
+            }
+            catch (ServiceException e)
+            {
+                return BadRequest(new ApiResponse(StatusCodes.Status400BadRequest, e.Message));
             }
         }
 
