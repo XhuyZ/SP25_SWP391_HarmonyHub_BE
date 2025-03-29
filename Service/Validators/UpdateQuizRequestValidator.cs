@@ -17,6 +17,8 @@ namespace Service.Validators
 
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Title cannot be empty");
+
+            RuleForEach(x => x.Questions).SetValidator(new UpdateQuestionRequestValidator());
         }
     }
 }
