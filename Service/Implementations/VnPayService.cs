@@ -15,7 +15,8 @@ namespace Service.Implementations
         private readonly VnPaySettings _vnPaySettings;
         private readonly ITransactionService _transactionService;
 
-        public VnPayService(IHttpContextAccessor httpContextAccessor, IOptions<VnPaySettings> vnPaySettings, ITransactionService transactionService)
+        public VnPayService(IHttpContextAccessor httpContextAccessor, IOptions<VnPaySettings> vnPaySettings,
+            ITransactionService transactionService)
         {
             _httpContextAccessor = httpContextAccessor;
             _vnPaySettings = vnPaySettings.Value;
@@ -113,11 +114,15 @@ namespace Service.Implementations
                     }
                     else
                     {
+                        await _transactionService.UpdateTransactionStatus(orderId,
+                            (int)TransactionStatusEnum.Failed);
                         return 0;
                     }
                 }
                 else
                 {
+                    await _transactionService.UpdateTransactionStatus(orderId,
+                        (int)TransactionStatusEnum.Failed);
                     return -1;
                 }
             }
