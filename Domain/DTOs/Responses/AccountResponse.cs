@@ -18,6 +18,9 @@ public class AccountResponse
     public decimal Balance { get; set; }
     public int Status { get; set; }
     public int Role { get; set; }
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 
     public ICollection<Appointment>? MemberAppointments { get; set; }
 

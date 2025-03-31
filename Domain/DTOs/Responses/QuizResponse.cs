@@ -8,6 +8,9 @@ public class QuizResponse
     public string Description { get; set; }
     public int Status { get; set; }
     public int TherapistId { get; set; }
+    
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     public List<QuestionResponse> QuestionResponse { get; set; } = new List<QuestionResponse>();
     public List<ResultResponse> ResultResponse { get; set; } = new List<ResultResponse>();
 }
