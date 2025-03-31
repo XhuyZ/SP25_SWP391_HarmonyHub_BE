@@ -114,8 +114,8 @@ namespace Service.Implementations
                     }
                     else
                     {
-                        // await _transactionService.UpdateTransactionStatus(orderId,
-                        //     (int)TransactionStatusEnum.Failed);
+                        await _transactionService.UpdateTransactionStatus(orderId,
+                            (int)TransactionStatusEnum.Failed);
                         return 0;
                     }
                 }
