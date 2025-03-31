@@ -69,12 +69,12 @@ public class TransactionService : ITransactionService
             var existingTransaction = await _transactionRepository.GetTransactionByTransactionId(transactionId);
             existingTransaction.Status = status;
             await _transactionRepository.UpdateAsync(existingTransaction);
-            if (status == (int)TransactionStatusEnum.Successful)
-            {
-                var existingAppointment = await _appointmentRepository.GetByIdAsync((int)existingTransaction.AppointmentId);
-                existingAppointment.Status = (int)AppointmentStatusEnum.Paid;
-                await _appointmentRepository.UpdateAsync(existingAppointment);
-            }
+            // if (status == (int)TransactionStatusEnum.Successful)
+            // {
+            //     var existingAppointment = await _appointmentRepository.GetByIdAsync((int)existingTransaction.AppointmentId);
+            //     existingAppointment.Status = (int)AppointmentStatusEnum.Paid;
+            //     await _appointmentRepository.UpdateAsync(existingAppointment);
+            // }
         }
         catch (Exception e)
         {
