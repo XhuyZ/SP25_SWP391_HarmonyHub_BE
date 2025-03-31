@@ -42,7 +42,7 @@ namespace Service.Implementations
             vnpay.AddRequestData("vnp_Version", _vnPaySettings.Version);
             vnpay.AddRequestData("vnp_Command", _vnPaySettings.PayCommand);
             vnpay.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-            vnpay.AddRequestData("vnp_Amount", (amount * 100).ToString());
+            vnpay.AddRequestData("vnp_Amount", (amount * 25000 * 100).ToString());
 
             vnpay.AddRequestData("vnp_CreateDate", createdDate.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", _vnPaySettings.CurrencyCode);
