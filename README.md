@@ -1,6 +1,8 @@
-# 💞 HarmonyHub - RESTful API for Pre-marital Counseling Platform
+# 💞 HarmonyHub() - RESTful API for Pre-marital Counseling Platform
 
-![HarmonyHub Banner - illustration placeholder](/docs/images/harmonyhub-banner.png) <!-- Replace with your actual image path -->
+![image](https://github.com/user-attachments/assets/4691a483-148e-4082-a98c-ee76c13e5bc8)
+![swp-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/d1b7d277-b95c-4678-8899-e84c1a8caa9d)
+
 
 > A RESTful API backend built with ASP.NET Core 8.0, providing a scalable foundation for a pre-marital psychological counseling platform.
 
@@ -68,5 +70,5 @@ This project is licensed under the MIT License.
 ## ✨ Contributors
 
 Developed by a team of 4 passionate developers.  
-This forked version is customized and maintained for personal showcase and extension.
+
 
