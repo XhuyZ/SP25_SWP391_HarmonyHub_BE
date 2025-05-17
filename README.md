@@ -42,8 +42,8 @@
 | [MySQL](https://www.mysql.com/)          | Relational database management            | 🌐 |
 | [JWT](https://jwt.io/)                   | Authentication mechanism                  | 🌐 |
 | [Cloudinary](https://cloudinary.com/)    | Media storage and cloud image handling    | 🌐 |
-| [VNPay Sandbox](https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/) | Payment gateway integration                | 🌐 |
-| [Google Meet API](https://developers.google.com/calendar) | Generate Google Meet links for sessions | 🌐 |
+| [VNPay Sandbox]([https://sandbox.vnpayment.vn/apis/docs/huong-dan-tich-hop/](https://sandbox.vnpayment.vn/apis/vnpay-demo/)) | Payment gateway integration                | 🌐 |
+| [Google Meet API]([https://developers.google.com/calendar](https://developers.google.com/apis-explorer)) | Generate Google Meet links for sessions | 🌐 |
 
 ---
 
